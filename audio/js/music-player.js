@@ -577,6 +577,86 @@ function tryInitPlayer() {
 // 立即尝试初始化播放器
 tryInitPlayer();
 
+// 添加缓存控制，确保资源不被缓存
+if (typeof window !== 'undefined') {
+  // 为播放器资源添加时间戳，避免缓存
+  const timestamp = new Date().getTime();
+  
+  // 重新加载CSS文件，避免缓存
+  const cssLink = document.querySelector('link[href="/blog/audio/css/music-player.css"]');
+  if (cssLink) {
+    cssLink.href = `/blog/audio/css/music-player.css?${timestamp}`;
+  }
+  
+  // 重新加载配置文件，避免缓存
+  const configUrl = `/blog/audio/js/music-config.json?${timestamp}`;
+  
+  // 覆盖默认的配置加载
+  window.loadMusicConfig = function() {
+    fetch(configUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Loaded music config with timestamp:', data);
+        // 修正路径，确保音频和封面文件路径正确
+        playlist = data.playlist.map(song => {
+          return {
+            name: song.name,
+            artist: song.artist,
+            url: `/blog${song.url}?${timestamp}`,
+            cover: `/blog${song.cover}?${timestamp}`
+          };
+        });
+        console.log('Processed playlist with timestamp:', playlist);
+        if (playlist.length > 0) {
+          initializePlayer();
+        }
+      })
+      .catch(error => {
+        console.error('Error loading music config:', error);
+        // 如果加载失败，使用默认播放列表
+        playlist = [
+          {
+            name: "Stay With Me",
+            artist: "未知艺术家",
+            url: `/blog/audio/music/Stay With Me.mp3?${timestamp}`,
+            cover: `/blog/audio/covers/stay-with-me.jpg?${timestamp}`
+          },
+          {
+            name: "半点心",
+            artist: "未知艺术家",
+            url: `/blog/audio/music/半点心.mp3?${timestamp}`,
+            cover: `/blog/audio/covers/ban-dian-xin.jpg?${timestamp}`
+          },
+          {
+            name: "打上花火",
+            artist: "未知艺术家",
+            url: `/blog/audio/music/打上花火.mp3?${timestamp}`,
+            cover: `/blog/audio/covers/da-shang-hua-huo.jpg?${timestamp}`
+          },
+          {
+            name: "生生世世爱",
+            artist: "未知艺术家",
+            url: `/blog/audio/music/生生世世爱.mp3?${timestamp}`,
+            cover: `/blog/audio/covers/sheng-sheng-shi-shi-ai.jpg?${timestamp}`
+          },
+          {
+            name: "MY ALL",
+            artist: "未知艺术家",
+            url: `/blog/audio/music/MY ALL.mp3?${timestamp}`,
+            cover: `/blog/audio/covers/my-all.jpg?${timestamp}`
+          }
+        ];
+        console.log('Using default playlist with timestamp:', playlist);
+        initializePlayer();
+      });
+  };
+}
+
 // 页面卸载前保存状态
 window.addEventListener('beforeunload', function() {
   console.log('Before unload, saving state');
