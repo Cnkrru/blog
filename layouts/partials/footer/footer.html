@@ -1,0 +1,148 @@
+<!-- 最终版页脚：统一排版 + 功能正常 -->
+
+<!-- 样式定义 -->
+<style>
+    /* 页脚基础样式 */
+    .site-footer__inner {
+        text-align: center;
+        font-family: inherit;
+        line-height: 1.6;
+    }
+    
+    /* 版权信息 */
+    .site-footer__copyright {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* 暗黑模式版权信息 */
+    .dark .site-footer__copyright {
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* 随机一言 */
+    #hitokoto {
+        font-size: 0.95rem;
+        font-style: italic;
+        text-align: center;
+        margin: 0.8rem 0;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        opacity: 1;
+    }
+    
+    /* 统计信息组 */
+    .site-footer__stats-section {
+        margin: 0.8rem 0;
+    }
+    
+    /* 统计信息 */
+    .site-footer__stats,
+    .site-footer__runtime {
+        font-size: 0.95rem;
+        text-align: center;
+        margin: 0.6rem 0;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* 技术支持信息 */
+    .site-footer__powered-by {
+        font-size: 0.95rem;
+        text-align: center;
+        margin-top: 1rem;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* 暗黑模式适配 */
+    .dark .site-footer__stats, 
+    .dark .site-footer__runtime,
+    .dark .site-footer__powered-by,
+    .dark #hitokoto {
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+</style>
+
+<div class="site-footer__inner">
+    <!-- 版权信息 -->
+    <div class="site-footer__copyright">
+        {{ .Site.Copyright | safeHTML }}
+    </div>
+    
+    <!-- 随机一言 -->
+    <div id="hitokoto">
+        天天开心
+    </div>
+    
+    <!-- 统计信息组 -->
+    <div class="site-footer__stats-section">
+        <!-- 网站运行时长 -->
+        <div class="site-footer__runtime">
+            本站已稳定运行：<span id="site-runtime"></span>
+        </div>
+    </div>
+    
+    <!-- 技术支持信息 -->
+    <div class="site-footer__powered-by">
+        {{ T "footer.poweredBy" }} <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &
+        <a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener">Stack</a>
+    </div>
+</div>
+
+<!-- 脚本部分 -->
+
+<!-- 网站运行时长脚本 -->
+<script>
+// 这里改成你博客的实际上线日期
+const launchDate = new Date('2026-01-31 12:00:00');
+function updateRuntime() {
+    const now = new Date();
+    const diff = now - launchDate;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    document.getElementById('site-runtime').innerText = `${days} 天 ${hours} 时 ${minutes} 分 ${seconds} 秒`;
+}
+updateRuntime();
+setInterval(updateRuntime, 1000);
+</script>
+
+<!-- 随机一言脚本 -->
+<script>
+window.onload = function() {
+    setTimeout(function() {
+        // 【随机一言切换话种类的部分】
+        // c=i 参数表示获取插画类型的一言
+        // 其他可选类型：a(动画)、b(漫画)、c(插画)、d(文学)、e(原创)、f(网络)、g(其他)
+        fetch(`https://v1.hitokoto.cn?c=a`)
+            .then(res => res.json())
+            .then(data => {
+                const el = document.getElementById('hitokoto');
+                if (el) {
+                    let text = data.hitokoto;
+                    if (data.from) text += ` —— ${data.from}`;
+                    el.innerText = text;
+                }
+            })
+            .catch(err => {});
+    }, 1000);
+};
+</script>

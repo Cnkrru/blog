@@ -1,0 +1,299 @@
+<!-- Mermaid 图表支持模块 -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+    // 初始化 Mermaid，自动适配明暗模式
+    document.addEventListener('DOMContentLoaded', function () {
+        // 判断当前是否为暗黑模式
+        const isDark = document.documentElement.classList.contains('dark');
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            securityLevel: 'loose'
+        });
+
+        // 监听主题切换，重新渲染 Mermaid
+        const observer = new MutationObserver(function () {
+            const newDark = document.documentElement.classList.contains('dark');
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: newDark ? 'dark' : 'default'
+            });
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    });
+</script>
+
+<!-- 阅读进度条样式模块 -->
+<style>
+    #reading-progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: #42b983; /* 主体绿色，可自定义颜色 */
+        width: 0%;
+        z-index: 9999;
+        transition: width 0.2s ease-out;
+    }
+    
+    /* 暗黑模式下可换颜色，可选 */
+    .dark #reading-progress-bar {
+        background: #61afef;
+    }
+</style>
+
+<!-- 随机一言 Hitokoto -->
+<script>
+    // 等页面完全加载后再执行
+    window.onload = function() {
+        // 1秒延迟，确保DOM完全渲染
+        setTimeout(function() {
+            // 可选分类：a(动画) b(漫画) c(游戏) d(文学) e(原创) f(网络) g(其他) h(影视) i(诗词)
+            const c = 'i'; 
+            fetch(`https://v1.hitokoto.cn?c=${c}`)
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('hitokoto');
+                    if (el) {
+                        let text = data.hitokoto;
+                        if (data.from) {
+                            text += ` —— ${data.from}`;
+                        }
+                        el.innerText = text;
+                        // 适配暗黑模式
+                        if (document.documentElement.classList.contains('dark')) {
+                            el.style.color = '#aaa';
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log('一言接口加载失败：', err);
+                    // 失败后仍显示默认文案
+                });
+        }, 1000);
+    };
+</script>
+
+<!-- 自定义交互动画样式 -->
+<style>
+    /* ========== 链接下划线动画 ========== */
+    a {
+        text-decoration: none !important;
+        position: relative;
+    }
+    
+    /* 下划线基础样式 */
+    a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 1px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--accent-color, #42b983); /* 主题色，可改 */
+        transition: width 0.3s ease;
+    }
+    
+    /* 鼠标悬停展开下划线 */
+    a:hover::after {
+        width: 100%;
+    }
+
+    /* ========== 图片放大+阴影动画 ========== */
+    img {
+        transition: all 0.2s ease-in-out;
+        border-radius: 4px; /* 轻微圆角，可选 */
+    }
+    
+    img:hover {
+        transform: scale(1.02); /* 放大2%，不夸张 */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+    }
+
+    /* ========== 暗黑模式适配 ========== */
+    .dark img:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* 暗黑模式阴影更深一点 */
+    }
+    
+    .dark a::after {
+        background-color: var(--accent-color, #61afef); /* 暗黑模式换蓝色 */
+    }
+
+    /* ========== 按钮/侧边栏组件悬停 ========== */
+    button, .sidebar-widget, .tag-cloud a {
+        transition: all 0.2s ease;
+    }
+    
+    button:hover, .sidebar-widget:hover, .tag-cloud a:hover {
+        opacity: 0.9;
+        transform: translateY(-1px); /* 轻微上移，更灵动 */
+    }
+</style>
+
+<!-- 文章目录（TOC）整体美化 -->
+<style>
+    /* 文章目录（TOC）整体美化 */
+    .sidebar-widget__toc {
+        border-radius: 8px;          /* 圆角 */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* 轻微阴影 */
+        padding: 1rem !important;    /* 内边距 */
+        border: none !important;     /* 去掉默认边框 */
+    }
+
+    /* 目录标题样式 */
+    .sidebar-widget__toc-title {
+        font-weight: 500 !important; /* 加粗 */
+        margin-bottom: 0.8rem !important;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4); /* 从上到下的粉蓝渐变 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+    }
+
+    /* 目录列表项基础样式 */
+    .sidebar-widget__toc ul {
+        padding-left: 0.8rem !important;
+    }
+    
+    .sidebar-widget__toc li {
+        margin: 0.4rem 0 !important; /* 列表项间距 */
+        list-style: none !important; /* 去掉默认圆点 */
+    }
+    
+    .sidebar-widget__toc a {
+        color: var(--secondary) !important; /* 基础文字色 */
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* 目录项悬浮效果 */
+    .sidebar-widget__toc a:hover {
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4); /* 从上到下的粉蓝渐变 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+    }
+    
+    .sidebar-widget__toc a::after {
+        display: none !important;   /* 去掉和全站链接重复的下划线 */
+    }
+
+    /* 当前激活的目录项（正在阅读的章节） */
+    .sidebar-widget__toc .active a {
+        font-weight: 500 !important;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4); /* 从上到下的粉蓝渐变 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    /* 暗黑模式适配 */
+    .dark .sidebar-widget__toc {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .dark .sidebar-widget__toc-title {
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4); /* 从上到下的粉蓝渐变 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+    }
+    
+    .dark .sidebar-widget__toc a:hover {
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4); /* 从上到下的粉蓝渐变 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+    }
+    
+    .dark .sidebar-widget__toc .active a {
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4); /* 从上到下的粉蓝渐变 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+</style>
+
+<!-- 回到顶部按钮功能 -->
+<style>
+    /* 按钮基础样式 */
+    #back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: #FFB7C5;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        outline: none;
+    }
+    
+    /* 滚动后显示 */
+    #back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* 悬浮效果 */
+    #back-to-top:hover {
+        background: #FF9AA2;
+        transform: scale(1.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* 暗黑模式适配 */
+    .dark #back-to-top {
+        background: #FF85A2;
+    }
+    
+    .dark #back-to-top:hover {
+        background: #FF6990;
+    }
+</style>
+
+<script>
+    // 创建按钮并插入body
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTop = document.createElement('button');
+        backToTop.id = 'back-to-top';
+        backToTop.innerHTML = '↑';
+        document.body.appendChild(backToTop);
+
+        // 滚动显示/隐藏
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // 点击平滑回到顶部
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>

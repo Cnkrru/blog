@@ -9,6 +9,7 @@ title: Cnkrru'blog
 # 一行简介语
 copyright: Cnkrru
 
+
 # Theme i18n support
 # Available values: ar, bn, ca, de, el, en, es, fr, hu, id, it, ja, ko, nl, pt-br, th, uk, zh-cn, zh-hk, zh-tw
 # 选择默认语言
@@ -27,6 +28,7 @@ languages:
     #     params:
     #         sidebar:
     #             subtitle: Example description
+    
     zh-cn:
         languageName: 简体中文
         title: Cnkrru'blog
@@ -34,6 +36,10 @@ languages:
         params:
             sidebar:
                 subtitle: 欢迎来到我的博客
+            # 来自官网的配置补充1
+            contact:
+                email: J19323850@gmail.com
+                phone: +86 18739168197
 
     # zh-tw:
     #     languageName: 正體中文
@@ -92,7 +98,7 @@ params:
     footer:
         # 设置网址创建起始年份
         since: 2026
-        customText:
+        customText: happy everyday
 
     dateFormat:
         # 设置网址日期格式，基于go语言的写法，与其他语言不同
@@ -125,7 +131,7 @@ params:
     comments:
         enabled: true
         # 选择使用哪种评论功能
-        provider: utterances
+        provider: giscus
 
         disqusjs:
             shortname:
@@ -186,12 +192,12 @@ params:
             siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
         giscus:
-            repo:
-            repoID:
-            category:
-            categoryID:
-            mapping:
-            lightTheme:
+            repo: Cnkrru/blog
+            repoID: R_kgDORFREWQ
+            category: Announcements
+            categoryID: DIC_kwDORFREWc4C1rIE
+            mapping: pathname
+            lightTheme: 
             darkTheme:
             reactionsEnabled: 1
             emitMetadata: 0
@@ -329,3 +335,19 @@ markup:
         lineNos: true
         lineNumbersInTable: true
         tabWidth: 4
+
+# 1.图像配置（来自官网）
+imaging:
+  anchor: Smart
+  bgColor: '#ffffff'
+  compression: lossy
+  hint: photo
+  quality: 75
+  resampleFilter: box
+
+# 自动更新文章最后更新时间
+frontmatter:
+  lastmod:
+    - lastmod
+    - :git  # 优先级：先读文章的 lastmod 字段，没有则读 git 最后提交时间
+    - :fileModTime  # git 不可用时，读文件修改时间
