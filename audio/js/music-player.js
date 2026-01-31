@@ -391,7 +391,9 @@ function initializePlayer() {
 }
 
 // 页面加载完成后初始化
-window.addEventListener('DOMContentLoaded', function() {
+function initPlayer() {
+  console.log('Initializing player...');
+  
   // 获取播放器元素
   player = document.getElementById('global-music-player');
   toggleBtn = document.getElementById('music-player-toggle');
@@ -411,6 +413,14 @@ window.addEventListener('DOMContentLoaded', function() {
   playerArtist = document.getElementById('player-artist');
   playerCover = document.getElementById('player-cover');
   
+  console.log('Player elements:', {
+    player: !!player,
+    toggleBtn: !!toggleBtn,
+    playBtn: !!playBtn,
+    prevBtn: !!prevBtn,
+    nextBtn: !!nextBtn
+  });
+  
   // 加载保存的播放器状态
   loadPlayerState();
   
@@ -423,6 +433,7 @@ window.addEventListener('DOMContentLoaded', function() {
       return response.json();
     })
     .then(data => {
+      console.log('Loaded music config:', data);
       // 修正路径，确保音频和封面文件路径正确
       playlist = data.playlist.map(song => {
         return {
@@ -432,6 +443,7 @@ window.addEventListener('DOMContentLoaded', function() {
           cover: '/blog' + song.cover
         };
       });
+      console.log('Processed playlist:', playlist);
       if (playlist.length > 0) {
         initializePlayer();
       }
@@ -471,9 +483,19 @@ window.addEventListener('DOMContentLoaded', function() {
           cover: "/blog/audio/covers/my-all.jpg"
         }
       ];
+      console.log('Using default playlist:', playlist);
       initializePlayer();
     });
-});
+}
+
+// 检查DOM是否已经加载完成
+if (document.readyState === 'loading') {
+  // DOM还在加载中，监听DOMContentLoaded事件
+  document.addEventListener('DOMContentLoaded', initPlayer);
+} else {
+  // DOM已经加载完成，直接执行初始化
+  initPlayer();
+}
 
 // 页面卸载前保存状态
 window.addEventListener('beforeunload', function() {
