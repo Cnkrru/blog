@@ -164,6 +164,22 @@ function initializePlayer() {
     // 加载当前歌曲
     loadSong(currentIndex);
     
+    // 立即恢复播放器UI状态
+    if (playerState.isPlaying) {
+      if (document.getElementById('player-play')) {
+        document.getElementById('player-play').classList.add('playing');
+        document.getElementById('player-play').setAttribute('aria-label', '暂停');
+      }
+      if (document.getElementById('global-music-player')) {
+        document.getElementById('global-music-player').classList.add('playing');
+        document.getElementById('global-music-player').classList.add('active');
+      }
+      if (document.getElementById('music-player-toggle')) {
+        document.getElementById('music-player-toggle').classList.add('active');
+      }
+      isPlayerVisible = true;
+    }
+    
     // 绑定事件
     bindEvents();
   }
@@ -461,4 +477,22 @@ function initializePlayer() {
 // 页面卸载前保存状态
 window.addEventListener('beforeunload', function() {
   savePlayerState();
+});
+
+// 监听所有链接点击事件，确保在页面切换前保存状态
+document.addEventListener('click', function(e) {
+  // 检查点击的是否是链接
+  var target = e.target;
+  while (target && target.tagName !== 'A') {
+    target = target.parentNode;
+  }
+  
+  if (target && target.tagName === 'A') {
+    // 检查是否是内部链接（同域）
+    var href = target.getAttribute('href');
+    if (href && (href.startsWith('/') || href.startsWith('./') || href.startsWith('../') || href.includes(window.location.hostname))) {
+      // 保存播放状态
+      savePlayerState();
+    }
+  }
 });
