@@ -167,6 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 初始化播放器
 function initializePlayer() {
+    console.log('Initializing player...');
+    
     // 创建音频对象
     audio = new Audio();
     window.audio = audio;
@@ -177,6 +179,51 @@ function initializePlayer() {
     
     audio.volume = playerState.volume || 0.7;
     audio.muted = playerState.isMuted || false;
+    
+    // 绑定音频事件（只绑定一次）
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', nextSong);
+    audio.addEventListener('loadedmetadata', function() {
+      console.log('Loaded metadata, current time:', playerState.currentTime);
+      updateProgress();
+      // 加载完成后设置时间
+      if (playerState.currentTime) {
+        audio.currentTime = playerState.currentTime;
+        console.log('Set current time to:', playerState.currentTime);
+      }
+    });
+    
+    // 当音频可以播放时尝试恢复播放
+    audio.addEventListener('canplay', function() {
+      console.log('Can play, current time:', audio.currentTime);
+      // 恢复播放状态
+      if (playerState.isPlaying && audio.paused) {
+        audio.play().catch(error => {
+          console.warn('Auto-play failed in canplay:', error);
+        });
+      }
+    });
+    
+    // 播放时保持显示
+    audio.addEventListener('play', function() {
+      console.log('Playing, current time:', audio.currentTime);
+      if (player) {
+        player.classList.add('playing');
+        player.classList.add('active');
+      }
+      if (toggleBtn) {
+        toggleBtn.classList.add('active');
+      }
+      isPlayerVisible = true;
+    });
+    
+    // 暂停时记录状态
+    audio.addEventListener('pause', function() {
+      console.log('Paused, current time:', audio.currentTime);
+      if (!playerState.isPlaying) {
+        savePlayerState();
+      }
+    });
     
     // 加载当前歌曲
     loadSong(currentIndex);
@@ -197,8 +244,10 @@ function initializePlayer() {
       isPlayerVisible = true;
     }
     
-    // 绑定事件
+    // 绑定其他事件
     bindEvents();
+    
+    console.log('Player initialized');
   }
   
   // 加载歌曲
@@ -246,85 +295,69 @@ function initializePlayer() {
   
   // 绑定事件
   function bindEvents() {
+    console.log('Binding events...');
+    
+    // 重新获取播放器元素，因为页面内容可能已更新
+    player = document.getElementById('global-music-player');
+    toggleBtn = document.getElementById('music-player-toggle');
+    playBtn = document.getElementById('player-play');
+    prevBtn = document.getElementById('player-prev');
+    nextBtn = document.getElementById('player-next');
+    progressBar = document.querySelector('.progress-bar');
+    progressFill = document.getElementById('progress-fill');
+    progressHandle = document.getElementById('progress-handle');
+    currentTimeEl = document.getElementById('current-time');
+    totalTimeEl = document.getElementById('total-time');
+    volumeBtn = document.getElementById('player-volume-btn');
+    volumeBar = document.querySelector('.volume-bar');
+    volumeFill = document.getElementById('volume-fill');
+    volumeHandle = document.getElementById('volume-handle');
+    playerTitle = document.getElementById('player-title');
+    playerArtist = document.getElementById('player-artist');
+    playerCover = document.getElementById('player-cover');
+    
+    console.log('Player elements:', {
+      player: !!player,
+      toggleBtn: !!toggleBtn,
+      playBtn: !!playBtn,
+      prevBtn: !!prevBtn,
+      nextBtn: !!nextBtn
+    });
+    
     // 播放/暂停
     if (playBtn) {
+      // 先移除可能存在的事件监听器
+      playBtn.removeEventListener('click', togglePlay);
       playBtn.addEventListener('click', togglePlay);
     }
     
     // 上一首/下一首
-    if (prevBtn) prevBtn.addEventListener('click', prevSong);
-    if (nextBtn) nextBtn.addEventListener('click', nextSong);
-    
-    // 音频事件
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('ended', nextSong);
-    audio.addEventListener('loadedmetadata', function() {
-      console.log('Loaded metadata, current time:', playerState.currentTime);
-      updateProgress();
-      // 加载完成后设置时间
-      if (playerState.currentTime) {
-        audio.currentTime = playerState.currentTime;
-        console.log('Set current time to:', playerState.currentTime);
-      }
-    });
-    
-    // 当音频可以播放时尝试恢复播放
-    audio.addEventListener('canplay', function() {
-      console.log('Can play, current time:', audio.currentTime);
-      // 恢复播放状态
-      if (playerState.isPlaying && audio.paused) {
-        audio.play().catch(error => {
-          console.warn('Auto-play failed in canplay:', error);
-        });
-      }
-    });
-    
-    // 播放时保持显示
-    audio.addEventListener('play', function() {
-      console.log('Playing, current time:', audio.currentTime);
-      if (player) {
-        player.classList.add('playing');
-        player.classList.add('active');
-      }
-      if (toggleBtn) {
-        toggleBtn.classList.add('active');
-      }
-      isPlayerVisible = true;
-    });
-    
-    // 暂停时记录状态
-    audio.addEventListener('pause', function() {
-      console.log('Paused, current time:', audio.currentTime);
-      if (!playerState.isPlaying) {
-        savePlayerState();
-      }
-    });
+    if (prevBtn) {
+      prevBtn.removeEventListener('click', prevSong);
+      prevBtn.addEventListener('click', prevSong);
+    }
+    if (nextBtn) {
+      nextBtn.removeEventListener('click', nextSong);
+      nextBtn.addEventListener('click', nextSong);
+    }
     
     // 进度条事件
     var isDragging = false;
     if (progressBar) {
+      progressBar.removeEventListener('click', seek);
       progressBar.addEventListener('click', seek);
     }
     if (progressHandle) {
+      progressHandle.removeEventListener('mousedown', function() {});
       progressHandle.addEventListener('mousedown', function() {
         isDragging = true;
       });
     }
     
-    document.addEventListener('mousemove', function(e) {
-      if (isDragging) {
-        seek(e);
-      }
-    });
-    
-    document.addEventListener('mouseup', function() {
-      isDragging = false;
-      isDraggingVolume = false;
-    });
-    
     // 音量控制
     var isDraggingVolume = false;
     if (volumeBtn) {
+      volumeBtn.removeEventListener('click', function() {});
       volumeBtn.addEventListener('click', function() {
         audio.muted = !audio.muted;
         volumeBtn.classList.toggle('muted', audio.muted);
@@ -333,24 +366,23 @@ function initializePlayer() {
     }
     
     if (volumeBar) {
+      volumeBar.removeEventListener('click', adjustVolume);
       volumeBar.addEventListener('click', adjustVolume);
     }
     if (volumeHandle) {
+      volumeHandle.removeEventListener('mousedown', function() {});
       volumeHandle.addEventListener('mousedown', function() {
         isDraggingVolume = true;
       });
     }
     
-    document.addEventListener('mousemove', function(e) {
-      if (isDraggingVolume) {
-        adjustVolume(e);
-      }
-    });
-    
     // 按钮点击事件
     if (toggleBtn) {
+      toggleBtn.removeEventListener('click', togglePlayer);
       toggleBtn.addEventListener('click', togglePlayer);
     }
+    
+    console.log('Events bound successfully');
   }
   
   // 播放/暂停
@@ -512,7 +544,7 @@ window.addEventListener('beforeunload', function() {
   savePlayerState();
 });
 
-// 监听所有链接点击事件，确保在页面切换前保存状态
+// 监听所有链接点击事件，实现无刷新页面切换
 document.addEventListener('click', function(e) {
   // 检查点击的是否是链接
   var target = e.target;
@@ -523,9 +555,101 @@ document.addEventListener('click', function(e) {
   if (target && target.tagName === 'A') {
     // 检查是否是内部链接（同域）
     var href = target.getAttribute('href');
-    if (href && (href.startsWith('/') || href.startsWith('./') || href.startsWith('../') || href.includes(window.location.hostname))) {
+    if (href && (href.startsWith('/blog') || href.startsWith('/') && !href.startsWith('//') || href.startsWith('./') || href.startsWith('../') || href.includes(window.location.hostname))) {
+      // 阻止默认行为
+      e.preventDefault();
+      
       // 保存播放状态
       savePlayerState();
+      
+      // 使用History API更新URL
+      history.pushState({}, '', href);
+      
+      // 加载新页面内容
+      fetch(href)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.text();
+        })
+        .then(html => {
+          // 解析HTML
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          
+          // 更新页面内容
+          var newContent = doc.querySelector('main');
+          if (newContent) {
+            var main = document.querySelector('main');
+            if (main) {
+              main.innerHTML = newContent.innerHTML;
+            }
+          }
+          
+          // 更新页面标题
+          if (doc.title) {
+            document.title = doc.title;
+          }
+          
+          // 重新绑定事件
+          bindEvents();
+          
+          // 滚动到顶部
+          window.scrollTo(0, 0);
+        })
+        .catch(error => {
+          console.error('Failed to load page:', error);
+          // 如果失败，使用默认行为
+          window.location.href = href;
+        });
     }
   }
+});
+
+// 监听浏览器的前进/后退按钮
+history.pushState = (function(originalPushState) {
+  return function(state, title, url) {
+    return originalPushState.call(history, state, title, url);
+  };
+})(history.pushState);
+
+// 监听popstate事件
+document.addEventListener('popstate', function() {
+  // 保存播放状态
+  savePlayerState();
+  
+  // 重新加载当前页面
+  fetch(window.location.href)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(html => {
+      // 解析HTML
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      
+      // 更新页面内容
+      var newContent = doc.querySelector('main');
+      if (newContent) {
+        var main = document.querySelector('main');
+        if (main) {
+          main.innerHTML = newContent.innerHTML;
+        }
+      }
+      
+      // 更新页面标题
+      if (doc.title) {
+        document.title = doc.title;
+      }
+      
+      // 重新绑定事件
+      bindEvents();
+    })
+    .catch(error => {
+      console.error('Failed to load page:', error);
+    });
 });
