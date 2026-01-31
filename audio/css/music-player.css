@@ -1,110 +1,8 @@
-/* 控制按钮容器 */
-.controls-container {
+/* 音乐播放器控制按钮 */
+.music-player-toggle {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  display: flex;
-  gap: 12px;
-  z-index: 10000;
-}
-
-/* 透明度调节面板 */
-.transparency-panel {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 200px;
-  background: linear-gradient(135deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(170, 210, 230, 0.4);
-  z-index: 9999;
-  transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.transparency-panel.active {
-  transform: translateX(0);
-}
-
-.transparency-slider-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.transparency-slider {
-  width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.5);
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: all 0.3s ease;
-}
-
-.transparency-slider:hover {
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.transparency-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: white;
-  border: 2px solid rgba(170, 210, 230, 0.9);
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.transparency-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.transparency-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: white;
-  border: 2px solid rgba(170, 210, 230, 0.9);
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.transparency-slider::-moz-range-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.transparency-value {
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-  font-weight: 600;
-}
-
-/* 暗黑模式适配 */
-.dark .transparency-panel {
-  background: linear-gradient(135deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(170, 210, 230, 0.4);
-}
-
-.dark .transparency-value {
-  color: #333;
-}
-
-/* 通用控制按钮样式 */
-.control-button {
   width: 50px;
   height: 50px;
   background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8));
@@ -113,6 +11,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   cursor: pointer;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,27 +19,6 @@
   color: #333;
   box-shadow: 0 4px 16px rgba(170, 210, 230, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.control-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(170, 210, 230, 0.5);
-}
-
-.dark .control-button {
-  background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #333;
-  box-shadow: 0 4px 16px rgba(170, 210, 230, 0.4);
-}
-
-.dark .control-button:hover {
-  box-shadow: 0 6px 20px rgba(170, 210, 230, 0.5);
-}
-
-/* 音乐播放器控制按钮 */
-.music-player-toggle {
-  background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8));
 }
 
 .dark .music-player-toggle {
@@ -207,200 +85,27 @@
   display: block;
 }
 
-/* 沉浸阅读按钮样式 */
-#immersive-reading-button {
-  background: linear-gradient(135deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
-}
-
-#immersive-reading-button:hover {
-  transform: scale(1.1) translateY(-3px);
-  box-shadow: 0 8px 24px rgba(170, 210, 230, 0.5);
-}
-
-/* 沉浸阅读按钮图标切换 */
-#immersive-reading-button .book-icon {
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-#immersive-reading-button .exit-icon {
-  display: none;
-  transition: transform 0.3s ease;
-}
-
-#immersive-reading-button.active .book-icon {
-  display: none;
-  transform: scale(0.8);
-}
-
-#immersive-reading-button.active .exit-icon {
-  display: block;
-  transform: scale(1);
-}
-
-/* 暗黑模式适配 */
-.dark #immersive-reading-button {
-  background: linear-gradient(135deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #333;
-  box-shadow: 0 6px 20px rgba(170, 210, 230, 0.4);
-}
-
-.dark #immersive-reading-button:hover {
-  box-shadow: 0 8px 24px rgba(170, 210, 230, 0.5);
-}
-
-/* 沉浸阅读模式样式 */
-.immersive-reading {
-  /* 隐藏侧边栏 */
-  .sidebar {
-    display: none !important;
-  }
-  
-  /* 隐藏音乐播放器 */
-  .global-music-player {
-    display: none !important;
-  }
-  
-  /* 隐藏控制按钮（保留沉浸阅读按钮） */
-  .controls-container {
-    position: fixed !important;
-    bottom: 20px !important;
-    right: 20px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    z-index: 10000 !important;
-  }
-  
-  /* 隐藏其他按钮，只保留沉浸阅读按钮 */
-  .controls-container .control-button:not(#immersive-reading-button) {
-    display: none !important;
-  }
-  
-  /* 调整沉浸阅读按钮大小 */
-  .controls-container #immersive-reading-button {
-    width: 60px !important;
-    height: 60px !important;
-    font-size: 24px !important;
-  }
-  
-  /* 扩大主内容区域 */
-  .main {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 40px !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-  
-  /* 优化文章内容 */
-  article {
-    max-width: 90% !important;
-    margin: 0 auto !important;
-    padding: 40px !important;
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
-  }
-  
-  /* 优化标题 */
-  h1, h2, h3, h4, h5, h6 {
-    color: #2d3748 !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
-    margin-bottom: 20px !important;
-  }
-  
-  /* 优化段落 */
-  p {
-    color: rgba(255, 105, 180, 0.8) !important;
-    line-height: 1.8 !important;
-    margin-bottom: 20px !important;
-    font-size: 18px !important;
-  }
-  
-  /* 优化链接 */
-  a {
-    color: rgba(255, 105, 180, 1) !important;
-    text-decoration: none !important;
-    transition: all 0.3s ease !important;
-  }
-  
-  a:hover {
-    color: rgba(255, 105, 180, 0.6) !important;
-    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5) !important;
-  }
-}
-
-/* 暗黑模式下的沉浸阅读 */
-.dark.immersive-reading {
-  /* 优化文章内容 */
-  article {
-    background: rgba(30, 30, 30, 0.95) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-  }
-  
-  /* 优化标题 */
-  h1, h2, h3, h4, h5, h6 {
-    color: #f7fafc !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-  }
-  
-  /* 优化段落 */
-  p {
-    color: #e2e8f0 !important;
-  }
-  
-  /* 优化链接 */
-  a {
-    color: #6c8ebf !important;
-  }
-  
-  a:hover {
-    color: #90cdf4 !important;
-    text-shadow: 0 0 10px rgba(170, 210, 230, 0.3) !important;
-  }
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .controls-container {
-    bottom: 16px;
-    right: 16px;
-    gap: 10px;
-  }
-  
-  .control-button {
-    width: 48px;
-    height: 48px;
-    font-size: 16px;
-  }
-  
-  .immersive-reading {
-    .main {
-      padding: 20px !important;
-    }
-    
-    article {
-      padding: 16px !important;
-      max-width: 100% !important;
-    }
-    
-    p {
-      font-size: 15px !important;
-      line-height: 1.7 !important;
-    }
-  }
-}
-
 /* 主题切换按钮样式 */
 .theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+  width: 50px;
+  height: 50px;
   background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #333;
+  box-shadow: 0 4px 16px rgba(170, 210, 230, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 主题切换按钮悬停效果 */
@@ -451,8 +156,9 @@
   box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* 播放时的样式（不自动显示） */
+/* 播放时保持显示 */
 .global-music-player.playing {
+  transform: translateY(0);
   box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.15);
 }
 
