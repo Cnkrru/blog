@@ -28,10 +28,16 @@ function savePlayerState() {
     playerState.isPlaying = !window.audio.paused;
     playerState.volume = window.audio.volume;
     playerState.isMuted = window.audio.muted;
-    playerState.currentIndex = window.currentIndex;
+    playerState.currentIndex = window.currentIndex || 0;
+    console.log('Saving player state:', {
+      currentTime: playerState.currentTime,
+      isPlaying: playerState.isPlaying,
+      currentIndex: playerState.currentIndex
+    });
     
     try {
       localStorage.setItem('musicPlayerState', JSON.stringify(playerState));
+      console.log('Saved player state to localStorage');
     } catch (error) {
       console.warn('Failed to save player state:', error);
     }
@@ -44,11 +50,19 @@ function loadPlayerState() {
     var savedState = localStorage.getItem('musicPlayerState');
     if (savedState) {
       var state = JSON.parse(savedState);
+      console.log('Loading player state:', {
+        currentTime: state.currentTime,
+        isPlaying: state.isPlaying,
+        currentIndex: state.currentIndex
+      });
       playerState = {
         ...playerState,
         ...state
       };
+      console.log('Loaded player state:', playerState);
       return true;
+    } else {
+      console.log('No saved player state found');
     }
   } catch (error) {
     console.warn('Failed to load player state:', error);
@@ -83,9 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var playerArtist = document.getElementById('player-artist');
   var playerCover = document.getElementById('player-cover');
   
-  // 加载保存的播放器状态
-  loadPlayerState();
-  
   // 从 JSON 文件加载播放列表
   fetch('/blog/audio/js/music-config.json')
     .then(response => {
@@ -104,6 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
           cover: '/blog' + song.cover
         };
       });
+      // 加载保存的播放器状态
+      loadPlayerState();
+      // 确保播放列表一致
       playerState.playlist = playlist;
       if (playlist.length > 0) {
         initializePlayer();
@@ -144,6 +158,9 @@ document.addEventListener('DOMContentLoaded', function() {
           cover: "/blog/audio/covers/my-all.jpg"
         }
       ];
+      // 加载保存的播放器状态
+      loadPlayerState();
+      // 确保播放列表一致
       playerState.playlist = playlist;
       initializePlayer();
     });
@@ -155,11 +172,11 @@ function initializePlayer() {
     window.audio = audio;
     
     // 恢复保存的状态
-    currentIndex = playerState.currentIndex;
+    currentIndex = playerState.currentIndex || 0;
     window.currentIndex = currentIndex;
     
-    audio.volume = playerState.volume;
-    audio.muted = playerState.isMuted;
+    audio.volume = playerState.volume || 0.7;
+    audio.muted = playerState.isMuted || false;
     
     // 加载当前歌曲
     loadSong(currentIndex);
@@ -242,21 +259,29 @@ function initializePlayer() {
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('ended', nextSong);
     audio.addEventListener('loadedmetadata', function() {
+      console.log('Loaded metadata, current time:', playerState.currentTime);
       updateProgress();
-      // 加载完成后设置时间和恢复播放状态
+      // 加载完成后设置时间
       if (playerState.currentTime) {
         audio.currentTime = playerState.currentTime;
+        console.log('Set current time to:', playerState.currentTime);
       }
+    });
+    
+    // 当音频可以播放时尝试恢复播放
+    audio.addEventListener('canplay', function() {
+      console.log('Can play, current time:', audio.currentTime);
       // 恢复播放状态
-      if (playerState.isPlaying) {
+      if (playerState.isPlaying && audio.paused) {
         audio.play().catch(error => {
-          console.warn('Auto-play failed:', error);
+          console.warn('Auto-play failed in canplay:', error);
         });
       }
     });
     
     // 播放时保持显示
     audio.addEventListener('play', function() {
+      console.log('Playing, current time:', audio.currentTime);
       if (player) {
         player.classList.add('playing');
         player.classList.add('active');
@@ -265,6 +290,14 @@ function initializePlayer() {
         toggleBtn.classList.add('active');
       }
       isPlayerVisible = true;
+    });
+    
+    // 暂停时记录状态
+    audio.addEventListener('pause', function() {
+      console.log('Paused, current time:', audio.currentTime);
+      if (!playerState.isPlaying) {
+        savePlayerState();
+      }
     });
     
     // 进度条事件
