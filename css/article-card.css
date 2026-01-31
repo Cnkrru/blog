@@ -1,0 +1,165 @@
+/* 首页文章卡片悬停美化功能 */
+/* 文章卡片基础样式 */
+.article-list .article-card {
+    border-radius: var(--border-radius-lg);
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+}
+
+/* 卡片背景渐变效果 */
+.article-list .article-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* 悬停核心效果：上浮 + 阴影 + 粉色边框 + 渐变条展开 */
+.article-list .article-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-heavy);
+    border-color: var(--primary-color);
+}
+
+.article-list .article-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* 卡片图片悬停效果 */
+.article-list .article-card .article-image {
+    overflow: hidden;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.article-list .article-card .article-image img {
+    transition: transform 0.5s ease;
+    width: 100%;
+    height: auto;
+}
+
+.article-list .article-card:hover .article-image img {
+    transform: scale(1.03);
+}
+
+/* 卡片标题悬浮效果 */
+.article-list .article-card .article-title {
+    transition: transform 0.35s ease;
+}
+
+.article-list .article-card:hover .article-title {
+    transform: translateY(-2px);
+}
+
+.article-list .article-card .article-title a {
+    transition: color 0.35s ease;
+}
+
+.article-list .article-card .article-title a:hover {
+    color: var(--primary-color);
+}
+
+/* 卡片摘要悬浮效果 */
+.article-list .article-card .article-summary {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.article-list .article-card:hover .article-summary {
+    opacity: 0.95;
+    transform: translateY(-1px);
+}
+
+/* 卡片底部信息（时间/分类）微调 */
+.article-list .article-card .article-meta {
+    opacity: 0.85;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.article-list .article-card:hover .article-meta {
+    opacity: 1;
+    transform: translateY(1px);
+}
+
+/* 卡片标签悬停效果 */
+.article-list .article-card .article-tags {
+    transition: opacity 0.35s ease;
+}
+
+.article-list .article-card:hover .article-tags {
+    opacity: 1;
+}
+
+.article-list .article-card .article-tags a {
+    transition: background 0.35s ease, color 0.35s ease, transform 0.35s ease;
+}
+
+.article-list .article-card:hover .article-tags a {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* 暗黑模式适配 */
+.dark .article-list .article-card {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--dark-shadow-light);
+}
+
+.dark .article-list .article-card::before {
+    background: linear-gradient(90deg, var(--dark-primary), var(--dark-secondary));
+}
+
+.dark .article-list .article-card:hover {
+    border-color: var(--dark-primary);
+    box-shadow: var(--dark-shadow-heavy);
+}
+
+.dark .article-list .article-card .article-title a:hover {
+    color: var(--dark-primary);
+}
+
+.dark .article-list .article-card:hover .article-tags a {
+    background: var(--dark-primary);
+    color: #fff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .article-list .article-card {
+        border-radius: 10px;
+    }
+    
+    .article-list .article-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-medium);
+    }
+    
+    .article-list .article-card::before {
+        height: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-list .article-card {
+        border-radius: 8px;
+    }
+    
+    .article-list .article-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-light);
+    }
+    
+    .article-list .article-card::before {
+        height: 2px;
+    }
+}

@@ -1,0 +1,301 @@
+/* 自定义主题样式 - 粉到蓝渐变 */
+
+/* 搜索栏样式 */
+.search-form {
+  position: relative;
+}
+
+.search-form label {
+  display: none !important;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 10px 48px 10px 16px;
+  border: 1px solid rgba(255, 200, 210, 0.3);
+  border-radius: 25px;
+  background: linear-gradient(135deg, rgba(255, 200, 210, 0.1), rgba(170, 210, 230, 0.1));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 14px;
+  transition: all 0.3s ease;
+  color: #333;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.dark .search-form input {
+  background: linear-gradient(135deg, rgba(255, 200, 210, 0.2), rgba(170, 210, 230, 0.2));
+  border-color: rgba(255, 200, 210, 0.4);
+  color: #f7fafc;
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: rgba(170, 210, 230, 0.8);
+  box-shadow: 0 0 20px rgba(170, 210, 230, 0.3);
+  transform: translateY(-1px);
+}
+
+.search-form button {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, rgba(170, 210, 230, 0.8), rgba(255, 200, 210, 0.8));
+  animation: gradient-shift 3s ease-in-out infinite;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(170, 210, 230, 0.3);
+  z-index: 1;
+  overflow: hidden;
+}
+
+.search-form button:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(170, 210, 230, 0.4);
+}
+
+.search-form button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #333;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+  background: none;
+}
+
+.dark .search-form button svg {
+  fill: none;
+  stroke: #333;
+  background: none;
+}
+
+.search-form button:hover svg {
+  transform: scale(1.1);
+  background: none;
+  stroke: #333;
+}
+
+/* 搜索页面样式 */
+.template-search .search-form {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.template-search .search-form input {
+  font-size: 16px;
+  padding: 12px 56px 12px 20px;
+  border-radius: 30px;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+.template-search .search-form button {
+  width: 44px;
+  height: 44px;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, rgba(170, 210, 230, 0.8), rgba(255, 200, 210, 0.8));
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+.template-search .search-form button svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: #333;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+  background: none;
+}
+
+.dark .template-search .search-form button svg {
+  fill: none;
+  stroke: #333;
+}
+
+.template-search .search-form button:hover svg {
+  transform: scale(1.1);
+  stroke: #333;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .search-form input {
+    padding: 8px 40px 8px 14px;
+    font-size: 13px;
+    height: 40px;
+  }
+  
+  .search-form button {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, rgba(170, 210, 230, 0.8), rgba(255, 200, 210, 0.8));
+    animation: gradient-shift 3s ease-in-out infinite;
+  }
+  
+  .search-form button svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #333;
+    stroke-width: 2;
+  }
+  
+  .dark .search-form button svg {
+    fill: none;
+    stroke: #333;
+  }
+  
+  .template-search .search-form {
+    margin: 30px auto;
+  }
+  
+  .template-search .search-form input {
+    padding: 10px 52px 10px 18px;
+    font-size: 15px;
+    height: 48px;
+  }
+  
+  .template-search .search-form button {
+    width: 40px;
+    height: 40px;
+    right: 4px;
+    background: linear-gradient(135deg, rgba(170, 210, 230, 0.8), rgba(255, 200, 210, 0.8));
+    animation: gradient-shift 3s ease-in-out infinite;
+  }
+  
+  .template-search .search-form button svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #333;
+    stroke-width: 2;
+  }
+  
+  .dark .template-search .search-form button svg {
+    fill: none;
+    stroke: #333;
+  }
+}
+
+/* 其他界面美化 */
+
+/* 侧边栏标题 */
+.widget-title {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.dark .widget-title {
+  color: #f7fafc;
+}
+
+.widget-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
+  border-radius: 2px;
+}
+
+/* 按钮样式 */
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 卡片悬停效果 */
+.article-list--item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.article-list--item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(170, 210, 230, 0.15);
+}
+
+.dark .article-list--item:hover {
+  box-shadow: 0 12px 24px rgba(170, 210, 230, 0.1);
+}
+
+/* 链接样式 */
+a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: #63b3ed;
+}
+
+/* 隐藏侧边栏中的主题切换按钮 */
+aside.sidebar #dark-mode-toggle {
+  display: none !important;
+}
+
+/* 确保右下角的主题切换按钮显示 */
+#theme-toggle-button.music-player-toggle {
+  display: flex !important;
+}
+
+/* 主题切换按钮样式 */
+#theme-toggle-button.music-player-toggle {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 200, 210, 0.1);
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(170, 210, 230, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(255, 200, 210, 0.6), rgba(170, 210, 230, 0.6));
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8));
+}
+
+/* 渐变动画关键帧 */
+@keyframes gradient-shift {
+  0% {
+    background: linear-gradient(135deg, rgba(170, 210, 230, 0.8), rgba(255, 200, 210, 0.8));
+  }
+  50% {
+    background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8));
+  }
+  100% {
+    background: linear-gradient(135deg, rgba(170, 210, 230, 0.8), rgba(255, 200, 210, 0.8));
+  }
+}

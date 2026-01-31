@@ -1,0 +1,29 @@
+/**
+ * 阅读进度条样式
+ */
+
+/* 阅读进度条容器 */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
+  z-index: 99999;
+  width: 0%;
+  transition: width 0.1s ease;
+  box-shadow: 0 2px 8px rgba(170, 210, 230, 0.4);
+}
+
+/* 暗色模式下的进度条样式 */
+.dark .reading-progress-bar {
+  background: linear-gradient(90deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9));
+  box-shadow: 0 2px 8px rgba(170, 210, 230, 0.4);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .reading-progress-bar {
+    height: 3px;
+  }
+}

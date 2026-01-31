@@ -1,0 +1,75 @@
+/* 文章目录（TOC）整体美化 */
+.sidebar-widget__toc {
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-light);
+    padding: var(--spacing-md) !important;
+    border: none !important;
+}
+
+/* 目录标题样式 */
+.sidebar-widget__toc-title {
+    font-weight: 500 !important;
+    margin-bottom: 0.8rem !important;
+    background: linear-gradient(180deg, var(--primary-darker), #4ECDC4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+/* 目录列表项基础样式 */
+.sidebar-widget__toc ul {
+    padding-left: 0.8rem !important;
+}
+
+.sidebar-widget__toc li {
+    margin: 0.4rem 0 !important;
+    list-style: none !important;
+}
+
+.sidebar-widget__toc a {
+    color: var(--secondary) !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+}
+
+/* 目录项悬浮效果 */
+.sidebar-widget__toc a:hover {
+    background: linear-gradient(180deg, var(--primary-darker), #4ECDC4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+.sidebar-widget__toc a::after {
+    display: none !important;
+}
+
+/* 当前激活的目录项（正在阅读的章节） */
+.sidebar-widget__toc .active a {
+    font-weight: 500 !important;
+    background: linear-gradient(180deg, var(--primary-darker), #4ECDC4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+    padding: 2px 6px;
+    border-radius: var(--border-radius-sm);
+}
+
+/* 暗黑模式适配 */
+.dark .sidebar-widget__toc {
+    box-shadow: var(--dark-shadow-light);
+}
+
+.dark .sidebar-widget__toc-title,
+.dark .sidebar-widget__toc a:hover,
+.dark .sidebar-widget__toc .active a {
+    background: linear-gradient(180deg, var(--dark-primary-dark), #4ECDC4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+.dark .sidebar-widget__toc .active a {
+    padding: 2px 6px;
+    border-radius: var(--border-radius-sm);
+}

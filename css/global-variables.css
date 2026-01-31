@@ -1,0 +1,72 @@
+/* 全局变量和公共样式 */
+/* 全局变量定义 */
+:root {
+    /* 主题颜色 */
+    --primary-color: #FFB7C5;
+    --primary-dark: #FF9AA2;
+    --primary-darker: #FF6990;
+    --secondary-color: #FFD1DC;
+    --accent-color: #42b983;
+    --accent-dark: #61afef;
+    
+    /* 暗黑模式颜色 */
+    --dark-primary: #FF85A2;
+    --dark-primary-dark: #FF6990;
+    --dark-secondary: #FFB7C5;
+    
+    /* 动画时间 */
+    --transition-fast: 0.2s;
+    --transition-normal: 0.3s;
+    --transition-slow: 0.5s;
+    
+    /* 阴影 */
+    --shadow-light: 0 1px 6px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --dark-shadow-light: 0 1px 6px rgba(0, 0, 0, 0.1);
+    --dark-shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --dark-shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.2);
+    
+    /* 边框半径 */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-full: 50%;
+    
+    /* 间距 */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+}
+
+/* 全局动画定义 */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineExpand {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 全局过渡效果 */
+* {
+    transition: background-color var(--transition-normal) ease, color var(--transition-normal) ease, border-color var(--transition-normal) ease;
+}
+
+/* 图片和媒体元素不应用过渡，避免闪烁 */
+img, video, canvas, svg {
+    transition: none;
+}

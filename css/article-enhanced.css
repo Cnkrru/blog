@@ -1,0 +1,340 @@
+/* 增强版文章样式 */
+
+/* 文章头部样式增强 */
+.article-header {
+    position: relative;
+    overflow: hidden;
+}
+
+.article-header .article-details {
+    padding: var(--card-padding);
+    padding-bottom: 0;
+}
+
+.article-header .article-title {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    line-height: 1.3;
+    color: var(--card-text-color-main);
+    font-weight: 700;
+}
+
+/* 文章元信息样式 */
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--card-text-color-tertiary);
+}
+
+.article-meta time {
+    font-family: var(--font-mono);
+}
+
+.article-reading-time {
+    display: inline-flex;
+    align-items: center;
+}
+
+.article-word-count {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* 文章描述样式 */
+.article-description {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--card-text-color-secondary);
+    border-left: 3px solid var(--primary-color);
+    padding-left: 1rem;
+    background: rgba(var(--primary), 0.05);
+    padding: 0.8rem 1rem;
+    border-radius: 0 4px 4px 0;
+}
+
+/* 文章卡片样式增强 */
+.article-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-background);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--shadow-l1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: var(--spacing-md);
+}
+
+.article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-l2);
+}
+
+.article-card.has-image {
+    flex-direction: row;
+}
+
+.article-card .article-image {
+    flex-shrink: 0;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.article-card.has-image .article-image {
+    width: 200px;
+    height: auto;
+    min-height: 150px;
+}
+
+.article-card .article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.article-card:hover .article-image img {
+    transform: scale(1.05);
+}
+
+.article-card .article-details {
+    flex: 1;
+    padding: var(--card-padding);
+    display: flex;
+    flex-direction: column;
+}
+
+.article-card .article-title {
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    color: var(--card-text-color-main);
+    font-weight: 600;
+}
+
+.article-card .article-summary {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--card-text-color-secondary);
+    flex: 1;
+}
+
+.article-card .article-meta {
+    margin-bottom: 0.8rem;
+}
+
+/* 紧凑模式文章列表样式 */
+.article-compact {
+    display: flex;
+    align-items: flex-start;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.article-compact:hover {
+    background: rgba(var(--primary), 0.03);
+    transform: translateX(4px);
+}
+
+.article-compact .article-details {
+    flex: 1;
+    margin-right: var(--spacing-md);
+}
+
+.article-compact .article-title {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: var(--card-text-color-main);
+    font-weight: 600;
+}
+
+.article-compact .article-summary {
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--card-text-color-secondary);
+}
+
+.article-compact .article-time {
+    font-size: 0.8rem;
+    color: var(--card-text-color-tertiary);
+    margin-bottom: 0.5rem;
+}
+
+.article-compact .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.article-compact .article-tags .tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    background: rgba(var(--primary), 0.1);
+    color: var(--primary-color);
+    border-radius: 12px;
+}
+
+.article-compact .article-image {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.article-compact .article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.article-compact:hover .article-image img {
+    transform: scale(1.05);
+}
+
+/* 标签样式 */
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.article-tags .tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(var(--primary), 0.1);
+    color: var(--primary-color);
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.article-tags .tag:hover {
+    background: rgba(var(--primary), 0.2);
+    transform: translateY(-1px);
+}
+
+/* 暗黑模式适配 */
+.dark .article-header .article-title {
+    color: var(--dark-card-text-color-main);
+}
+
+.dark .article-meta {
+    color: var(--dark-card-text-color-tertiary);
+}
+
+.dark .article-description {
+    color: var(--dark-card-text-color-secondary);
+    background: rgba(var(--dark-primary), 0.1);
+    border-left-color: var(--dark-primary);
+}
+
+.dark .article-card {
+    background: var(--dark-card-background);
+    box-shadow: var(--dark-shadow-l1);
+}
+
+.dark .article-card:hover {
+    box-shadow: var(--dark-shadow-l2);
+}
+
+.dark .article-card .article-title {
+    color: var(--dark-card-text-color-main);
+}
+
+.dark .article-card .article-summary {
+    color: var(--dark-card-text-color-secondary);
+}
+
+.dark .article-compact {
+    border-bottom-color: var(--dark-border-color);
+}
+
+.dark .article-compact:hover {
+    background: rgba(var(--dark-primary), 0.05);
+}
+
+.dark .article-compact .article-title {
+    color: var(--dark-card-text-color-main);
+}
+
+.dark .article-compact .article-summary {
+    color: var(--dark-card-text-color-secondary);
+}
+
+.dark .article-compact .article-time {
+    color: var(--dark-card-text-color-tertiary);
+}
+
+.dark .article-compact .article-tags .tag {
+    background: rgba(var(--dark-primary), 0.15);
+    color: var(--dark-primary);
+}
+
+.dark .article-tags .tag {
+    background: rgba(var(--dark-primary), 0.15);
+    color: var(--dark-primary);
+}
+
+.dark .article-tags .tag:hover {
+    background: rgba(var(--dark-primary), 0.25);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .article-header .article-title {
+        font-size: 1.5rem;
+    }
+    
+    .article-card.has-image {
+        flex-direction: column;
+    }
+    
+    .article-card.has-image .article-image {
+        width: 100%;
+        height: 180px;
+    }
+    
+    .article-compact {
+        flex-direction: column;
+    }
+    
+    .article-compact .article-details {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .article-compact .article-image {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-header .article-title {
+        font-size: 1.3rem;
+    }
+    
+    .article-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+    
+    .article-description {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+    }
+}

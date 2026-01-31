@@ -1,0 +1,57 @@
+/* 页面淡入加载动画 - 极简版 */
+/* 页面根容器淡入动画 */
+html {
+    animation: pageFadeIn 1s ease-in-out forwards;
+    opacity: 0.2; /* 初始半透明，避免突然闪现 */
+    will-change: opacity;
+    /* 防止动画期间的布局偏移 */
+    min-height: 100%;
+    /* 初始背景色设置，避免页面加载时闪烁 */
+    background-color: #f8f9fa;
+}
+
+/* 暗黑模式初始背景色 */
+.dark {
+    background-color: #2d3748;
+}
+
+/* 动画关键帧：从半透明到不透明 */
+@keyframes pageFadeIn {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* 图片淡入动画，避免图片闪跳 */
+img {
+    animation: imgFadeIn 1.2s ease-in-out forwards;
+    opacity: 0.2;
+    will-change: opacity;
+    /* 确保图片加载期间保持占位 */
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* 为已缓存的图片禁用动画，提高性能 */
+img[src] {
+    animation: none;
+    opacity: 1;
+}
+
+@keyframes imgFadeIn {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* 确保动画在打印时被禁用 */
+@media print {
+    html {
+        animation: none;
+        opacity: 1;
+    }
+    
+    img {
+        animation: none;
+        opacity: 1;
+    }
+}

@@ -1,0 +1,179 @@
+/* 社交分享功能 */
+/* 社交分享容器 */
+.social-share {
+    margin: 0.6rem 0;
+    padding: 0.6rem;
+    background: rgba(255, 183, 197, 0.05);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 左侧绿色竖线 */
+.social-share::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-color);
+    border-radius: var(--border-radius-md) 0 0 var(--border-radius-md);
+}
+
+/* 标题容器 */
+.social-share__title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin: 0;
+    flex-shrink: 0;
+    padding-left: 0.5rem;
+}
+
+.social-share__title::before {
+    content: '📤';
+    font-size: 1.05rem;
+}
+
+/* 分享按钮容器 */
+.social-share__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+/* 分享按钮基础样式 */
+.social-share__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast) ease;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    min-width: 28px;
+    height: 28px;
+}
+
+/* 分享按钮图标 */
+.social-share__button i {
+    margin-right: 0.3rem;
+    font-size: 0.9rem;
+}
+
+/* 平台特定样式 */
+.social-share__button--wechat {
+    background: #07C160;
+    color: #fff;
+}
+
+.social-share__button--weibo {
+    background: #E6162D;
+    color: #fff;
+}
+
+.social-share__button--qq {
+    background: #12B7F5;
+    color: #fff;
+}
+
+.social-share__button--twitter {
+    background: #1DA1F2;
+    color: #fff;
+}
+
+.social-share__button--facebook {
+    background: #1877F2;
+    color: #fff;
+}
+
+.social-share__button--linkedin {
+    background: #0077B5;
+    color: #fff;
+}
+
+.social-share__button--copy {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* 悬停效果 */
+.social-share__button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    opacity: 0.9;
+}
+
+/* 暗黑模式适配 */
+.dark .social-share {
+    background: rgba(255, 149, 162, 0.05);
+    border-color: var(--dark-primary);
+    box-shadow: var(--dark-shadow-light);
+}
+
+.dark .social-share__title {
+    color: var(--secondary);
+}
+
+.dark .social-share__button--copy {
+    background: var(--dark-primary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .social-share {
+        padding: 1.2rem;
+    }
+    
+    .social-share__buttons {
+        gap: 0.6rem;
+    }
+    
+    .social-share__button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        height: 36px;
+    }
+    
+    .social-share__button i {
+        margin-right: 0.3rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-share__buttons {
+        justify-content: center;
+    }
+    
+    .social-share__button {
+        flex: 1;
+        min-width: 32px;
+        padding: 0.4rem;
+    }
+    
+    .social-share__button span {
+        display: none;
+    }
+    
+    .social-share__button i {
+        margin-right: 0;
+    }
+}

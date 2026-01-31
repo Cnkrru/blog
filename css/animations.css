@@ -1,0 +1,53 @@
+/* 自定义交互动画样式 */
+/* ========== 链接下划线动画 ========== */
+a {
+    text-decoration: none !important;
+    position: relative;
+}
+
+/* 下划线基础样式 */
+a::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--accent-color);
+    transition: width var(--transition-normal) ease;
+}
+
+/* 鼠标悬停展开下划线 */
+a:hover::after {
+    width: 100%;
+}
+
+/* ========== 图片放大+阴影动画 ========== */
+img {
+    transition: all var(--transition-fast) ease-in-out;
+    border-radius: var(--border-radius-sm);
+}
+
+img:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-light);
+}
+
+/* ========== 按钮/侧边栏组件悬停 ========== */
+button, .sidebar-widget, .tag-cloud a {
+    transition: all var(--transition-fast) ease;
+}
+
+button:hover, .sidebar-widget:hover, .tag-cloud a:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* ========== 暗黑模式适配 ========== */
+.dark img:hover {
+    box-shadow: var(--dark-shadow-light);
+}
+
+.dark a::after {
+    background-color: var(--accent-dark);
+}
