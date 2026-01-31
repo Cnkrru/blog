@@ -1,0 +1,42 @@
+<!-- 增强版评论系统管理组件 -->
+{{ if .Site.Params.comments.enabled }}
+    <section class="comments-section">
+        <div class="comments-header">
+            <div class="comments-header-top">
+                <h3 class="comments-title">
+                    {{- i18n "article.comments" | default "Comments" -}}
+                    {{ with .Site.Params.comments.provider }}
+                        <span class="comments-provider">({{ . }})</span>
+                    {{ end }}
+                </h3>
+                {{ partial "comments/components/comment-count" . }}
+            </div>
+            {{ partial "comments/components/comment-sort" . }}
+        </div>
+        
+        <div class="comments-content">
+            <!-- 评论系统加载动画 -->
+            <div class="comments-loading">
+                <div class="comments-loading-spinner"></div>
+                <p>{{ i18n "article.comments.loading" | default "Loading comments..." }}</p>
+            </div>
+            
+            <!-- 评论系统容器 -->
+            <div id="comments-container">
+                {{ partial (printf "comments/provider/%s" .Site.Params.comments.provider) . }}
+            </div>
+            
+            <!-- 评论系统错误提示 -->
+            <div class="comments-error" style="display: none;">
+                <p>{{ i18n "article.comments.error" | default "Failed to load comments. Please try again later." }}</p>
+                <button class="comments-retry">{{ i18n "article.comments.retry" | default "Retry" }}</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 引入评论系统增强样式 -->
+    <link rel="stylesheet" href="/blog/css/comments-enhanced.css">
+    
+    <!-- 引入评论系统增强脚本 -->
+    <script src="/blog/js/comments-enhanced.js"></script>
+{{ end }}

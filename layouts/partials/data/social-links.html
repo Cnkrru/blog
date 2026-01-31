@@ -1,0 +1,89 @@
+{{- /* 增强版社交媒体链接管理 */ -}}
+{{- $pageUrl := .Permalink -}}
+{{- $pageTitle := .Title -}}
+{{- $pageDescription := partial "data/description" . -}}
+{{- $siteTitle := .Site.Title -}}
+
+{{- /* 社交媒体配置 */ -}}
+{{- $social := .Site.Params.social | default dict -}}
+{{- $share := .Site.Params.share | default dict -}}
+
+{{- /* 社交媒体链接数据 */ -}}
+{{- $socialLinks := dict -}}
+
+{{- /* 基础社交媒体平台 */ -}}
+{{- $platforms := dict -}}
+{{- $platforms = merge $platforms (dict "weibo" (dict "name" "微博" "icon" "fab fa-weibo" "url" "https://service.weibo.com/share/share.php")) -}}
+{{- $platforms = merge $platforms (dict "twitter" (dict "name" "Twitter" "icon" "fab fa-twitter" "url" "https://twitter.com/intent/tweet")) -}}
+{{- $platforms = merge $platforms (dict "facebook" (dict "name" "Facebook" "icon" "fab fa-facebook-f" "url" "https://www.facebook.com/sharer/sharer.php")) -}}
+{{- $platforms = merge $platforms (dict "linkedin" (dict "name" "LinkedIn" "icon" "fab fa-linkedin-in" "url" "https://www.linkedin.com/shareArticle")) -}}
+{{- $platforms = merge $platforms (dict "pinterest" (dict "name" "Pinterest" "icon" "fab fa-pinterest" "url" "https://pinterest.com/pin/create/button")) -}}
+{{- $platforms = merge $platforms (dict "reddit" (dict "name" "Reddit" "icon" "fab fa-reddit" "url" "https://www.reddit.com/submit")) -}}
+
+{{- /* 生成分享链接 */ -}}
+{{- $shareLinks := dict -}}
+
+{{- /* 微博分享链接 */ -}}
+{{- if index $share "weibo" | default true -}}
+    {{- $weiboUrl := printf "%s?url=%s&title=%s&content=%s" 
+        (index $platforms "weibo").url 
+        ($pageUrl | urlquery) 
+        ($pageTitle | urlquery) 
+        ($pageDescription | urlquery) -}}
+    {{- $shareLinks = merge $shareLinks (dict "weibo" $weiboUrl) -}}
+{{- end -}}
+
+{{- /* Twitter分享链接 */ -}}
+{{- if index $share "twitter" | default true -}}
+    {{- $twitterUrl := printf "%s?url=%s&text=%s" 
+        (index $platforms "twitter").url 
+        ($pageUrl | urlquery) 
+        ($pageTitle | urlquery) -}}
+    {{- $shareLinks = merge $shareLinks (dict "twitter" $twitterUrl) -}}
+{{- end -}}
+
+{{- /* Facebook分享链接 */ -}}
+{{- if index $share "facebook" | default true -}}
+    {{- $facebookUrl := printf "%s?u=%s" 
+        (index $platforms "facebook").url 
+        ($pageUrl | urlquery) -}}
+    {{- $shareLinks = merge $shareLinks (dict "facebook" $facebookUrl) -}}
+{{- end -}}
+
+{{- /* LinkedIn分享链接 */ -}}
+{{- if index $share "linkedin" | default true -}}
+    {{- $linkedinUrl := printf "%s?url=%s&title=%s&summary=%s" 
+        (index $platforms "linkedin").url 
+        ($pageUrl | urlquery) 
+        ($pageTitle | urlquery) 
+        ($pageDescription | urlquery) -}}
+    {{- $shareLinks = merge $shareLinks (dict "linkedin" $linkedinUrl) -}}
+{{- end -}}
+
+{{- /* Pinterest分享链接 */ -}}
+{{- if index $share "pinterest" | default true -}}
+    {{- $pinterestUrl := printf "%s?url=%s&media=%s&description=%s" 
+        (index $platforms "pinterest").url 
+        ($pageUrl | urlquery) 
+        ($pageUrl | urlquery) 
+        ($pageTitle | urlquery) -}}
+    {{- $shareLinks = merge $shareLinks (dict "pinterest" $pinterestUrl) -}}
+{{- end -}}
+
+{{- /* Reddit分享链接 */ -}}
+{{- if index $share "reddit" | default true -}}
+    {{- $redditUrl := printf "%s?url=%s&title=%s" 
+        (index $platforms "reddit").url 
+        ($pageUrl | urlquery) 
+        ($pageTitle | urlquery) -}}
+    {{- $shareLinks = merge $shareLinks (dict "reddit" $redditUrl) -}}
+{{- end -}}
+
+{{- /* 生成社交媒体链接数据 */ -}}
+{{- $socialData := dict -}}
+{{- $socialData = merge $socialData (dict "platforms" $platforms) -}}
+{{- $socialData = merge $socialData (dict "shareLinks" $shareLinks) -}}
+{{- $socialData = merge $socialData (dict "config" $share) -}}
+
+{{- /* 返回社交媒体链接数据 */ -}}
+{{- return $socialData -}}

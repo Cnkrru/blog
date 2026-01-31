@@ -1,0 +1,262 @@
+{{- $scope := default "homepage" .Scope -}}
+{{- $context := .Context -}}
+{{- $options := .options | default dict -}}
+
+{{- /* Default options */ -}}
+{{- $animate := $options.animate | default true -}}
+{{- $collapsible := $options.collapsible | default false -}}
+{{- $width := $options.width | default "" -}}
+
+{{- with (index .Context.Site.Params.widgets $scope) -}}
+    <aside class="sidebar right-sidebar sticky" {{ with $width }}style="width: {{ . }}"{{ end }}>
+        {{ $widgetIndex := 0 }}
+        {{ range $widget := . }}
+            {{ if templates.Exists (printf "partials/widget/%s.html" .type) }}
+                <!-- Ensure that the `params` is not nil -->
+                {{- $params := default dict .params -}}
+                
+                <!-- Add animation delay based on index -->
+                {{- $animationDelay := mul $widgetIndex 0.1 -}}
+                
+                <div class="widget" {{ if $animate }}style="animation-delay: {{ $animationDelay }}s"{{ end }}>
+                    {{ if and $collapsible (isset $params "title") }}
+                        <!-- Collapsible widget -->
+                        <div class="widget-header">
+                            <h3 class="widget-title">{{ $params.title }}</h3>
+                            <button class="widget-toggle" aria-label="Toggle widget">
+                                {{ partial "helper/icon" (dict "name" "chevron-down" "options" (dict "size" 16)) }}
+                            </button>
+                        </div>
+                        <div class="widget-content">
+                            {{ partial (printf "widget/%s" .type) (dict "Context" $context "Params" $params "WidgetOptions" (dict "animate" $animate)) }}
+                        </div>
+                    {{ else }}
+                        <!-- Regular widget -->
+                        {{ partial (printf "widget/%s" .type) (dict "Context" $context "Params" $params "WidgetOptions" (dict "animate" $animate)) }}
+                    {{ end }}
+                </div>
+            {{ else }}
+                {{ warnf "Widget %s not found" .type }}
+            {{ end }}
+            {{- $widgetIndex = add $widgetIndex 1 -}}
+        {{ end }}
+    </aside>
+{{ end }}
+
+<style>
+    /* 右侧边栏增强样式 */
+    
+    /* 基础样式 */
+    .right-sidebar {
+        transition: all 0.3s ease;
+    }
+    
+    /* 小部件容器 */
+    .widget {
+        background: var(--card-background);
+        border-radius: 12px;
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-light);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* 小部件悬停效果 */
+    .widget:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-medium);
+        border-color: rgba(255, 107, 129, 0.2);
+    }
+    
+    /* 小部件标题 */
+    .widget-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* 可折叠小部件 */
+    .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .widget-toggle {
+        background: none;
+        border: none;
+        color: var(--secondary);
+        cursor: pointer;
+        padding: 0.3rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .widget-toggle:hover {
+        background: rgba(255, 107, 129, 0.1);
+        transform: rotate(180deg);
+        color: var(--primary);
+    }
+    
+    .widget-content {
+        transition: all 0.3s ease;
+    }
+    
+    /* 动画效果 */
+    .widget {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* 小部件分隔线 */
+    .widget + .widget {
+        border-top: 1px solid var(--border-color);
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 1024px) {
+        .right-sidebar {
+            margin-top: 2rem;
+        }
+        
+        .widget {
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        .widget-title {
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .right-sidebar {
+            margin-top: 1.5rem;
+        }
+        
+        .widget {
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .widget-title {
+            font-size: 0.9rem;
+        }
+        
+        .widget + .widget {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+        }
+    }
+    
+    /* 暗黑模式适配 */
+    .dark .widget {
+        background: var(--dark-card-background);
+        box-shadow: var(--dark-shadow-light);
+        border-color: var(--dark-border-color);
+    }
+    
+    .dark .widget:hover {
+        box-shadow: var(--dark-shadow-medium);
+        border-color: rgba(255, 107, 129, 0.3);
+    }
+    
+    .dark .widget-title {
+        background: linear-gradient(135deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    .dark .widget-toggle {
+        color: var(--dark-secondary);
+    }
+    
+    .dark .widget-toggle:hover {
+        background: rgba(255, 107, 129, 0.15);
+        color: var(--dark-primary);
+    }
+    
+    .dark .widget + .widget {
+        border-top-color: var(--dark-border-color);
+    }
+    
+    /* 自定义宽度 */
+    @media (min-width: 1200px) {
+        .sidebar.right-sidebar {
+            max-width: 350px;
+        }
+    }
+    
+    /* 滚动条样式 */
+    .right-sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .right-sidebar::-webkit-scrollbar-track {
+        background: var(--background);
+        border-radius: 10px;
+    }
+    
+    .right-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 107, 129, 0.3);
+        border-radius: 10px;
+    }
+    
+    .right-sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 107, 129, 0.5);
+    }
+    
+    .dark .right-sidebar::-webkit-scrollbar-track {
+        background: var(--dark-background);
+    }
+    
+    .dark .right-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 107, 129, 0.4);
+    }
+    
+    .dark .right-sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 107, 129, 0.6);
+    }
+</style>
+
+<script>
+    // 可折叠小部件功能
+    document.addEventListener('DOMContentLoaded', function() {
+        const widgetToggles = document.querySelectorAll('.widget-toggle');
+        
+        widgetToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const widgetContent = this.closest('.widget').querySelector('.widget-content');
+                if (widgetContent) {
+                    widgetContent.style.display = widgetContent.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,78 @@
+{{- /* 增强版页面描述生成 */ -}}
+{{- $maxLength := .Site.Params.description.maxLength | default 160 -}}
+{{- $minLength := .Site.Params.description.minLength | default 50 -}}
+{{- $separator := .Site.Params.description.separator | default " " -}}
+
+{{- /* 优先使用页面描述 */ -}}
+{{- $description := .Description -}}
+
+{{- /* 页面没有描述时的智能处理 */ -}}
+{{- if not $description -}}
+    {{- if eq .Kind "page" -}}
+        {{- /* 文章页面：使用摘要 */ -}}
+        {{- $description = .Summary -}}
+        
+        {{- /* 摘要为空时，从内容中提取 */ -}}
+        {{- if not $description -}}
+            {{- /* 从内容中提取前200个字符作为摘要 */ -}}
+            {{- $content := .Content | plainify | replaceRE "\\s+" " " | trim " " -}}
+            {{- if $content -}}
+                {{- $description = substr $content 0 200 -}}
+                {{- if gt (len $content) 200 -}}
+                    {{- $description = printf "%s..." $description -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- else if eq .Kind "section" -}}
+        {{- /* 分类/章节页面：使用分类描述 */ -}}
+        {{- $description = .Site.Params.sections.description | default dict -}}
+        {{- $sectionDesc := index $description .Section -}}
+        {{- if not $sectionDesc -}}
+            {{- $description = printf "%s的所有文章" .Section | title -}}
+        {{- else -}}
+            {{- $description = $sectionDesc -}}
+        {{- end -}}
+    {{- else if eq .Kind "taxonomy" -}}
+        {{- /* 标签页面：使用标签描述 */ -}}
+        {{- $description = printf "关于%s标签的所有文章" .Title -}}
+    {{- else if eq .Kind "home" -}}
+        {{- /* 首页：使用站点描述 */ -}}
+        {{- $description = .Site.Params.description | default .Site.Params.sidebar.subtitle -}}
+    {{- end -}}
+{{- end -}}
+
+{{- /* 最后 fallback 到站点副标题 */ -}}
+{{- if not $description -}}
+    {{- $description = .Site.Params.sidebar.subtitle -}}
+{{- end -}}
+
+{{- /* 清理描述文本 */ -}}
+{{- $description = $description | replaceRE "\\n" " " | replaceRE "\\s+" " " | plainify | trim " " -}}
+
+{{- /* 长度控制 */ -}}
+{{- if $description -}}
+    {{- /* 截断过长的描述 */ -}}
+    {{- if gt (len $description) $maxLength -}}
+        {{- /* 智能截断：在单词边界截断 */ -}}
+        {{- $truncated := substr $description 0 $maxLength -}}
+        {{- /* 找到最后一个空格 */ -}}
+        {{- $lastSpace := substr $truncated (sub $maxLength 20) | findRE "\\s" | len -}}
+        {{- if $lastSpace -}}
+            {{- $lastSpacePos := sub (len $truncated) (len (substr $truncated (sub $maxLength 20) | findRE "\\s" | last 1)) -}}
+            {{- $truncated = substr $truncated 0 $lastSpacePos -}}
+        {{- end -}}
+        {{- $description = printf "%s..." $truncated -}}
+    {{- end -}}
+    
+    {{- /* 确保描述长度不低于最小值 */ -}}
+    {{- if lt (len $description) $minLength -}}
+        {{- $additionalText := .Site.Params.description.additionalText | default "这是一个详细的页面描述，包含了页面的主要内容和特点。" -}}
+        {{- $neededLength := sub $minLength (len $description) -}}
+        {{- if $additionalText -}}
+            {{- $additionalText = substr $additionalText 0 $neededLength -}}
+            {{- $description = printf "%s %s" $description $additionalText -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- return $description -}}

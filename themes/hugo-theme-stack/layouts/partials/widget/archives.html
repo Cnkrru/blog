@@ -3,7 +3,7 @@
 {{- $limit := default 5 .Params.limit -}}
 {{- if $query -}}
     {{- $archivesPage := index $query 0 -}}
-    <section class="widget archives">
+    <section class="widget archives widget-enhanced">
         <div class="widget-icon">
             {{ partial "helper/icon" "infinity" }}
         </div>
@@ -16,8 +16,8 @@
         <div class="widget-archive--list">
             {{ range $index, $item := first (add $limit 1) ($archives) }}
                 {{- $id := lower (replace $item.Key " " "-") -}}
-                <div class="archives-year">
-                    <a href="{{ $archivesPage.RelPermalink }}#{{ $id }}">
+                <div class="archives-year" data-aos="fade-up" data-aos-delay="{{ mul $index 100 }}">
+                    <a href="{{ $archivesPage.RelPermalink }}#{{ $id }}" class="archives-year-link">
                         {{ if eq $index $limit }}
                             <span class="year">{{ T "widget.archives.more" }}</span>
                         {{ else }}
@@ -29,6 +29,176 @@
             {{ end }}
         </div>
     </section>
+
+    <style>
+    /* Archives Widget Enhancements */
+    .widget.archives {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background-color: var(--card-background);
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+    }
+
+    .widget.archives:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .widget.archives .widget-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        border-radius: 8px;
+        color: white;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .widget.archives .widget-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+    }
+
+    .widget.archives .widget-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+        color: var(--primary);
+        position: relative;
+        padding-left: 12px;
+    }
+
+    .widget.archives .widget-title:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 20px;
+        background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+        border-radius: 2px;
+    }
+
+    .widget-archive--list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .archives-year {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .archives-year-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: var(--secondary);
+        text-decoration: none;
+        background-color: var(--accent);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .archives-year-link:hover {
+        background-color: var(--primary);
+        color: white;
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+    }
+
+    .archives-year-link:hover:before {
+        transform: scaleX(1);
+    }
+
+    .archives-year-link:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background-color: var(--primary-light);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .archives-year .year {
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .archives-year .count {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: inherit;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .archives-year-link:hover .count {
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .widget.archives {
+            padding: 1.2rem;
+        }
+
+        .widget.archives .widget-title {
+            font-size: 1rem;
+        }
+
+        .archives-year-link {
+            padding: 0.6rem 0.8rem;
+        }
+
+        .archives-year .year {
+            font-size: 0.9rem;
+        }
+
+        .archives-year .count {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+        }
+    }
+
+    /* Dark Mode Support */
+    body.dark .widget.archives {
+        background-color: var(--card-background);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    body.dark .widget.archives:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark .archives-year-link {
+        background-color: var(--accent);
+        color: var(--secondary);
+    }
+
+    body.dark .archives-year-link:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+    </style>
 {{- else -}}
     {{- warnf "Archives page not found. Create a page with layout: archives." -}}
 {{- end -}}

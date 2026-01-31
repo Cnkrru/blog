@@ -277,6 +277,12 @@ menu:
           url: https://github.com/Cnkrru
           params:
               icon: brand-github
+    # 配置Bilibili
+        - identifier: bilibili
+          name: Bilibili
+          url: https://space.bilibili.com/
+          params:
+              icon: brand-bilibili
     # 配置推特
         # - identifier: twitter
         #   name: Twitter
@@ -344,6 +350,58 @@ imaging:
   hint: photo
   quality: 75
   resampleFilter: box
+
+# 2.资源处理配置
+resources:
+  # 启用 CSS 压缩
+  css:
+    minify: true
+  # 启用 JS 压缩
+  js:
+    minify: true
+
+# 3.输出配置
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+# 4.服务器配置（开发环境）
+server:
+  # 启用压缩
+  compress:
+    enabled: true
+  # 缓存控制
+  headers:
+    - for: "**/*.css"
+      values:
+        Cache-Control: "public, max-age=31536000, immutable"
+    - for: "**/*.js"
+      values:
+        Cache-Control: "public, max-age=31536000, immutable"
+    - for: "**/*.{png,jpg,jpeg,gif,webp,svg}"
+      values:
+        Cache-Control: "public, max-age=31536000, immutable"
+    - for: "**/*.{woff,woff2,eot,ttf,otf}"
+      values:
+        Cache-Control: "public, max-age=31536000, immutable"
+    # HTTPS 强制
+    - for: "**"
+      values:
+        Strict-Transport-Security: "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options: "nosniff"
+        X-Frame-Options: "SAMEORIGIN"
+        X-XSS-Protection: "1; mode=block"
+        Referrer-Policy: "strict-origin-when-cross-origin"
+
+# 5.SEO 配置
+# 启用站点地图
+sitemap:
+  changefreq: weekly
+  priority: 0.5
+  filename: sitemap.xml
+  exclude: []
 
 # 自动更新文章最后更新时间
 frontmatter:

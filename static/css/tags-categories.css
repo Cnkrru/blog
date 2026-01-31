@@ -1,0 +1,160 @@
+/* 标签云 & 分类按钮美化 - 粉色适配版 */
+/* 基础标签/分类按钮 */
+.article-tags a,
+.article-categories a,
+.widget-tag-cloud a,
+.category-list a {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 0 6px 6px 0;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    background: rgba(255, 183, 197, 0.12);
+    color: var(--primary-dark);
+    border: none;
+    transition: all var(--transition-fast) ease;
+    text-decoration: none;
+    will-change: transform, background, color;
+}
+/* hover 效果 */
+.article-tags a:hover,
+.article-categories a:hover,
+.widget-tag-cloud a:hover,
+.category-list a:hover {
+    background: rgba(255, 183, 197, 0.25);
+    color: var(--primary-darker);
+    transform: scale(1.05);
+}
+/* 暗黑模式适配 */
+.dark .article-tags a,
+.dark .article-categories a,
+.dark .widget-tag-cloud a,
+.dark .category-list a {
+    background: rgba(255, 149, 162, 0.15);
+    color: var(--dark-primary);
+}
+.dark .article-tags a:hover,
+.dark .article-categories a:hover,
+.dark .widget-tag-cloud a:hover,
+.dark .category-list a:hover {
+    background: rgba(255, 149, 162, 0.28);
+    color: var(--dark-primary-dark);
+}
+
+/* 响应式设计优化 */
+@media (max-width: 768px) {
+    /* 标签/分类按钮适配 */
+    .article-tags a,
+    .article-categories a,
+    .widget-tag-cloud a,
+    .category-list a {
+        padding: 3px 8px;
+        margin: 0 4px 4px 0;
+        font-size: 0.75rem;
+    }
+    
+    /* 回到顶部按钮适配 */
+    #back-to-top {
+        bottom: var(--spacing-lg);
+        right: var(--spacing-lg);
+        width: 2.2rem;
+        height: 2.2rem;
+        font-size: 0.9rem;
+    }
+    
+    /* 文章目录适配 */
+    .sidebar-widget__toc {
+        padding: 0.8rem;
+    }
+    
+    .sidebar-widget__toc-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .sidebar-widget__toc a {
+        font-size: 0.85rem;
+    }
+    
+    /* 文章版权声明适配 */
+    .article-copyright {
+        width: 95%;
+        margin: 1.5rem auto 0;
+        padding: 1rem 1.2rem;
+        font-size: 0.8rem;
+    }
+    
+    .article-copyright__title {
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 标签/分类按钮适配 */
+    .article-tags a,
+    .article-categories a,
+    .widget-tag-cloud a,
+    .category-list a {
+        padding: 2px 6px;
+        margin: 0 3px 3px 0;
+        font-size: 0.7rem;
+    }
+    
+    /* 回到顶部按钮适配 */
+    #back-to-top {
+        bottom: var(--spacing-md);
+        right: var(--spacing-md);
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.8rem;
+    }
+    
+    /* 文章目录适配 */
+    .sidebar-widget__toc {
+        padding: 0.7rem;
+    }
+    
+    .sidebar-widget__toc-title {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .sidebar-widget__toc a {
+        font-size: 0.8rem;
+    }
+    
+    /* 文章版权声明适配 */
+    .article-copyright {
+        width: 98%;
+        margin: 1.2rem auto 0;
+        padding: 0.8rem 0.9rem;
+        font-size: 0.75rem;
+    }
+    
+    .article-copyright__title {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* 文章末尾分隔符适配 */
+    .article-end-separator {
+        width: 95%;
+        margin: 2rem auto 0;
+        font-size: 0.7rem;
+        gap: 0.6rem;
+    }
+}
+
+/* 大屏幕适配 */
+@media (min-width: 1200px) {
+    /* 标签/分类按钮适配 */
+    .article-tags a,
+    .article-categories a,
+    .widget-tag-cloud a,
+    .category-list a {
+        padding: 5px 12px;
+        margin: 0 8px 8px 0;
+        font-size: 0.85rem;
+    }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Cnkrru's Blog",
+  "short_name": "Cnkrru Blog",
+  "description": "Cnkrru的个人博客，分享技术文章、生活感悟和学习心得",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FFB7C5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/img/avatar.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/avatar.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "首页",
+      "short_name": "首页",
+      "description": "返回博客首页",
+      "url": "/",
+      "icons": [{ "src": "/img/avatar.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "文章",
+      "short_name": "文章",
+      "description": "查看所有文章",
+      "url": "/post/",
+      "icons": [{ "src": "/img/avatar.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "关于",
+      "short_name": "关于",
+      "description": "关于博主",
+      "url": "/about/",
+      "icons": [{ "src": "/img/avatar.png", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["blog", "technology", "personal"],
+  "lang": "zh-CN",
+  "dir": "ltr"
+}

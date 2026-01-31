@@ -1,3 +1,4 @@
+{{- $ThemeVersion := "3.34.1" -}}
 <!-- 最终版页脚：统一排版 + 功能正常 -->
 
 <!-- 样式定义 -->
@@ -5,8 +6,143 @@
     /* 页脚基础样式 */
     .site-footer__inner {
         text-align: center;
-        font-family: inherit;
+        font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
         line-height: 1.6;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(255, 107, 129, 0.05), rgba(78, 205, 196, 0.05));
+        border-top: 1px solid rgba(255, 107, 129, 0.2);
+        border-radius: 10px 10px 0 0;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 版权信息 */
+    .site-footer__copyright {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* 随机一言 */
+    #hitokoto {
+        font-size: 0.95rem;
+        font-style: italic;
+        text-align: center;
+        margin: 0.8rem 0;
+        font-weight: 400;
+        letter-spacing: 0.3px;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        opacity: 1;
+    }
+
+    /* 技术支持信息 */
+    .site-footer__powered-by {
+        font-size: 0.95rem;
+        text-align: center;
+        margin-top: 1rem;
+        font-weight: 400;
+        letter-spacing: 0.3px;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* 页脚背景装饰 */
+    .site-footer__inner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #FF6B81, #4ECDC4);
+    }
+    
+    /* 页脚背景图案 */
+    .site-footer__inner::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            radial-gradient(circle at 20% 80%, rgba(255, 107, 129, 0.1) 0%, transparent 20%),
+            radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.1) 0%, transparent 20%),
+            radial-gradient(circle at 40% 40%, rgba(255, 107, 129, 0.05) 0%, transparent 30%);
+        pointer-events: none;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    /* 浮动动画 */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        33% {
+            transform: translateY(-10px) rotate(1deg);
+        }
+        66% {
+            transform: translateY(5px) rotate(-1deg);
+        }
+    }
+
+    /* 淡入动画 */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 应用淡入动画 */
+    .site-footer__copyright,
+    .site-footer__social,
+    .site-footer__links,
+    .site-footer__stats,
+    .site-footer__powered-by,
+    #hitokoto {
+        animation: fadeInUp 0.8s ease forwards;
+        opacity: 0;
+    }
+
+    /* 交错动画延迟 */
+    .site-footer__copyright {
+        animation-delay: 0.1s;
+    }
+
+    .site-footer__social {
+        animation-delay: 0.2s;
+    }
+
+    #hitokoto {
+        animation-delay: 0.3s;
+    }
+
+    .site-footer__links {
+        animation-delay: 0.4s;
+    }
+
+    .site-footer__stats {
+        animation-delay: 0.5s;
+    }
+
+    .site-footer__powered-by {
+        animation-delay: 0.6s;
     }
     
     /* 版权信息 */
@@ -39,24 +175,138 @@
         color: transparent;
         opacity: 1;
     }
-    
-    /* 统计信息组 */
-    .site-footer__stats-section {
-        margin: 0.8rem 0;
+
+    /* 自定义文本 */
+    .site-footer__custom-text {
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+        color: var(--secondary);
     }
-    
-    /* 统计信息 */
-    .site-footer__stats,
-    .site-footer__runtime {
-        font-size: 0.95rem;
-        text-align: center;
-        margin: 0.6rem 0;
+
+    /* 社交媒体图标 */
+    .site-footer__social {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+    }
+
+    .site-footer__social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--secondary);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+    }
+
+    .site-footer__social-link:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #FF6B81, #4ECDC4);
+        color: white;
+    }
+
+    /* 友情链接 */
+    .site-footer__links {
+        margin: 2rem 0;
+    }
+
+    .site-footer__links-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
         background: linear-gradient(180deg, #FF6B81, #4ECDC4);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
     }
-    
+
+    .site-footer__links-list {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .site-footer__link-item {
+        margin: 0;
+    }
+
+    .site-footer__link {
+        color: var(--secondary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.3rem 0;
+    }
+
+    .site-footer__link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: linear-gradient(90deg, #FF6B81, #4ECDC4);
+        transition: width 0.3s ease;
+    }
+
+    .site-footer__link:hover {
+        color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    .site-footer__link:hover::after {
+        width: 100%;
+    }
+
+    /* 网站统计信息 */
+    .site-footer__stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 1rem 0;
+        font-size: 0.85rem;
+        flex-wrap: wrap;
+    }
+
+    .site-footer__stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .site-footer__stat-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .site-footer__stat-label {
+        font-size: 0.75rem;
+        color: var(--secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
     /* 技术支持信息 */
     .site-footer__powered-by {
         font-size: 0.95rem;
@@ -68,11 +318,24 @@
         color: transparent;
     }
     
+    /* 技术支持链接 */
+    .site-footer__powered-by a {
+        color: inherit;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .site-footer__powered-by a:hover {
+        text-decoration: underline;
+        opacity: 0.8;
+    }
+    
     /* 暗黑模式适配 */
     .dark .site-footer__stats, 
     .dark .site-footer__runtime,
     .dark .site-footer__powered-by,
-    .dark #hitokoto {
+    .dark #hitokoto,
+    .dark .site-footer__custom-text {
         background: linear-gradient(180deg, #FF6B81, #4ECDC4);
         -webkit-background-clip: text;
         background-clip: text;
@@ -83,7 +346,66 @@
 <div class="site-footer__inner">
     <!-- 版权信息 -->
     <div class="site-footer__copyright">
-        {{ .Site.Copyright | safeHTML }}
+        &copy; 
+        {{ if and (.Site.Params.footer.since) (ne .Site.Params.footer.since (int (now.Format "2006"))) }}
+            {{ .Site.Params.footer.since }} - 
+        {{ end }}
+        {{ now.Format "2006" }} {{ default .Site.Title .Site.Copyright }}
+    </div>
+    
+    <!-- 社交媒体图标 -->
+    <div class="site-footer__social">
+        <!-- GitHub -->
+        <a href="https://github.com" target="_blank" rel="noopener" class="site-footer__social-link" title="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+                <path d="M9 18c-4.51 2-5-2-7-2"></path>
+            </svg>
+        </a>
+        
+        <!-- 微博 -->
+        <a href="https://weibo.com" target="_blank" rel="noopener" class="site-footer__social-link" title="微博">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 12a4 4 0 0 1 4-4 4 4 0 0 1 4 4"></path>
+                <line x1="9" y1="17" x2="15" y2="17"></line>
+            </svg>
+        </a>
+        
+        <!-- 微信 -->
+        <a href="#" class="site-footer__social-link" title="微信" onclick="alert('微信公众号：示例公众号'); return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+        </a>
+        
+        <!-- Twitter -->
+        <a href="https://twitter.com" target="_blank" rel="noopener" class="site-footer__social-link" title="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+            </svg>
+        </a>
+    </div>
+    
+    <!-- 友情链接 -->
+    <div class="site-footer__links">
+        <h3 class="site-footer__links-title">友情链接</h3>
+        <ul class="site-footer__links-list">
+            <li class="site-footer__link-item">
+                <a href="https://gohugo.io/" target="_blank" rel="noopener" class="site-footer__link">Hugo</a>
+            </li>
+            <li class="site-footer__link-item">
+                <a href="https://github.com/" target="_blank" rel="noopener" class="site-footer__link">GitHub</a>
+            </li>
+            <li class="site-footer__link-item">
+                <a href="https://stackoverflow.com/" target="_blank" rel="noopener" class="site-footer__link">Stack Overflow</a>
+            </li>
+            <li class="site-footer__link-item">
+                <a href="https://developer.mozilla.org/" target="_blank" rel="noopener" class="site-footer__link">MDN Web Docs</a>
+            </li>
+        </ul>
     </div>
     
     <!-- 随机一言 -->
@@ -91,43 +413,57 @@
         天天开心
     </div>
     
-    <!-- 统计信息组 -->
-    <div class="site-footer__stats-section">
-        <!-- 网站运行时长 -->
-        <div class="site-footer__runtime">
-            本站已稳定运行：<span id="site-runtime"></span>
+    <!-- 自定义文本 -->
+    {{ with .Site.Params.footer.customText }}
+        <div class="site-footer__custom-text">
+            {{ . | safeHTML }}
+        </div>
+    {{ end }}
+    
+    <!-- 网站统计信息 -->
+    <div class="site-footer__stats">
+        <!-- 运行时间 -->
+        <div class="site-footer__stat-item">
+            <div class="site-footer__stat-value" id="site-runtime">0</div>
+            <div class="site-footer__stat-label">运行时间</div>
+        </div>
+        
+        <!-- 文章总数 -->
+        <div class="site-footer__stat-item">
+            <div class="site-footer__stat-value">{{ len (where .Site.RegularPages "Type" "post") }}</div>
+            <div class="site-footer__stat-label">文章总数</div>
+        </div>
+        
+        <!-- 标签总数 -->
+        <div class="site-footer__stat-item">
+            <div class="site-footer__stat-value">{{ len .Site.Taxonomies.tags }}</div>
+            <div class="site-footer__stat-label">标签总数</div>
+        </div>
+        
+        <!-- 分类总数 -->
+        <div class="site-footer__stat-item">
+            <div class="site-footer__stat-value">{{ len .Site.Taxonomies.categories }}</div>
+            <div class="site-footer__stat-label">分类总数</div>
         </div>
     </div>
     
     <!-- 技术支持信息 -->
     <div class="site-footer__powered-by">
-        {{ T "footer.poweredBy" }} <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &
-        <a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener">Stack</a>
+        {{- $Generator := `<a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>` -}}
+        {{- $Theme := printf `<b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="%s">Stack</a></b>` $ThemeVersion -}}
+        {{- $DesignedBy := `<a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>` -}}
+
+        {{ T "footer.builtWith" (dict "Generator" $Generator) | safeHTML }} <br />
+        {{ T "footer.designedBy" (dict "Theme" $Theme "DesignedBy" $DesignedBy) | safeHTML }}
     </div>
 </div>
 
-<!-- 脚本部分 -->
 
-<!-- 网站运行时长脚本 -->
-<script>
-// 这里改成你博客的实际上线日期
-const launchDate = new Date('2026-01-31 12:00:00');
-function updateRuntime() {
-    const now = new Date();
-    const diff = now - launchDate;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    document.getElementById('site-runtime').innerText = `${days} 天 ${hours} 时 ${minutes} 分 ${seconds} 秒`;
-}
-updateRuntime();
-setInterval(updateRuntime, 1000);
-</script>
 
 <!-- 随机一言脚本 -->
 <script>
 window.onload = function() {
+    // 随机一言
     setTimeout(function() {
         // 【随机一言切换话种类的部分】
         // c=i 参数表示获取插画类型的一言
@@ -144,5 +480,27 @@ window.onload = function() {
             })
             .catch(err => {});
     }, 1000);
+    
+    // 计算网站运行时间
+    function updateRuntime() {
+        // 网站创建时间（修改为你的网站创建时间）
+        const createDate = new Date('2024-01-01');
+        const now = new Date();
+        const diff = now - createDate;
+        
+        // 计算天数
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        
+        const runtimeEl = document.getElementById('site-runtime');
+        if (runtimeEl) {
+            runtimeEl.textContent = days;
+        }
+    }
+    
+    // 初始更新
+    updateRuntime();
+    
+    // 每小时更新一次
+    setInterval(updateRuntime, 3600000);
 };
 </script>

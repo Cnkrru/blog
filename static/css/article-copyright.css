@@ -1,0 +1,171 @@
+/* 文章底部版权声明栏功能 */
+/* 版权声明容器 */
+.article-copyright {
+    width: 100%;
+    margin: 0.6rem 0 0;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #FFB7C5;
+    border-radius: 10px;
+    background: rgba(255, 183, 197, 0.03);
+    color: var(--secondary);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.3s;
+    box-shadow: 0 2px 8px rgba(255, 183, 197, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 背景装饰 */
+.article-copyright::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #FFB7C5, #FFD1DC);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+}
+
+.article-copyright:hover::before {
+    transform: scaleX(1);
+}
+
+/* 淡入动画 */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 标题样式 */
+.article-copyright__title {
+    color: #FFB7C5;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.3s ease;
+}
+
+.article-copyright__title::before {
+    content: '📜';
+    font-size: 0.85rem;
+}
+
+/* 版权内容 */
+.article-copyright p {
+    margin: 0.3rem 0;
+    transition: opacity 0.3s ease;
+}
+
+.article-copyright:hover p {
+    opacity: 0.95;
+}
+
+/* 链接样式 */
+.article-copyright a {
+    color: #FFB7C5 !important;
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none !important;
+}
+
+.article-copyright a:hover {
+    color: #FF9AA2 !important;
+    transform: translateX(3px);
+}
+
+.article-copyright a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #FFB7C5;
+    transition: width 0.3s ease;
+}
+
+.article-copyright a:hover::after {
+    width: 100%;
+    background: #FF9AA2;
+}
+
+/* 强调文本 */
+.article-copyright strong {
+    color: #FFB7C5;
+    font-weight: 500;
+}
+
+/* 暗黑模式适配 */
+.dark .article-copyright {
+    border-color: #FF9AA2;
+    background: rgba(255, 149, 162, 0.05);
+    box-shadow: 0 2px 8px rgba(255, 149, 162, 0.1);
+}
+
+.dark .article-copyright::before {
+    background: linear-gradient(90deg, #FF9AA2, #FFB7C5);
+}
+
+.dark .article-copyright__title {
+    color: #FF9AA2;
+}
+
+.dark .article-copyright a {
+    color: #FF9AA2 !important;
+}
+
+.dark .article-copyright a:hover {
+    color: #FF85A2 !important;
+}
+
+.dark .article-copyright a::after {
+    background: #FF9AA2;
+}
+
+.dark .article-copyright a:hover::after {
+    background: #FF85A2;
+}
+
+.dark .article-copyright strong {
+    color: #FF9AA2;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .article-copyright {
+        width: 95%;
+        margin: 1.8rem auto 0;
+        padding: 1rem 1.2rem;
+        font-size: 0.8rem;
+    }
+    
+    .article-copyright__title {
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-copyright {
+        margin: 1.5rem auto 0;
+        padding: 0.9rem 1rem;
+        font-size: 0.75rem;
+    }
+    
+    .article-copyright__title {
+        font-size: 0.8rem;
+    }
+}

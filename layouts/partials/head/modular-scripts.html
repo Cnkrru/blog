@@ -1,0 +1,171 @@
+<!-- ======================================= -->
+<!-- 模块化资源引入 -->
+<!-- ======================================= -->
+
+<!-- 外部资源引入 -->
+<!-- 字体加载优化 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome 图标库 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<!-- Mermaid 图表支持 -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+
+<!-- ======================================= -->
+<!-- CSS 模块化文件 -->
+<!-- ======================================= -->
+
+<!-- 全局变量和公共样式 -->
+<link rel="stylesheet" href="/blog/css/global-variables.css">
+
+<!-- 自定义主题样式 -->
+<link rel="stylesheet" href="/blog/css/custom-theme.css">
+
+<!-- 交互动画样式 -->
+<link rel="stylesheet" href="/blog/css/animations.css">
+
+<!-- 文章目录样式 -->
+<link rel="stylesheet" href="/blog/css/toc.css">
+
+<!-- 回到顶部按钮样式 -->
+<link rel="stylesheet" href="/blog/css/back-to-top.css">
+
+<!-- 图片灯箱样式 -->
+<link rel="stylesheet" href="/blog/css/lightbox.css">
+
+<!-- 文章结束分隔线样式 -->
+<link rel="stylesheet" href="/blog/css/article-end.css">
+
+<!-- 文章卡片样式 -->
+<link rel="stylesheet" href="/blog/css/article-card.css">
+
+<!-- 版权声明样式 -->
+<link rel="stylesheet" href="/blog/css/article-copyright.css">
+
+<!-- 搜索框样式 -->
+<link rel="stylesheet" href="/blog/css/search.css">
+
+<!-- 图片懒加载样式 -->
+<link rel="stylesheet" href="/blog/css/lazy-load.css">
+
+<!-- 社交分享样式 -->
+<link rel="stylesheet" href="/blog/css/social-share.css">
+
+<!-- 代码块样式 -->
+<link rel="stylesheet" href="/blog/css/code-blocks.css">
+
+<!-- 代码复制功能样式 -->
+<link rel="stylesheet" href="/blog/css/code-copy.css">
+
+<!-- 阅读进度条样式 -->
+<link rel="stylesheet" href="/blog/css/reading-progress.css">
+
+<!-- 页面淡入动画样式 -->
+<link rel="stylesheet" href="/blog/css/page-fade.css">
+
+<!-- 标签和分类按钮样式 -->
+<link rel="stylesheet" href="/blog/css/tags-categories.css">
+
+<!-- 响应式设计样式 -->
+<link rel="stylesheet" href="/blog/css/responsive.css">
+
+<!-- ======================================= -->
+<!-- JS 模块化文件 -->
+<!-- ======================================= -->
+
+<!-- 主题管理 -->
+<script src="/blog/js/theme-manager.js"></script>
+
+<!-- Mermaid 图表支持 -->
+<script src="/blog/js/mermaid-support.js"></script>
+
+<!-- 图片懒加载 -->
+<script src="/blog/js/lazy-load.js"></script>
+
+<!-- 回到顶部按钮 -->
+<script src="/blog/js/back-to-top.js"></script>
+
+<!-- 文章结束分隔线 -->
+<script src="/blog/js/article-end.js"></script>
+
+<!-- 版权声明 -->
+<script src="/blog/js/article-copyright.js"></script>
+
+<!-- 社交分享 -->
+<script src="/blog/js/social-share.js"></script>
+
+<!-- 代码复制功能 -->
+<script src="/blog/js/code-copy.js"></script>
+
+<!-- 阅读进度条 -->
+<script src="/blog/js/reading-progress.js"></script>
+
+<!-- ======================================= -->
+<!-- 图片灯箱 DOM 结构 -->
+<!-- ======================================= -->
+
+<!-- 灯箱DOM结构 -->
+<div id="image-lightbox">
+    <span class="lb-close">&times;</span>
+    <span class="lb-prev">&lsaquo;</span>
+    <span class="lb-next">&rsaquo;</span>
+    <img id="lightbox-img" src="" alt="预览图">
+    <div class="lb-loader"></div>
+    <div class="lb-counter">1 / 1</div>
+</div>
+
+<!-- 图片灯箱脚本 -->
+<script src="/blog/js/lightbox.js"></script>
+
+<!-- ======================================= -->
+<!-- PWA Service Worker 注册 -->
+<!-- ======================================= -->
+
+<script>
+    // 注册 Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker 注册成功:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker 注册失败:', error);
+                });
+        });
+    }
+</script>
+
+<!-- ======================================= -->
+<!-- 随机一言 Hitokoto -->
+<!-- ======================================= -->
+
+<script>
+    // 等页面完全加载后再执行
+    window.onload = function() {
+        // 1秒延迟，确保DOM完全渲染
+        setTimeout(function() {
+            // 可选分类：a(动画) b(漫画) c(游戏) d(文学) e(原创) f(网络) g(其他) h(影视) i(诗词)
+            const c = 'i'; 
+            fetch(`https://v1.hitokoto.cn?c=${c}`)
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('hitokoto');
+                    if (el) {
+                        let text = data.hitokoto;
+                        if (data.from) {
+                            text += ` —— ${data.from}`;
+                        }
+                        el.innerText = text;
+                    }
+                })
+                .catch(err => {
+                    console.log('一言接口加载失败：', err);
+                    // 失败后仍显示默认文案
+                });
+        }, 1000);
+    };
+</script>

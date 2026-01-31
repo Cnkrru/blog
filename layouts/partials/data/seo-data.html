@@ -1,0 +1,156 @@
+{{- /* 增强版SEO数据整合 */ -}}
+{{- $page := . -}}
+{{- $site := .Site -}}
+
+{{- /* SEO数据结构 */ -}}
+{{- $seoData := dict -}}
+
+{{- /* 1. 基础SEO数据 */ -}}
+{{- $basic := dict -}}
+{{- $basic = merge $basic (dict "title" (partial "data/title" $page)) -}}
+{{- $basic = merge $basic (dict "description" (partial "data/description" $page)) -}}
+{{- $basic = merge $basic (dict "url" $page.Permalink) -}}
+{{- $basic = merge $basic (dict "lang" $page.Lang) -}}
+{{- $seoData = merge $seoData (dict "basic" $basic) -}}
+
+{{- /* 2. 关键词管理 */ -}}
+{{- $keywords := slice -}}
+
+{{- /* 从页面参数提取关键词 */ -}}
+{{- if $page.Params.tags -}}
+    {{- $keywords = $keywords | append $page.Params.tags -}}
+{{- end -}}
+
+{{- /* 从分类提取关键词 */ -}}
+{{- if $page.Section -}}
+    {{- $keywords = $keywords | append $page.Section -}}
+{{- end -}}
+
+{{- /* 从站点配置提取关键词 */ -}}
+{{- if $site.Params.keywords -}}
+    {{- $keywords = $keywords | append $site.Params.keywords -}}
+{{- end -}}
+
+{{- /* 去重并限制数量 */ -}}
+{{- $keywords = uniq $keywords | first 10 -}}
+{{- $seoData = merge $seoData (dict "keywords" $keywords) -}}
+
+{{- /* 3. 规范URL (Canonical URL) */ -}}
+{{- $canonical := $page.Permalink -}}
+
+{{- /* 处理分页 canonical URL */ -}}
+{{- $paginator := partial "helper/paginator.html" $page -}}
+{{- if and $paginator (gt $paginator.PageNumber 1) -}}
+    {{- $canonical = $page.CurrentSection.Permalink -}}
+{{- end -}}
+
+{{- $seoData = merge $seoData (dict "canonical" $canonical) -}}
+
+{{- /* 4. hreflang标签 (多语言支持) */ -}}
+{{- $hreflang := slice -}}
+
+{{- /* 检查是否有多语言配置 */ -}}
+{{- if gt (len $site.Languages) 1 -}}
+    {{- /* 遍历所有语言 */ -}}
+    {{- range $site.Languages -}}
+        {{- $lang := .Lang -}}
+        {{- $translated := $page.Translations.Get $lang -}}
+        {{- if $translated -}}
+            {{- /* 添加翻译页面的 hreflang */ -}}
+            {{- $hreflang = $hreflang | append (dict "lang" $lang "url" $translated.Permalink) -}}
+        {{- else if eq $lang $site.Language.Lang -}}
+            {{- /* 添加默认语言的 hreflang */ -}}
+            {{- $hreflang = $hreflang | append (dict "lang" $lang "url" $canonical) -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $seoData = merge $seoData (dict "hreflang" $hreflang) -}}
+
+{{- /* 5. 页面类型特定SEO数据 */ -}}
+{{- $typeData := dict -}}
+
+{{- if $page.IsHome -}}
+    {{- /* 首页SEO数据 */ -}}
+    {{- $typeData = merge $typeData (dict "type" "home") -}}
+    {{- $typeData = merge $typeData (dict "priority" "1.0") -}}
+    {{- $typeData = merge $typeData (dict "changefreq" "daily") -}}
+{{- else if $page.IsPage -}}
+    {{- /* 文章页面SEO数据 */ -}}
+    {{- $typeData = merge $typeData (dict "type" "article") -}}
+    {{- $typeData = merge $typeData (dict "priority" "0.8") -}}
+    {{- $typeData = merge $typeData (dict "changefreq" "monthly") -}}
+    {{- $typeData = merge $typeData (dict "author" ($page.Params.author | default $site.Params.author)) -}}
+    {{- $typeData = merge $typeData (dict "datePublished" ($page.Date.Format "2006-01-02T15:04:05Z07:00")) -}}
+    {{- $typeData = merge $typeData (dict "dateModified" ($page.Lastmod.Format "2006-01-02T15:04:05Z07:00")) -}}
+{{- else if $page.IsSection -}}
+    {{- /* 分类/章节页面SEO数据 */ -}}
+    {{- $typeData = merge $typeData (dict "type" "section") -}}
+    {{- $typeData = merge $typeData (dict "priority" "0.7") -}}
+    {{- $typeData = merge $typeData (dict "changefreq" "weekly") -}}
+{{- else if $page.IsTaxonomy -}}
+    {{- /* 标签页面SEO数据 */ -}}
+    {{- $typeData = merge $typeData (dict "type" "taxonomy") -}}
+    {{- $typeData = merge $typeData (dict "priority" "0.6") -}}
+    {{- $typeData = merge $typeData (dict "changefreq" "weekly") -}}
+{{- else -}}
+    {{- /* 其他页面SEO数据 */ -}}
+    {{- $typeData = merge $typeData (dict "type" "page") -}}
+    {{- $typeData = merge $typeData (dict "priority" "0.5") -}}
+    {{- $typeData = merge $typeData (dict "changefreq" "monthly") -}}
+{{- end -}}
+
+{{- $seoData = merge $seoData (dict "type" $typeData) -}}
+
+{{- /* 6. 结构化数据 (Schema.org) */ -}}
+{{- $schema := dict -}}
+
+{{- if $page.IsPage -}}
+    {{- /* 文章结构化数据 */ -}}
+    {{- $articleSchema := dict -}}
+    {{- $articleSchema = merge $articleSchema (dict "@type" "Article") -}}
+    {{- $articleSchema = merge $articleSchema (dict "headline" $page.Title) -}}
+    {{- $articleSchema = merge $articleSchema (dict "url" $page.Permalink) -}}
+    {{- $articleSchema = merge $articleSchema (dict "datePublished" ($page.Date.Format "2006-01-02T15:04:05Z07:00")) -}}
+    {{- $articleSchema = merge $articleSchema (dict "dateModified" ($page.Lastmod.Format "2006-01-02T15:04:05Z07:00")) -}}
+    {{- $articleSchema = merge $articleSchema (dict "description" (partial "data/description" $page)) -}}
+    
+    {{- /* 作者信息 */ -}}
+    {{- $author := dict -}}
+    {{- $authorName := $page.Params.author | default $site.Params.author | default $site.Title -}}
+    {{- $author = merge $author (dict "@type" "Person") -}}
+    {{- $author = merge $author (dict "name" $authorName) -}}
+    {{- $articleSchema = merge $articleSchema (dict "author" $author) -}}
+    
+    {{- /* 出版商信息 */ -}}
+    {{- $publisher := dict -}}
+    {{- $publisher = merge $publisher (dict "@type" "Organization") -}}
+    {{- $publisher = merge $publisher (dict "name" $site.Title) -}}
+    {{- if $site.Params.logo -}}
+        {{- $publisher = merge $publisher (dict "logo" (dict "@type" "ImageObject" "url" $site.Params.logo)) -}}
+    {{- end -}}
+    {{- $articleSchema = merge $articleSchema (dict "publisher" $publisher) -}}
+    
+    {{- /* 标签作为关键词 */ -}}
+    {{- if $page.Params.tags -}}
+        {{- $articleSchema = merge $articleSchema (dict "keywords" $page.Params.tags) -}}
+    {{- end -}}
+    
+    {{- $schema = merge $schema (dict "article" $articleSchema) -}}
+{{- else if $page.IsHome -}}
+    {{- /* 首页结构化数据 */ -}}
+    {{- $websiteSchema := dict -}}
+    {{- $websiteSchema = merge $websiteSchema (dict "@type" "WebSite") -}}
+    {{- $websiteSchema = merge $websiteSchema (dict "name" $site.Title) -}}
+    {{- $websiteSchema = merge $websiteSchema (dict "url" $site.Home.Permalink) -}}
+    {{- $schema = merge $schema (dict "website" $websiteSchema) -}}
+{{- end -}}
+
+{{- $seoData = merge $seoData (dict "schema" $schema) -}}
+
+{{- /* 7. 社交媒体分享数据 */ -}}
+{{- $social := partial "data/social-links" $page -}}
+{{- $seoData = merge $seoData (dict "social" $social) -}}
+
+{{- /* 返回完整SEO数据 */ -}}
+{{- return $seoData -}}

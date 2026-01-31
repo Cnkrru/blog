@@ -1,0 +1,75 @@
+{{- $List := index .Context.Site.Data.external .Namespace -}}
+{{- $options := .options | default dict -}}
+
+{{- /* Default options */ -}}
+{{- $async := $options.async | default false -}}
+{{- $defer := $options.defer | default true -}}
+{{- $preload := $options.preload | default false -}}
+{{- $condition := $options.condition | default "" -}}
+{{- $version := $options.version | default "" -}}
+
+{{- with $List -}}
+    {{- range . -}}
+        {{- /* Apply options */ -}}
+        {{- $itemAsync := .async | default $async -}}
+        {{- $itemDefer := .defer | default $defer -}}
+        {{- $itemPreload := .preload | default $preload -}}
+        {{- $itemCondition := .condition | default $condition -}}
+        {{- $itemVersion := .version | default $version -}}
+        
+        {{- /* Add version to URL if provided */ -}}
+        {{- $src := .src -}}
+        {{- if $itemVersion -}}
+            {{- $separator := cond (in $src "?") "&" "?" -}}
+            {{- $src = printf "%s%sver=%s" $src $separator $itemVersion -}}
+        {{- end -}}
+        
+        {{- /* Preload resource if enabled */ -}}
+        {{- if and $itemPreload (eq .type "script") -}}
+            <link rel="preload" href="{{ $src }}" as="script" crossorigin="anonymous">
+        {{- else if and $itemPreload (eq .type "style") -}}
+            <link rel="preload" href="{{ $src }}" as="style" crossorigin="anonymous">
+        {{- end -}}
+        
+        {{- /* Condition check */ -}}
+        {{- if not $itemCondition -}}
+            {{- /* No condition, always load */ -}}
+            {{- if eq .type "script" -}}
+                <script 
+                    src="{{ $src }}"
+                    {{- with .integrity -}}
+                    integrity="{{ . }}"
+                    {{- end -}}
+                    crossorigin="anonymous"
+                    {{ if $itemAsync }}async{{ end }}
+                    {{ if $itemDefer }}defer{{ end }}
+                    >
+                </script>
+            {{- else if eq .type "style" -}}
+                <link 
+                    rel="stylesheet" 
+                    href="{{ $src }}"
+                    {{- with .integrity -}}
+                    integrity="{{ . }}"
+                    {{- end -}}
+                    crossorigin="anonymous"
+                >
+            {{- else -}}
+                {{- errorf "Error: unknown external resource type: %s" .type -}}
+            {{- end -}}
+        {{- else -}}
+            {{- /* Load with condition */ -}}
+            {{- if eq .type "script" -}}
+                <script>
+                    {{- printf "if (%s) { var script = document.createElement('script'); script.src = '%s'; script.crossOrigin = 'anonymous'; %s %s document.head.appendChild(script); }" $itemCondition $src (cond $itemAsync "script.async = true;" "") (cond $itemDefer "script.defer = true;" "") | safeJS -}}
+                </script>
+            {{- else if eq .type "style" -}}
+                <script>
+                    {{- printf "if (%s) { var link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '%s'; link.crossOrigin = 'anonymous'; document.head.appendChild(link); }" $itemCondition $src | safeJS -}}
+                </script>
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- errorf "Error: external resource '%s' is not found" .Namespace -}}
+{{- end -}}

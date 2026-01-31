@@ -1,0 +1,295 @@
+{{ define "body-class" }}template-404{{ end }}
+{{ define "main" }}
+    <div class="not-found-container">
+        <div class="not-found-card">
+            <div class="not-found-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h1 class="not-found-title">404</h1>
+            <h2 class="not-found-subtitle">页面未找到</h2>
+            <p class="not-found-description">
+                抱歉，您访问的页面不存在或已被移除。
+            </p>
+            
+            <div class="not-found-actions">
+                <a href="{{ .Site.BaseURL }}" class="not-found-button not-found-button--primary">
+                    <i class="fas fa-home"></i>
+                    返回首页
+                </a>
+                <a href="{{ .Site.BaseURL }}archives/" class="not-found-button not-found-button--secondary">
+                    <i class="fas fa-archive"></i>
+                    查看归档
+                </a>
+            </div>
+        </div>
+
+        {{- $query := first 1 (where .Site.Pages "Layout" "==" "search") -}}
+        {{- $searchPage := index $query 0 -}}
+
+        {{- with $searchPage -}}
+            <div class="not-found-search">
+                <h3 class="not-found-search__title">
+                    <i class="fas fa-search"></i>
+                    搜索内容
+                </h3>
+                <form action="{{ $searchPage.RelPermalink }}" class="search-form widget" {{ with .OutputFormats.Get "json" -}}data-json="{{ .Permalink }}" {{- end }}>
+                    <p>
+                        <label>{{ T "search.title" }}</label>
+                        <input id="searchInput" name="keyword" required placeholder="{{ T `search.placeholder` }}" />
+                    
+                        <button type="submit" title="{{ T `search.title` }}">
+                            {{ partial "helper/icon" "search" }}
+                        </button>
+                    </p>
+                </form>
+
+                <div class="search-result">
+                    <h3 class="search-result--title section-title"></h3>
+                    <div class="search-result--list article-list--compact"></div>
+                </div>
+            </div>
+        {{- end -}}
+    </div>
+
+    <style>
+        /* 404 页面容器 */
+        .not-found-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        /* 404 卡片 */
+        .not-found-card {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 183, 197, 0.05);
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 2rem;
+        }
+        
+        /* 404 图标 */
+        .not-found-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        /* 404 标题 */
+        .not-found-title {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+            line-height: 1;
+        }
+        
+        /* 404 副标题 */
+        .not-found-subtitle {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--secondary);
+            margin: 1rem 0;
+        }
+        
+        /* 404 描述 */
+        .not-found-description {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin: 1.5rem 0 2.5rem;
+            line-height: 1.6;
+        }
+        
+        /* 操作按钮容器 */
+        .not-found-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* 按钮基础样式 */
+        .not-found-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all var(--transition-fast) ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* 主按钮 */
+        .not-found-button--primary {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        
+        /* 次要按钮 */
+        .not-found-button--secondary {
+            background: transparent;
+            color: var(--secondary);
+            border: 1px solid var(--primary-color);
+        }
+        
+        /* 按钮悬停效果 */
+        .not-found-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .not-found-button--primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .not-found-button--secondary:hover {
+            background: rgba(255, 183, 197, 0.1);
+        }
+        
+        /* 搜索区域 */
+        .not-found-search {
+            background: rgba(255, 183, 197, 0.03);
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-light);
+        }
+        
+        /* 搜索标题 */
+        .not-found-search__title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 暗黑模式适配 */
+        .dark .not-found-card {
+            background: rgba(255, 149, 162, 0.05);
+            border-color: var(--dark-primary);
+            box-shadow: var(--dark-shadow-light);
+        }
+        
+        .dark .not-found-icon {
+            color: var(--dark-primary);
+        }
+        
+        .dark .not-found-title {
+            color: var(--dark-primary);
+        }
+        
+        .dark .not-found-button--primary {
+            background: var(--dark-primary);
+        }
+        
+        .dark .not-found-button--primary:hover {
+            background: var(--dark-primary-dark);
+        }
+        
+        .dark .not-found-button--secondary {
+            border-color: var(--dark-primary);
+        }
+        
+        .dark .not-found-button--secondary:hover {
+            background: rgba(255, 149, 162, 0.1);
+        }
+        
+        .dark .not-found-search {
+            background: rgba(255, 149, 162, 0.03);
+            border-color: var(--dark-primary);
+            box-shadow: var(--dark-shadow-light);
+        }
+        
+        /* 动画效果 */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .not-found-container {
+                padding: 0 1rem;
+                margin: 2rem auto;
+            }
+            
+            .not-found-card {
+                padding: 3rem 1.5rem;
+            }
+            
+            .not-found-icon {
+                font-size: 3rem;
+            }
+            
+            .not-found-title {
+                font-size: 4rem;
+            }
+            
+            .not-found-subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .not-found-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .not-found-button {
+                width: 100%;
+                max-width: 200px;
+                justify-content: center;
+            }
+            
+            .not-found-search {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .not-found-card {
+                padding: 2rem 1rem;
+            }
+            
+            .not-found-title {
+                font-size: 3rem;
+            }
+            
+            .not-found-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .not-found-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+    {{- $query := first 1 (where .Site.Pages "Layout" "==" "search") -}}
+    {{- $searchPage := index $query 0 -}}
+
+    {{- with $searchPage -}}
+        <script>
+            const wrongUrl = new URL(window.location.href);
+            const searchKeyword = decodeURIComponent(wrongUrl.pathname).split(/[/|-]/).join(' ').trim();
+            document.getElementById('searchInput').setAttribute('value', searchKeyword);
+        </script>
+    {{- end -}}
+    {{ partialCached "footer/footer" . }}
+{{ end }}

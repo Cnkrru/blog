@@ -1,0 +1,12 @@
+<!-- 评论计数组件 -->
+{{ if .Site.Params.comments.enabled }}
+    <span class="comments-count">
+        <span class="comments-count-icon">💬</span>
+        <span class="comments-count-number" id="comments-count-number">
+            {{- i18n "article.comments.count" | default "0" -}}
+        </span>
+        <span class="comments-count-label">
+            {{- i18n "article.comments" | default "Comments" -}}
+        </span>
+    </span>
+{{ end }}

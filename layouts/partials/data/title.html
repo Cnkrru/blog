@@ -1,0 +1,68 @@
+{{- /* 增强版页面标题生成 */ -}}
+{{- $pageTitle := .Title -}}
+{{- $siteTitle := .Site.Title -}}
+{{- $paginator := partial "helper/paginator.html" . -}}
+{{- $separator := .Site.Params.title.separator | default " - " -}}
+{{- $maxLength := .Site.Params.title.maxLength | default 70 -}}
+
+{{- $title := slice -}}
+
+{{- /* 分页信息增强 */ -}}
+{{- if $paginator -}}
+    {{- /* Try to use paginator properties safely */ -}}
+    {{- if reflect.IsMap $paginator -}}
+        {{- /* Handle map-based paginator */ -}}
+        {{- if and (isset $paginator "HasPrev") $paginator.HasPrev -}}
+            {{- if and (isset $paginator "HasNext") $paginator.HasNext -}}
+                {{- /* 显示完整分页信息：第X页 - 共Y页 */ -}}
+                {{- $title = $title | append (printf "第%d页 - 共%d页" $paginator.PageNumber $paginator.TotalPages) -}}
+            {{- else -}}
+                {{- /* 最后一页 */ -}}
+                {{- $title = $title | append (printf "第%d页 (最后一页)" $paginator.PageNumber) -}}
+            {{- end -}}
+        {{- else if and (isset $paginator "HasNext") $paginator.HasNext -}}
+            {{- /* 第一页 */ -}}
+            {{- $title = $title | append (printf "第%d页" $paginator.PageNumber) -}}
+        {{- end -}}
+    {{- else -}}
+        {{- /* Handle regular paginator object */ -}}
+        {{- if and (not (eq $paginator nil)) (not (eq $paginator "")) -}}
+            {{- /* Just return the paginator as is */ -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- /* 页面类型特定标题 */ -}}
+{{- if eq .Kind "home" -}}
+    {{- /* 首页标题 */ -}}
+    {{- $title = $title | append (default $siteTitle $pageTitle) -}}
+{{- else if eq .Kind "section" -}}
+    {{- /* 分类/章节页面标题 */ -}}
+    {{- $sectionTitle := i18n "section" .Section | default .Section | title -}}
+    {{- $title = $title | append (printf "%s - %s" $sectionTitle (default $siteTitle $pageTitle)) -}}
+{{- else if eq .Kind "taxonomy" -}}
+    {{- /* 标签页面标题 */ -}}
+    {{- $taxonomyTitle := i18n "taxonomy" .Data.Singular | default .Data.Singular | title -}}
+    {{- $termTitle := .Title -}}
+    {{- $title = $title | append (printf "%s: %s" $taxonomyTitle $termTitle) -}}
+    {{- $title = $title | append $siteTitle -}}
+{{- else if eq .Kind "page" -}}
+    {{- /* 文章页面标题 */ -}}
+    {{- $title = $title | append (default $siteTitle $pageTitle) -}}
+    {{- $title = $title | append $siteTitle -}}
+{{- else -}}
+    {{- /* 其他页面 */ -}}
+    {{- $title = $title | append (default $siteTitle $pageTitle) -}}
+{{- end -}}
+
+{{- /* 生成最终标题 */ -}}
+{{- $finalTitle := delimit $title $separator -}}
+
+{{- /* 标题长度控制 */ -}}
+{{- if gt (len $finalTitle) $maxLength -}}
+    {{- /* 截断标题，确保不超过最大长度 */ -}}
+    {{- $truncatedTitle := substr $finalTitle 0 (sub $maxLength 3) -}}
+    {{- $finalTitle = printf "%s..." $truncatedTitle -}}
+{{- end -}}
+
+{{- return $finalTitle -}}

@@ -1,16 +1,189 @@
 {{- $context := .Context -}}
 {{- $limit := default 10 .Params.limit -}}
-<section class="widget tagCloud">
+<section class="widget categories widget-enhanced">
     <div class="widget-icon">
         {{ partial "helper/icon" "categories" }}
     </div>
     <h2 class="widget-title section-title">{{ T "widget.categoriesCloud.title" }}</h2>
 
-    <div class="tagCloud-tags">
-        {{ range first $limit $context.Site.Taxonomies.categories.ByCount }}
-            <a href="{{ .Page.RelPermalink }}" class="font_size_{{ .Count }}">
-                {{ .Page.Title }}
-            </a>
+    <div class="categories-list">
+        {{ range $index, $item := first $limit $context.Site.Taxonomies.categories.ByCount }}
+            <div class="category-item" data-aos="fade-up" data-aos-delay="{{ mul $index 50 }}">
+                <a href="{{ .Page.RelPermalink }}" class="category-link">
+                    <span class="category-name">{{ .Page.Title }}</span>
+                    <span class="category-count">{{ len .Pages }}</span>
+                </a>
+            </div>
         {{ end }}
     </div>
 </section>
+
+<style>
+/* Categories Widget Enhancements */
+.widget.categories {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.widget.categories:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.widget.categories .widget-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.widget.categories .widget-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+}
+
+.widget.categories .widget-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    color: var(--primary);
+    position: relative;
+    padding-left: 12px;
+}
+
+.widget.categories .widget-title:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+    border-radius: 2px;
+}
+
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.category-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.category-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--secondary);
+    text-decoration: none;
+    background-color: var(--accent);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-link:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+}
+
+.category-link:hover:before {
+    transform: scaleX(1);
+}
+
+.category-link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-light);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.category-name {
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.category-count {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.category-link:hover .category-count {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .widget.categories {
+        padding: 1.2rem;
+    }
+
+    .widget.categories .widget-title {
+        font-size: 1rem;
+    }
+
+    .category-link {
+        padding: 0.6rem 0.8rem;
+    }
+
+    .category-name {
+        font-size: 0.9rem;
+    }
+
+    .category-count {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.5rem;
+    }
+}
+
+/* Dark Mode Support */
+body.dark .widget.categories {
+    background-color: var(--card-background);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .widget.categories:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .category-link {
+    background-color: var(--accent);
+    color: var(--secondary);
+}
+
+body.dark .category-link:hover {
+    background-color: var(--primary);
+    color: white;
+}
+</style>

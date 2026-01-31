@@ -1,0 +1,94 @@
+{{- $pages := "" -}}
+{{- $options := dict -}}
+{{- $page := . -}}
+
+{{- /* Check if called with options or just page context */ -}}
+{{- if and (isset . "options") (isset . "context") -}}
+    {{- /* Called with options */ -}}
+    {{- $options = .options | default dict -}}
+    {{- $page = .context | default .Context -}}
+{{- else if isset . "Site" -}}
+    {{- /* Called with just page context */ -}}
+    {{- $options = dict -}}
+{{- end -}}
+
+{{- /* Default options */ -}}
+{{- $pageSize := $options.pageSize | default $page.Site.Params.paginate | default 10 -}}
+{{- $sortBy := $options.sortBy | default "date" -}}
+{{- $sortOrder := $options.sortOrder | default "desc" -}}
+{{- $filterHidden := $options.filterHidden | default true -}}
+{{- $includeSections := $options.includeSections | default $page.Site.Params.mainSections -}}
+
+{{- if eq $page.Kind "home" -}}
+    {{- /* Home page pagination */ -}}
+    {{- $pages = where $page.Site.RegularPages "Section" "in" $includeSections -}}
+    {{- if $filterHidden -}}
+        {{- $pages = where $pages "Params.hidden" "!=" true -}}
+    {{- end -}}
+    {{- if $sortBy -}}
+        {{- $pages = $pages.ByParam $sortBy -}}
+        {{- if eq $sortOrder "desc" -}}
+            {{- $pages = $pages.Reverse -}}
+        {{- end -}}
+    {{- else -}}
+        {{- $pages = $pages.ByDate.Reverse -}}
+    {{- end -}}
+{{- else if eq $page.Kind "term" -}}
+    {{- /* Taxonomy term page pagination */ -}}
+    {{- $pages = $page.Pages -}}
+    {{- if $filterHidden -}}
+        {{- $pages = where $pages "Params.hidden" "!=" true -}}
+    {{- end -}}
+    {{- if $sortBy -}}
+        {{- $pages = $pages.ByParam $sortBy -}}
+        {{- if eq $sortOrder "desc" -}}
+            {{- $pages = $pages.Reverse -}}
+        {{- end -}}
+    {{- else -}}
+        {{- $pages = $pages.ByDate.Reverse -}}
+    {{- end -}}
+{{- else if or (eq $page.Kind "section") (eq $page.Kind "taxonomy") -}}
+    {{- /* Section or taxonomy page pagination */ -}}
+    {{- $subsections := $page.Sections -}}
+    {{- $pages = $page.Pages | complement $subsections -}}
+    {{- if $filterHidden -}}
+        {{- $pages = where $pages "Params.hidden" "!=" true -}}
+    {{- end -}}
+    {{- if $sortBy -}}
+        {{- $pages = $pages.ByParam $sortBy -}}
+        {{- if eq $sortOrder "desc" -}}
+            {{- $pages = $pages.Reverse -}}
+        {{- end -}}
+    {{- else -}}
+        {{- $pages = $pages.ByDate.Reverse -}}
+    {{- end -}}
+
+    {{- if eq (len $pages) 0 -}}
+        {{/* See complete logic in list.html */}}
+        {{- $pages = $subsections -}}
+    {{- end -}}
+{{- else if eq $page.Kind "page" -}}
+    {{- /* Page pagination (for series or chapters) */ -}}
+    {{- if $page.Section -}}
+        {{- $sectionPages := where $page.Site.RegularPages "Section" $page.Section -}}
+        {{- if $filterHidden -}}
+            {{- $sectionPages = where $sectionPages "Params.hidden" "!=" true -}}
+        {{- end -}}
+        {{- if $sortBy -}}
+            {{- $sectionPages = $sectionPages.ByParam $sortBy -}}
+            {{- if eq $sortOrder "desc" -}}
+                {{- $sectionPages = $sectionPages.Reverse -}}
+            {{- end -}}
+        {{- else -}}
+            {{- $sectionPages = $sectionPages.ByDate -}}
+        {{- end -}}
+        {{- $pages = $sectionPages -}}
+    {{- end -}}
+{{- end -}}
+
+{{- if and $pages (or (eq $page.Kind "home") (eq $page.Kind "section") (eq $page.Kind "taxonomy") (eq $page.Kind "term")) -}}
+    {{- /* Only paginate supported page types */ -}}
+    {{- $pages = $page.Paginate $pages $pageSize -}}
+{{- end -}}
+
+{{ return $pages }}

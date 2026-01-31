@@ -1,0 +1,15 @@
+<article class="{{ if .Params.image }}has-image {{ end }}main-article">
+    {{ partial "article/components/header" . }}
+
+    <!-- 使用增强版的内容组件 -->
+    {{ partial "article/components/content-enhanced" . }}
+
+    {{ partial "article/components/footer" . }}
+
+    {{ if or .Params.math .Site.Params.article.math }}
+        {{ partialCached "article/components/math.html" . }}
+    {{ end }}
+    
+    <!-- 使用增强版评论系统 -->
+    {{ partial "comments/include-enhanced" . }}
+</article>

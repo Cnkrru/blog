@@ -1,0 +1,89 @@
+{{- $iconName := . -}}
+{{- $options := dict -}}
+
+{{- /* Check if called with options or just icon name */ -}}
+{{- if and (isset . "options") (isset . "name") -}}
+    {{- /* Called with options */ -}}
+    {{- $iconName = .name -}}
+    {{- $options = .options | default dict -}}
+{{- else if eq (printf "%T" .) "string" -}}
+    {{- /* Called with just icon name */ -}}
+    {{- $iconName = . -}}
+    {{- $options = dict -}}
+{{- end -}}
+
+{{- /* Default options */ -}}
+{{- $size := $options.size | default 24 -}}
+{{- $color := $options.color | default "" -}}
+{{- $class := $options.class | default "" -}}
+{{- $fallback := $options.fallback | default "" -}}
+{{- $inline := $options.inline | default true -}}
+
+{{- /* Try to get icon from assets */ -}}
+{{- $iconFile := resources.GetMatch (printf "icons/%s.svg" $iconName) -}}
+
+{{- if $iconFile -}}
+    {{- $iconContent := $iconFile.Content -}}
+    
+    {{- /* Add size if provided */ -}}
+    {{- if $size -}}
+        {{- $iconContent = replaceRE "width=\"[0-9]+\"" (printf "width=\"%d\"" $size) $iconContent -}}
+        {{- $iconContent = replaceRE "height=\"[0-9]+\"" (printf "height=\"%d\"" $size) $iconContent -}}
+    {{- end -}}
+    
+    {{- /* Add color if provided */ -}}
+    {{- if $color -}}
+        {{- $iconContent = replaceRE "fill=\"[#a-zA-Z0-9]+\"" (printf "fill=\"%s\"" $color) $iconContent -}}
+        {{- $iconContent = replaceRE "stroke=\"[#a-zA-Z0-9]+\"" (printf "stroke=\"%s\"" $color) $iconContent -}}
+    {{- end -}}
+    
+    {{- /* Add class if provided */ -}}
+    {{- if $class -}}
+        {{- $iconContent = replaceRE "<svg" (printf "<svg class=\"%s\"" $class) $iconContent -}}
+    {{- end -}}
+    
+    {{- /* Output icon */ -}}
+    {{- if $inline -}}
+        {{- $iconContent | safeHTML -}}
+    {{- else -}}
+        <span class="icon-wrapper">{{ $iconContent | safeHTML }}</span>
+    {{- end -}}
+{{- else if $fallback -}}
+    {{- /* Use fallback icon */ -}}
+    {{- $fallbackIconFile := resources.GetMatch (printf "icons/%s.svg" $fallback) -}}
+    {{- if $fallbackIconFile -}}
+        {{- $fallbackContent := $fallbackIconFile.Content -}}
+        
+        {{- /* Add size to fallback */ -}}
+        {{- if $size -}}
+            {{- $fallbackContent = replaceRE "width=\"[0-9]+\"" (printf "width=\"%d\"" $size) $fallbackContent -}}
+            {{- $fallbackContent = replaceRE "height=\"[0-9]+\"" (printf "height=\"%d\"" $size) $fallbackContent -}}
+        {{- end -}}
+        
+        {{- /* Add color to fallback */ -}}
+        {{- if $color -}}
+            {{- $fallbackContent = replaceRE "fill=\"[#a-zA-Z0-9]+\"" (printf "fill=\"%s\"" $color) $fallbackContent -}}
+            {{- $fallbackContent = replaceRE "stroke=\"[#a-zA-Z0-9]+\"" (printf "stroke=\"%s\"" $color) $fallbackContent -}}
+        {{- end -}}
+        
+        {{- /* Add class to fallback */ -}}
+        {{- if $class -}}
+            {{- $fallbackContent = replaceRE "<svg" (printf "<svg class=\"%s icon-fallback\"" $class) $fallbackContent -}}
+        {{- else -}}
+            {{- $fallbackContent = replaceRE "<svg" "<svg class=\"icon-fallback\"" $fallbackContent -}}
+        {{- end -}}
+        
+        {{- /* Output fallback icon */ -}}
+        {{- if $inline -}}
+            {{- $fallbackContent | safeHTML -}}
+        {{- else -}}
+            <span class="icon-wrapper">{{ $fallbackContent | safeHTML }}</span>
+        {{- end -}}
+    {{- else -}}
+        {{- /* Fallback icon not found */ -}}
+        {{- errorf "Error: fallback icon '%s.svg' is not found under 'assets/icons' folder" $fallback -}}
+    {{- end -}}
+{{- else -}}
+    {{- /* No icon found and no fallback */ -}}
+    {{- errorf "Error: icon '%s.svg' is not found under 'assets/icons' folder" $iconName -}}
+{{- end -}}

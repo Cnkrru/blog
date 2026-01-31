@@ -1,0 +1,64 @@
+{{/* 
+    This helper is used to generate a background color and text color from a string
+    Used to generate deterministic colors for tags, categories, etc.
+    Enhanced with more color schemes and customization options
+*/}}
+
+{{- $str := . -}}
+{{- $options := .options | default dict -}}
+
+{{- /* Default options */ -}}
+{{- $hueRange := $options.hueRange | default (slice 0 360) -}}
+{{- $saturation := $options.saturation | default 60 -}}
+{{- $lightness := $options.lightness | default (dict "background" 84 "text" 15) -}}
+{{- $colorScheme := $options.scheme | default "default" -}}
+
+{{- /* Generate hash */ -}}
+{{- $hash := hash.FNV32a $str -}}
+{{- $h := mod $hash (sub (index $hueRange 1) (index $hueRange 0)) -}}
+{{- $h = add $h (index $hueRange 0) -}}
+
+{{- /* Color scheme logic */ -}}
+{{- $backgroundColor := "" -}}
+{{- $textColor := "" -}}
+
+{{- if eq $colorScheme "pastel" -}}
+    {{- /* Pastel color scheme */ -}}
+    {{- $backgroundColor = printf "hsl(%d, %d%%, %d%%)" $h $saturation (add $lightness.background 5) -}}
+    {{- $textColor = printf "hsl(%d, %d%%, %d%%)" $h $saturation (sub $lightness.text 5) -}}
+{{- else if eq $colorScheme "vibrant" -}}
+    {{- /* Vibrant color scheme */ -}}
+    {{- $backgroundColor = printf "hsl(%d, %d%%, %d%%)" $h (add $saturation 20) (sub $lightness.background 10) -}}
+    {{- $textColor = printf "hsl(%d, %d%%, %d%%)" $h (add $saturation 10) $lightness.text -}}
+{{- else if eq $colorScheme "monochrome" -}}
+    {{- /* Monochrome color scheme */ -}}
+    {{- $grayValue := mod $hash 50 -}}
+    {{- $grayValue = add $grayValue 40 -}}
+    {{- $backgroundColor = printf "hsl(0, 0%%, %d%%)" (add $grayValue 20) -}}
+    {{- $textColor = printf "hsl(0, 0%%, %d%%)" (sub 100 $grayValue) -}}
+{{- else -}}
+    {{- /* Default color scheme */ -}}
+    {{- $backgroundColor = printf "hsl(%d, %d%%, %d%%)" $h $saturation $lightness.background -}}
+    {{- $textColor = printf "hsl(%d, %d%%, %d%%)" $h $saturation $lightness.text -}}
+{{- end -}}
+
+{{- /* Add contrast check */ -}}
+{{- $contrastRatio := 0 -}}
+{{- /* Simple contrast ratio calculation */ -}}
+{{- if ne $colorScheme "monochrome" -}}
+    {{- $contrastRatio = div (add 0.2 (div $saturation 100)) 2 -}}
+{{- else -}}
+    {{- $grayValue := mod $hash 50 -}}
+    {{- $grayValue = add $grayValue 40 -}}
+    {{- $contrastRatio = div (sub 100 $grayValue) 100 -}}
+{{- end -}}
+
+{{- return dict 
+    "BackgroundColor" $backgroundColor 
+    "TextColor" $textColor 
+    "Hue" $h
+    "Saturation" $saturation
+    "Lightness" $lightness
+    "ContrastRatio" $contrastRatio
+    "Scheme" $colorScheme
+-}}

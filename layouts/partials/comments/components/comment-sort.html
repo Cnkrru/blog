@@ -1,0 +1,19 @@
+<!-- 评论排序组件 -->
+{{ if .Site.Params.comments.enabled }}
+    <div class="comments-sort">
+        <label class="comments-sort-label" for="comments-sort-select">
+            {{- i18n "article.comments.sort" | default "排序方式:" -}}
+        </label>
+        <select id="comments-sort-select" class="comments-sort-select">
+            <option value="newest">
+                {{- i18n "article.comments.sort.newest" | default "最新优先" -}}
+            </option>
+            <option value="oldest">
+                {{- i18n "article.comments.sort.oldest" | default "最早优先" -}}
+            </option>
+            <option value="popular">
+                {{- i18n "article.comments.sort.popular" | default "最受欢迎" -}}
+            </option>
+        </select>
+    </div>
+{{ end }}

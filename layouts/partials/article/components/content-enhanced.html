@@ -1,0 +1,17 @@
+<!-- 增强版文章内容组件 -->
+<section class="article-content">
+    <!-- 保留原有的表格响应式包裹功能 -->
+    {{ $wrappedTable := printf "<div class=\"table-wrapper\">${1}</div>" }}
+    {{ .Content | replaceRE "(<table>(?:.|\n)+?</table>)" $wrappedTable | safeHTML }}
+    
+    <!-- 文章结束分隔线 -->
+    {{ partial "article/components/article-end.html" . }}
+</section>
+
+<!-- 引入模块化 CSS 文件 -->
+<link rel="stylesheet" href="/blog/css/code-blocks.css">
+<link rel="stylesheet" href="/blog/css/article-end.css">
+<link rel="stylesheet" href="/blog/css/article-enhanced.css">
+
+<!-- 引入模块化 JS 文件 -->
+<script src="/blog/js/code-copy.js"></script>

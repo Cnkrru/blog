@@ -1,0 +1,69 @@
+<!-- 增强版文章头部组件 -->
+<header class="article-header">
+    {{- $image := partialCached "helper/image" (dict "Context" . "Type" "article") .RelPermalink "article" -}}
+    {{ if $image.exists }}
+        <div class="article-image">
+            <a href="{{ .RelPermalink }}">
+                {{ if $image.resource }}
+                    {{- $Permalink := $image.resource.RelPermalink -}}
+                    {{- $Width := $image.resource.Width -}}
+                    {{- $Height := $image.resource.Height -}}
+                    {{- $Srcset := "" -}}
+                    
+                    {{- if (default true .Page.Site.Params.imageProcessing.cover.enabled) -}}
+                        {{- $thumbnail := $image.resource.Resize "800x" -}}
+                        {{- $thumbnailRetina := $image.resource.Resize "1600x" -}}
+                        {{- $Srcset = printf "%s 800w, %s 1600w" $thumbnail.RelPermalink $thumbnailRetina.RelPermalink -}}
+                        {{- $Permalink = $thumbnail.RelPermalink -}}
+                        {{- $Width = $thumbnail.Width -}}
+                        {{- $Height = $thumbnail.Height -}}
+                    {{- end -}}
+
+                    <img src="{{ $Permalink }}"
+                        {{ with $Srcset }}srcset="{{ . }}"{{ end }}
+                        width="{{ $Width }}" 
+                        height="{{ $Height }}" 
+                        loading="lazy"
+                        alt="Featured image of post {{ .Title }}" />
+                {{ else }}
+                    <img src="{{ $image.permalink }}" loading="lazy" alt="Featured image of post {{ .Title }}" />
+                {{ end }}
+            </a>
+        </div>
+    {{ end }}
+
+    <div class="article-details">
+        <h1 class="article-title">{{ .Title }}</h1>
+        
+        <!-- 文章元信息 -->
+        <div class="article-meta">
+            <!-- 发布日期 -->
+            <time datetime='{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}'>
+                {{- .Date | time.Format (or .Site.Params.dateFormat.published "Jan 02, 2006") -}}
+            </time>
+            
+            <!-- 阅读时间 -->
+            {{ if .Site.Params.article.readingTime }}
+                <span class="article-reading-time">
+                    · {{ .ReadingTime }} min read
+                </span>
+            {{ end }}
+            
+            <!-- 字数统计 -->
+            <span class="article-word-count">
+                · {{ .WordCount }} words
+            </span>
+        </div>
+        
+        <!-- 文章摘要 -->
+        {{ if .Description }}
+            <div class="article-description">
+                {{ .Description }}
+            </div>
+        {{ else if .Summary }}
+            <div class="article-description">
+                {{ .Summary | plainify }}
+            </div>
+        {{ end }}
+    </div>
+</header>

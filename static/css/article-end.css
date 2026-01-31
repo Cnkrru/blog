@@ -1,0 +1,94 @@
+/* 文章结束分隔线样式 */
+.article-end-separator {
+    width: 85%;
+    margin: var(--spacing-xxl) auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    font-style: italic;
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.2s;
+    will-change: transform, opacity;
+}
+
+/* 左右线条 */
+.article-end-separator::before,
+.article-end-separator::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    opacity: 0.7;
+    position: relative;
+    transform: scaleX(0);
+    animation: lineExpand 1s ease forwards;
+    animation-delay: 0.4s;
+    will-change: transform;
+}
+
+.article-end-separator::before {
+    transform-origin: right;
+}
+
+.article-end-separator::after {
+    transform-origin: left;
+}
+
+/* 文字和线条层级 */
+.article-end-separator {
+    position: relative;
+    z-index: 2;
+}
+
+.article-end-separator::before,
+.article-end-separator::after {
+    z-index: 1;
+}
+
+/* 暗黑模式适配 */
+.dark .article-end-separator {
+    color: var(--dark-primary);
+}
+
+.dark .article-end-separator::before,
+.dark .article-end-separator::after {
+    background: linear-gradient(90deg, transparent, var(--dark-primary), transparent);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .article-end-separator {
+        width: 95%;
+        margin: 2.5rem auto 0;
+        font-size: 0.75rem;
+        gap: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-end-separator {
+        margin: 2rem auto 0;
+        font-size: 0.7rem;
+        gap: 0.6rem;
+    }
+}
+
+/* 动画关键帧 */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineExpand {
+    to {
+        transform: scaleX(1);
+    }
+}

@@ -2,15 +2,360 @@
 {{- $context := .Context -}}
 {{- with (index .Context.Site.Params.widgets $scope) -}}
     <aside class="sidebar right-sidebar sticky">
+        {{ $index := 0 }}
         {{ range $widget := . }}
             {{ if templates.Exists (printf "partials/widget/%s.html" .type) }}
                 <!-- Ensure that the `params` is not nil -->
                 {{- $params := default dict .params -}}
-
-                {{ partial (printf "widget/%s" .type) (dict "Context" $context "Params" $params) }}
+                {{- $widgetId := printf "widget-%s-%d" .type $index -}}
+                {{- $index = add $index 1 -}}
+                
+                <div class="widget-wrapper" id="{{ $widgetId }}">
+                    <div class="widget" data-widget-type="{{ .type }}">
+                        {{ partial (printf "widget/%s" .type) (dict "Context" $context "Params" $params) }}
+                    </div>
+                </div>
             {{ else }}
                 {{ warnf "Widget %s not found" .type }}
             {{ end }}
         {{ end }}
     </aside>
 {{ end }}
+
+<style>
+/* Right Sidebar Enhancements */
+.right-sidebar {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.right-sidebar:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Widget Wrapper */
+.widget-wrapper {
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: var(--card-background);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+}
+
+.widget-wrapper:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Staggered Animation */
+.widget-wrapper:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.widget-wrapper:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.widget-wrapper:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.widget-wrapper:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.widget-wrapper:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+/* Widget Content */
+.widget {
+    padding: 1.5rem;
+    position: relative;
+}
+
+/* Widget Header */
+.widget h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    position: relative;
+    padding-left: 12px;
+}
+
+.widget h3:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+    border-radius: 2px;
+}
+
+/* Widget List */
+.widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.widget li {
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.widget li:hover {
+    transform: translateX(4px);
+}
+
+.widget a {
+    color: var(--secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 0.5rem 0;
+}
+
+.widget a:hover {
+    color: var(--primary);
+}
+
+/* Tag Widget */
+.widget .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.widget .tag-cloud a {
+    background-color: var(--accent);
+    color: var(--primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.widget .tag-cloud a:hover {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Search Widget */
+.widget .search-form {
+    position: relative;
+    margin-top: 1rem;
+}
+
+.widget .search-form input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--card-background);
+    color: var(--secondary);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.widget .search-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+.widget .search-form button {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.widget .search-form button:hover {
+    color: var(--primary);
+    background-color: var(--accent);
+}
+
+/* Category Widget */
+.widget .category-list li {
+    position: relative;
+}
+
+.widget .category-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.widget .category-list .count {
+    background-color: var(--accent);
+    color: var(--primary);
+    font-size: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* Recent Posts Widget */
+.widget .post-list li {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.widget .post-list li:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.widget .post-list a {
+    display: block;
+}
+
+.widget .post-list .post-title {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+}
+
+.widget .post-list .post-date {
+    font-size: 0.75rem;
+    color: var(--secondary);
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .right-sidebar {
+        padding: 1.5rem 1rem;
+        border-radius: 0;
+        margin-top: 2rem;
+    }
+
+    .widget-wrapper {
+        margin-bottom: 1.5rem;
+    }
+
+    .widget {
+        padding: 1.2rem;
+    }
+
+    .widget h3 {
+        font-size: 1rem;
+    }
+}
+
+/* Dark Mode Support */
+body.dark .right-sidebar {
+    background-color: var(--card-background);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .widget-wrapper {
+    background-color: var(--card-background);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .widget-wrapper:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Width Support */
+@media (min-width: 1200px) {
+    .right-sidebar {
+        max-width: 320px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .right-sidebar {
+        max-width: 360px;
+    }
+}
+</style>
+
+<script>
+// Widget Interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click effect to widget links
+    const widgetLinks = document.querySelectorAll('.widget a');
+    widgetLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('href') && !this.getAttribute('target')) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                // Add click animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 150);
+            }
+        });
+    });
+
+    // Add hover effect to widgets
+    const widgets = document.querySelectorAll('.widget-wrapper');
+    widgets.forEach(widget => {
+        widget.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-4px)';
+            this.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.12)';
+        });
+
+        widget.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.06)';
+        });
+    });
+
+    // Add animation to widget content when scrolling into view
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    widgets.forEach(widget => {
+        observer.observe(widget);
+    });
+});
+</script>

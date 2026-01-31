@@ -1,0 +1,152 @@
+/* 搜索框美化功能 */
+/* 搜索框基础样式 */
+.search-form {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/* 搜索框容器 */
+.search-form p {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 搜索输入框 */
+.search-form input {
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius-md);
+    background: rgba(255, 183, 197, 0.05);
+    color: var(--secondary);
+    font-size: 0.9rem;
+    transition: all var(--transition-normal) ease;
+    outline: none;
+    will-change: border-color, box-shadow, background;
+}
+
+/* 搜索输入框聚焦效果 */
+.search-form input:focus {
+    border-color: var(--primary-dark);
+    background: rgba(255, 183, 197, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 183, 197, 0.15);
+    transform: translateY(-1px);
+}
+
+/* 搜索输入框占位符样式 */
+.search-form input::placeholder {
+    color: rgba(255, 183, 197, 0.6);
+    transition: color var(--transition-normal) ease;
+}
+
+.search-form input:focus::placeholder {
+    color: rgba(255, 183, 197, 0.4);
+}
+
+/* 搜索按钮 */
+.search-form button {
+    padding: 0.6rem;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--transition-normal) ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform, background, box-shadow;
+    min-width: 40px;
+}
+
+/* 搜索按钮悬停效果 */
+.search-form button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+/* 搜索按钮点击效果 */
+.search-form button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* 搜索标签 */
+.search-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    font-weight: 500;
+    transition: color var(--transition-normal) ease;
+}
+
+/* 暗黑模式适配 */
+.dark .search-form input {
+    border-color: var(--dark-primary);
+    background: rgba(255, 149, 162, 0.05);
+}
+
+.dark .search-form input:focus {
+    border-color: var(--dark-primary-dark);
+    background: rgba(255, 149, 162, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 149, 162, 0.15);
+}
+
+.dark .search-form input::placeholder {
+    color: rgba(255, 149, 162, 0.6);
+}
+
+.dark .search-form input:focus::placeholder {
+    color: rgba(255, 149, 162, 0.4);
+}
+
+.dark .search-form button {
+    background: var(--dark-primary);
+}
+
+.dark .search-form button:hover {
+    background: var(--dark-primary-dark);
+}
+
+.dark .search-form label {
+    color: var(--secondary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .search-form input {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    .search-form button {
+        padding: 0.5rem;
+        min-width: 36px;
+    }
+    
+    .search-form label {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-form input {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .search-form button {
+        padding: 0.4rem;
+        min-width: 32px;
+    }
+    
+    .search-form label {
+        font-size: 0.8rem;
+    }
+}

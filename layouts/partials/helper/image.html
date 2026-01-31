@@ -1,0 +1,106 @@
+{{ $result := dict "exists" false "permalink" nil "resource" nil "isDefault" false "alt" "" "width" 0 "height" 0 }}
+{{ $imageField := default "image" .Context.Site.Params.featuredImageField }}
+{{ $imageValue := index .Context.Params $imageField }}
+{{ $options := .options | default dict }}
+
+{{- /* Default options */ -}}
+{{- $process := $options.process | default false -}}
+{{- $resize := $options.resize | default "" -}}
+{{- $quality := $options.quality | default 85 -}}
+{{- $webp := $options.webp | default false -}}
+{{- $alt := $options.alt | default .Context.Title -}}
+{{- $lazy := $options.lazy | default true -}}
+{{- $loading := $options.loading | default "lazy" -}}
+
+{{ if $imageValue }}
+    <!-- If page has `image` field set -->
+    {{ $result = merge $result (dict "exists" true "alt" $alt) }}
+    {{ $url := urls.Parse $imageValue }}
+
+    {{ if or (eq $url.Scheme "http") (eq $url.Scheme "https") }}
+        <!-- Is an external image -->
+        {{ $result = merge $result (dict "permalink" $imageValue) }}
+    {{ else }}
+        {{ $pageResourceImage := .Context.Resources.GetMatch (printf "%s" ($imageValue | safeURL)) }}
+        
+        {{ if $pageResourceImage }}
+            <!-- If image is found under page bundle -->
+            
+            {{- /* Process image if enabled */ -}}
+            {{- if and $process (ne (path.Ext $imageValue) ".svg") -}}
+                {{- $processedImage := $pageResourceImage -}}
+                
+                {{- /* Resize image if specified */ -}}
+                {{- if $resize -}}
+                    {{- $processedImage = $processedImage.Resize (printf "%s q%d" $resize $quality) -}}
+                {{- end -}}
+                
+                {{- /* Generate WebP version if enabled */ -}}
+                {{- if $webp -}}
+                    {{- $webpImage := $processedImage.Resize (printf "%s webp q%d" (default $processedImage.Width $resize) $quality) -}}
+                    {{- $result = merge $result (dict "webpPermalink" $webpImage.RelPermalink) -}}
+                {{- end -}}
+                
+                {{- $result = merge $result (dict "permalink" $processedImage.RelPermalink "resource" $processedImage) -}}
+                {{- $result = merge $result (dict "width" $processedImage.Width "height" $processedImage.Height) -}}
+            {{- else -}}
+                {{- $result = merge $result (dict "permalink" $pageResourceImage.RelPermalink "resource" $pageResourceImage) -}}
+                {{- $result = merge $result (dict "width" $pageResourceImage.Width "height" $pageResourceImage.Height) -}}
+            {{- end -}}
+        {{ else }}
+            <!-- Can not find the image under page bundle. Could be a relative linked image -->
+            {{ $result = merge $result (dict "permalink" (relURL $imageValue)) }}
+        {{ end }}
+
+    {{ end }}
+
+{{ else if and (ne .Type nil) (index .Context.Site.Params.defaultImage .Type) }}
+    <!-- Type arg is set, check for defaultImage setting -->
+    {{ $defaultImageSetting := index .Context.Site.Params.defaultImage .Type }}
+
+    {{ if $defaultImageSetting.enabled }}
+        {{ $result = merge $result (dict "isDefault" true "exists" true "alt" $alt) }}
+
+        {{ if $defaultImageSetting.local }}
+            {{ $siteResourceImage := resources.GetMatch (printf "%s" ($defaultImageSetting.src | safeURL)) }}
+
+            {{ if $siteResourceImage }}
+                <!-- Try search image under site's assets folder -->
+                
+                {{- /* Process image if enabled */ -}}
+                {{- if and $process (ne (path.Ext $defaultImageSetting.src) ".svg") -}}
+                    {{- $processedImage := $siteResourceImage -}}
+                    
+                    {{- /* Resize image if specified */ -}}
+                    {{- if $resize -}}
+                        {{- $processedImage = $processedImage.Resize (printf "%s q%d" $resize $quality) -}}
+                    {{- end -}}
+                    
+                    {{- /* Generate WebP version if enabled */ -}}
+                    {{- if $webp -}}
+                        {{- $webpImage := $processedImage.Resize (printf "%s webp q%d" (default $processedImage.Width $resize) $quality) -}}
+                        {{- $result = merge $result (dict "webpPermalink" $webpImage.RelPermalink) -}}
+                    {{- end -}}
+                    
+                    {{- $result = merge $result (dict "permalink" $processedImage.RelPermalink "resource" $processedImage) -}}
+                    {{- $result = merge $result (dict "width" $processedImage.Width "height" $processedImage.Height) -}}
+                {{- else -}}
+                    {{- $result = merge $result (dict "permalink" $siteResourceImage.RelPermalink "resource" $siteResourceImage) -}}
+                    {{- $result = merge $result (dict "width" $siteResourceImage.Width "height" $siteResourceImage.Height) -}}
+                {{- end -}}
+            {{ else }}
+                <!-- Can not find the image -->
+                {{ errorf "Failed loading image: %q" $defaultImageSetting.src }}
+                {{ $result = merge $result (dict "exists" false) }}
+            {{ end }}
+
+        {{ else }}
+            <!-- External image -->
+            {{ $result = merge $result (dict "permalink" (relURL $defaultImageSetting.src)) }}
+        {{ end }}
+        
+    {{ end }}
+
+{{ end }}
+
+{{ return $result }}
