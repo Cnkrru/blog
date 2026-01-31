@@ -1,0 +1,21 @@
+# Hugo 可执行文件
+hugo.exe
+hugo
+
+# Hugo 构建锁文件
+.hugo_build.lock
+
+# Hugo 构建产物（本地无需提交，工作流会在服务器上构建）
+public
+resources
+
+# 编辑器/IDE 生成的文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统临时文件
+.DS_Store
+Thumbs.db

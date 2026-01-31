@@ -1,0 +1,41 @@
+name: Hugo 自动构建部署 GitHub Pages
+# 监听main分支推送，自动触发部署（写文章推送后自动跑）
+on:
+  push:
+    branches: [ main ]
+
+# 赋予工作流必要的写入权限（内置令牌，无需手动配置PAT）
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 拉取源码（含主题子模块，避免样式丢失）
+      - name: 拉取main分支源码
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # 必选，拉取主题子模块
+          fetch-depth: 0    # 拉取完整提交历史，防止构建报错
+
+      # 安装最新版Hugo扩展版（自动适配，支持所有主题）
+      - name: 安装Hugo构建工具
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      # 构建静态文件（压缩优化HTML/CSS/JS，生成public文件夹）
+      - name: 构建博客静态文件
+        run: hugo --minify
+
+      # 自动部署到同仓库gh-pages分支（GitHub Pages默认源）
+      - name: 自动部署到GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 仓库内置令牌，100%有权限
+          publish_dir: ./public                      # 固定指向Hugo构建的静态文件目录
+          publish_branch: gh-pages                   # 静态文件自动推送到gh-pages分支

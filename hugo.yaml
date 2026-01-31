@@ -1,0 +1,331 @@
+# 部署站点
+baseurl: https://Cnkrru.github.io/blog      
+
+languageCode: en-us
+# 主题配置
+theme: hugo-theme-stack
+# 网址标题
+title: Cnkrru'blog
+# 一行简介语
+copyright: Cnkrru
+
+# Theme i18n support
+# Available values: ar, bn, ca, de, el, en, es, fr, hu, id, it, ja, ko, nl, pt-br, th, uk, zh-cn, zh-hk, zh-tw
+# 选择默认语言
+DefaultContentLanguage: zh-cn
+
+# Set hasCJKLanguage to true if DefaultContentLanguage is in [zh-cn ja ko]
+# This will make .Summary and .WordCount behave correctly for CJK languages.
+hasCJKLanguage: true
+
+# 选择初始界面是哪种语言，被注释的是关闭的界面，不再使用
+languages:
+    # en:
+    #     languageName: English
+    #     title: Example Site
+    #     weight: 1
+    #     params:
+    #         sidebar:
+    #             subtitle: Example description
+    zh-cn:
+        languageName: 简体中文
+        title: Cnkrru'blog
+        weight: 2
+        params:
+            sidebar:
+                subtitle: 欢迎来到我的博客
+
+    # zh-tw:
+    #     languageName: 正體中文
+    #     title: 演示站點
+    #     weight: 2
+    #     params:
+    #         sidebar:
+    #             subtitle: 演示說明
+
+    # ja:
+    #     languageName: 日本語
+    #     title: サンプルサイト
+    #     weight: 2
+    #     params:
+    #         sidebar:
+    #             subtitle: サンプル説明
+    # ar:
+    #     languageName: عربي
+    #     languagedirection: rtl
+    #     title: موقع تجريبي
+    #     weight: 3
+    #     params:
+    #         sidebar:
+    #             subtitle: وصف تجريبي
+
+services:
+    # # Change it to your Disqus shortname before using
+    # disqus:
+    #     shortname: "hugo-theme-stack"
+    # # GA Tracking ID
+    googleAnalytics:
+        id: G-081MCRMZFS
+
+# 单页显示文章数量
+pagination:
+    pagerSize: 3
+
+permalinks:
+# 配置页面链接格式
+    post: /p/:slug/
+    page: /:slug/
+    categories: /categories/:slug/
+    tags: /tags/:slug/
+    archive: /archives/:slug/
+
+params:
+    # 配置文章
+    mainSections:
+        - post
+    # 配置文章封面图
+    featuredImageField: image
+    rssFullContent: true
+    # 配置网址图标
+    favicon: /favicon.ico # e.g.: favicon placed in `static/favicon.ico` of your site folder, then set this field to `/favicon.ico` (`/` is necessary)
+
+    footer:
+        # 设置网址创建起始年份
+        since: 2026
+        customText:
+
+    dateFormat:
+        # 设置网址日期格式，基于go语言的写法，与其他语言不同
+        published: 2006-01-02
+        lastUpdated: Jan 02, 2006 15:04 MST
+
+    sidebar:
+        # 配置网站头像图标旁边的表情
+        emoji: 🍥
+        subtitle: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        # 配置头像，头像需要放在assert文件夹下的img文件夹里
+        avatar:
+            enabled: true
+            local: true
+            src: img/avatar.png
+
+    article:
+        # 配置数学公式渲染器
+        math: true
+        # 配置目录
+        toc: true
+        # 配置阅读时间估计
+        readingTime: false
+        # 配置版权声明
+        license:
+            enabled: true
+            default: Licensed under CC BY-NC-SA 4.0
+
+# 配置评论功能，有多种选择:disqus、utterances：beaudar、remarker、vssue、waline……
+    comments:
+        enabled: true
+        # 选择使用哪种评论功能
+        provider: utterances
+
+        disqusjs:
+            shortname:
+            apiUrl:
+            apiKey:
+            admin:
+            adminLabel:
+
+        utterances:
+            repo:
+            issueTerm: pathname
+            label:
+
+        beaudar:
+            repo:
+            issueTerm: pathname
+            label:
+            theme:
+
+        remark42:
+            host:
+            site:
+            locale:
+
+        vssue:
+            platform:
+            owner:
+            repo:
+            clientId:
+            clientSecret:
+            autoCreateIssue: false
+
+        # Waline client configuration see: https://waline.js.org/en/reference/component.html
+        waline:
+            serverURL:
+            lang:
+            pageview:
+            emoji:
+                - https://unpkg.com/@waline/emojis@1.0.1/weibo
+            requiredMeta:
+                - name
+                - email
+                - url
+            locale:
+                admin: Admin
+                placeholder:
+
+        twikoo:
+            envId:
+            region:
+            path:
+            lang:
+
+        # See https://cactus.chat/docs/reference/web-client/#configuration for description of the various options
+        cactus:
+            defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
+            serverName: "cactus.chat"
+            siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
+
+        giscus:
+            repo:
+            repoID:
+            category:
+            categoryID:
+            mapping:
+            lightTheme:
+            darkTheme:
+            reactionsEnabled: 1
+            emitMetadata: 0
+
+        gitalk:
+            owner:
+            admin:
+            repo:
+            clientID:
+            clientSecret:
+            proxy:
+
+        cusdis:
+            host:
+            id:
+# 侧边栏功能配置
+    widgets:
+        homepage:
+        # 配置搜索功能
+            - type: search
+        # 配置归档功能
+            - type: archives
+              params:
+                  limit: 5
+        # 配置文章分类
+            # - type: categories
+            #   params:
+            #       limit: 10
+        # 配置文章标签
+            - type: tag-cloud
+              params:
+                  limit: 10
+        # 配置文章目录
+        page:
+            - type: toc
+    # 分类与标签二选一即可
+
+# 配置推特
+    # opengraph:
+    #     twitter:
+    #         # Your Twitter username
+    #         site:
+
+    #         # Available values: summary, summary_large_image
+    #         card: summary_large_image
+# 配置社媒预览图
+    defaultImage:
+        opengraph:
+            enabled: false
+            local: false
+            src:
+# 配置界面亮/暗模式
+    colorScheme:
+        # Display toggle
+        toggle: true
+
+        # 默认模式: auto, light, dark
+        default: auto
+# 配置图片处理功能
+    imageProcessing:
+        cover:
+            enabled: true
+        content:
+            enabled: true
+
+### Custom menu
+### See https://stack.jimmycai.com/config/menu
+### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
+menu:
+# 配置菜单
+    main: []
+# 配置社媒
+    social:
+    # 配置GitHub
+        - identifier: github
+          name: GitHub
+          url: https://github.com/Cnkrru
+          params:
+              icon: brand-github
+    # 配置推特
+        # - identifier: twitter
+        #   name: Twitter
+        #   url: https://twitter.com
+        #   params:
+        #       icon: brand-twitter
+
+related:
+# 文章相关推荐配置
+    includeNewer: true
+    threshold: 60
+    # 是否转为小写再进行权重计算
+    toLower: false
+    indices:
+    # 两种权重配置
+        - name: tags
+          weight: 100
+
+        - name: categories
+          weight: 200
+
+# 配置markdown引擎
+markup:
+    goldmark:
+        extensions:
+            passthrough:
+                enable: true
+                delimiters:
+                    block:
+                        - - \[
+                          - \]
+                        - - $$
+                          - $$
+                    inline:
+                        - - \(
+                          - \)
+        renderer:
+            ## Set to true if you have HTML content inside Markdown
+            unsafe: true
+
+    # 配置文章目录
+    tableOfContents:
+        # 设置字号，根据html的标题字号，4对应h4
+        endLevel: 4
+        # 设置列表：有序/无序
+        ordered: true
+        # 设置字号，根据html的标题字号，2对应h2
+        startLevel: 2
+    
+    # 配置高亮
+    highlight:
+        noClasses: true
+        codeFences: true
+        guessSyntax: true
+        lineNoStart: 1
+        lineNos: true
+        lineNumbersInTable: true
+        tabWidth: 4
