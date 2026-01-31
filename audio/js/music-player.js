@@ -7,7 +7,7 @@
  * - 音量控制
  * - 响应式设计
  * - 暗黑模式支持
- * - 页面切换时保持播放状态
+ * - 页面切换时保持音乐播放
  * - 播放时保持音乐框显示
  */
 
@@ -20,6 +20,7 @@ var audio = null;
 var playlist = [];
 var currentIndex = 0;
 var isPlayerVisible = false;
+var saveStateInterval = null;
 
 // 全局播放器状态存储
 var playerState = {
@@ -41,6 +42,7 @@ function savePlayerState() {
     
     try {
       localStorage.setItem('musicPlayerState', JSON.stringify(playerState));
+      console.log('Player state saved:', playerState);
     } catch (error) {
       console.warn('Failed to save player state:', error);
     }
@@ -57,6 +59,7 @@ function loadPlayerState() {
         ...playerState,
         ...state
       };
+      console.log('Player state loaded:', playerState);
       return true;
     }
   } catch (error) {
@@ -69,6 +72,8 @@ function loadPlayerState() {
 function loadSong(index) {
   var song = playlist[index];
   if (!song) return;
+  
+  console.log('Loading song:', song);
   
   // 添加加载动画
   if (playerCover && playerCover.parentElement) {
@@ -172,8 +177,8 @@ function updateProgress() {
   currentTimeEl.textContent = formatTime(currentTime);
   totalTimeEl.textContent = formatTime(duration);
   
-  // 每2秒保存一次播放状态
-  if (Math.floor(currentTime * 2) % 2 === 0) {
+  // 更频繁地保存播放状态，每0.5秒保存一次
+  if (Math.floor(currentTime * 2) % 1 === 0) {
     savePlayerState();
   }
 }
@@ -225,11 +230,6 @@ function adjustVolume(e) {
 
 // 切换播放器显示/隐藏
 function togglePlayer() {
-  // 只有在暂停时才允许隐藏
-  if (audio && !audio.paused) {
-    return;
-  }
-  
   isPlayerVisible = !isPlayerVisible;
   
   if (isPlayerVisible) {
@@ -249,6 +249,29 @@ function togglePlayer() {
       toggleBtn.classList.remove('active');
       toggleBtn.setAttribute('aria-label', '音乐播放器');
       toggleBtn.setAttribute('title', '音乐播放器');
+    }
+  }
+}
+
+// 鼠标悬停在播放器区域时保持显示
+function handlePlayerHover() {
+  if (player) {
+    player.classList.add('active');
+  }
+  if (toggleBtn) {
+    toggleBtn.classList.add('active');
+  }
+}
+
+// 鼠标离开播放器区域时自动收回
+function handlePlayerLeave() {
+  // 只有在暂停时才允许自动收回
+  if (!audio || audio.paused) {
+    if (player) {
+      player.classList.remove('active');
+    }
+    if (toggleBtn) {
+      toggleBtn.classList.remove('active');
     }
   }
 }
@@ -322,10 +345,24 @@ function bindEvents() {
   if (toggleBtn) {
     toggleBtn.addEventListener('click', togglePlayer);
   }
+  
+  // 播放器区域鼠标事件
+  if (player) {
+    player.addEventListener('mouseenter', handlePlayerHover);
+    player.addEventListener('mouseleave', handlePlayerLeave);
+  }
+  
+  // 控制按钮鼠标事件
+  if (toggleBtn) {
+    toggleBtn.addEventListener('mouseenter', handlePlayerHover);
+    toggleBtn.addEventListener('mouseleave', handlePlayerLeave);
+  }
 }
 
 // 初始化播放器
 function initializePlayer() {
+  console.log('Initializing player with state:', playerState);
+  
   // 创建音频对象
   audio = new Audio();
   
@@ -338,15 +375,18 @@ function initializePlayer() {
   audio.addEventListener('timeupdate', updateProgress);
   audio.addEventListener('ended', nextSong);
   audio.addEventListener('loadedmetadata', function() {
+    console.log('Loaded metadata, duration:', audio.duration);
     updateProgress();
-    // 加载完成后设置时间
+    // 加载完成后立即设置时间
     if (playerState.currentTime) {
       audio.currentTime = playerState.currentTime;
+      console.log('Set current time:', playerState.currentTime);
     }
   });
   
-  // 当音频可以播放时尝试恢复播放
+  // 当音频可以播放时立即恢复播放
   audio.addEventListener('canplay', function() {
+    console.log('Can play, attempting to resume:', playerState.isPlaying);
     // 恢复播放状态
     if (playerState.isPlaying && audio.paused) {
       audio.play().catch(error => {
@@ -355,16 +395,37 @@ function initializePlayer() {
     }
   });
   
-  // 播放时保持显示
+  // 当音频加载完成时立即恢复播放
+  audio.addEventListener('canplaythrough', function() {
+    console.log('Can play through, attempting to resume:', playerState.isPlaying);
+    if (playerState.isPlaying && audio.paused) {
+      audio.play().catch(error => {
+        console.warn('Auto-play failed:', error);
+      });
+    }
+  });
+  
+  // 播放时的处理
   audio.addEventListener('play', function() {
+    console.log('Play event triggered');
     if (player) {
       player.classList.add('playing');
-      player.classList.add('active');
+      // 不自动添加active，让用户通过按钮或悬停控制显示
     }
     if (toggleBtn) {
-      toggleBtn.classList.add('active');
+      // 不自动添加active，让用户通过按钮或悬停控制显示
     }
-    isPlayerVisible = true;
+  });
+  
+  // 暂停时的处理
+  audio.addEventListener('pause', function() {
+    console.log('Pause event triggered');
+    if (playBtn) {
+      playBtn.classList.remove('playing');
+    }
+    if (player) {
+      player.classList.remove('playing');
+    }
   });
   
   // 加载当前歌曲
@@ -372,27 +433,37 @@ function initializePlayer() {
   
   // 立即恢复播放器UI状态
   if (playerState.isPlaying) {
+    console.log('Restoring UI state for playing');
     if (playBtn) {
       playBtn.classList.add('playing');
       playBtn.setAttribute('aria-label', '暂停');
     }
     if (player) {
       player.classList.add('playing');
-      player.classList.add('active');
+      // 不自动添加active，让用户通过按钮或悬停控制显示
     }
     if (toggleBtn) {
-      toggleBtn.classList.add('active');
+      // 不自动添加active，让用户通过按钮或悬停控制显示
     }
-    isPlayerVisible = true;
+    isPlayerVisible = false; // 默认隐藏
+  } else {
+    isPlayerVisible = false; // 默认隐藏
   }
   
   // 绑定事件
   bindEvents();
+  
+  // 启动定期保存状态的定时器
+  if (saveStateInterval) {
+    clearInterval(saveStateInterval);
+  }
+  saveStateInterval = setInterval(savePlayerState, 500); // 每500毫秒保存一次状态
+  console.log('Started save state interval');
 }
 
 // 页面加载完成后初始化
 function initPlayer() {
-  console.log('Initializing player...');
+  console.log('Init player called, document readyState:', document.readyState);
   
   // 获取播放器元素
   player = document.getElementById('global-music-player');
@@ -418,7 +489,9 @@ function initPlayer() {
     toggleBtn: !!toggleBtn,
     playBtn: !!playBtn,
     prevBtn: !!prevBtn,
-    nextBtn: !!nextBtn
+    nextBtn: !!nextBtn,
+    progressBar: !!progressBar,
+    volumeBar: !!volumeBar
   });
   
   // 加载保存的播放器状态
@@ -488,18 +561,29 @@ function initPlayer() {
     });
 }
 
-// 检查DOM是否已经加载完成
-if (document.readyState === 'loading') {
-  // DOM还在加载中，监听DOMContentLoaded事件
-  document.addEventListener('DOMContentLoaded', initPlayer);
-} else {
-  // DOM已经加载完成，直接执行初始化
-  initPlayer();
+// 立即尝试初始化，不等待DOMContentLoaded
+function tryInitPlayer() {
+  console.log('Try init player called');
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initPlayer();
+  } else {
+    // DOM还在加载中，监听DOMContentLoaded事件
+    document.addEventListener('DOMContentLoaded', initPlayer);
+    // 同时设置一个超时，确保即使DOMContentLoaded延迟也能初始化
+    setTimeout(initPlayer, 100);
+  }
 }
+
+// 立即尝试初始化播放器
+tryInitPlayer();
 
 // 页面卸载前保存状态
 window.addEventListener('beforeunload', function() {
+  console.log('Before unload, saving state');
   savePlayerState();
+  if (saveStateInterval) {
+    clearInterval(saveStateInterval);
+  }
 });
 
 // 监听链接点击事件，保存播放状态
@@ -513,9 +597,20 @@ window.addEventListener('click', function(e) {
   if (target && target.tagName === 'A') {
     // 检查是否是内部链接
     var href = target.getAttribute('href');
-    if (href && (href.startsWith('/') || href.startsWith('./') || href.startsWith('../'))) {
-      // 保存播放状态
+    if (href && (href.startsWith('/') || href.startsWith('./') || href.startsWith('../')) && !href.startsWith('//')) {
+      // 立即保存播放状态
+      console.log('Internal link clicked, saving state');
       savePlayerState();
     }
+  }
+});
+
+// 监听页面显示事件，尝试恢复播放
+window.addEventListener('pageshow', function() {
+  console.log('Page show event, attempting to restore playback');
+  if (audio && playerState.isPlaying && audio.paused) {
+    audio.play().catch(error => {
+      console.warn('Resume play on pageshow failed:', error);
+    });
   }
 });

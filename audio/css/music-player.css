@@ -156,9 +156,8 @@
   box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* 播放时保持显示 */
+/* 播放时的样式（不自动显示） */
 .global-music-player.playing {
-  transform: translateY(0);
   box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.15);
 }
 
