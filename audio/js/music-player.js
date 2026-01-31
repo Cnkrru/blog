@@ -666,25 +666,6 @@ window.addEventListener('beforeunload', function() {
   }
 });
 
-// 监听链接点击事件，保存播放状态
-window.addEventListener('click', function(e) {
-  // 检查点击的是否是链接
-  var target = e.target;
-  while (target && target.tagName !== 'A') {
-    target = target.parentNode;
-  }
-  
-  if (target && target.tagName === 'A') {
-    // 检查是否是内部链接
-    var href = target.getAttribute('href');
-    if (href && (href.startsWith('/') || href.startsWith('./') || href.startsWith('../')) && !href.startsWith('//')) {
-      // 立即保存播放状态
-      console.log('Internal link clicked, saving state');
-      savePlayerState();
-    }
-  }
-});
-
 // 监听页面显示事件，尝试恢复播放
 window.addEventListener('pageshow', function() {
   console.log('Page show event, attempting to restore playback');
@@ -694,3 +675,81 @@ window.addEventListener('pageshow', function() {
     });
   }
 });
+
+// 监听PJAX相关事件
+if (typeof window !== 'undefined') {
+  // 监听PJAX开始事件
+  document.addEventListener('pjax:start', function() {
+    console.log('PJAX start, saving player state');
+    savePlayerState();
+  });
+
+  // 监听PJAX完成事件
+  document.addEventListener('pjax:complete', function() {
+    console.log('PJAX complete, reinitializing player UI');
+    // 重新初始化播放器UI元素
+    reinitPlayerUI();
+    // 恢复播放状态
+    if (audio && playerState.isPlaying && audio.paused) {
+      audio.play().catch(error => {
+        console.warn('Resume play on PJAX complete failed:', error);
+      });
+    }
+  });
+}
+
+// 重新初始化播放器UI元素
+function reinitPlayerUI() {
+  console.log('Reinitializing player UI elements');
+  
+  // 重新获取播放器元素
+  player = document.getElementById('global-music-player');
+  toggleBtn = document.getElementById('music-player-toggle');
+  playBtn = document.getElementById('player-play');
+  prevBtn = document.getElementById('player-prev');
+  nextBtn = document.getElementById('player-next');
+  progressBar = document.querySelector('.progress-bar');
+  progressFill = document.getElementById('progress-fill');
+  progressHandle = document.getElementById('progress-handle');
+  currentTimeEl = document.getElementById('current-time');
+  totalTimeEl = document.getElementById('total-time');
+  volumeBtn = document.getElementById('player-volume-btn');
+  volumeBar = document.querySelector('.volume-bar');
+  volumeFill = document.getElementById('volume-fill');
+  volumeHandle = document.getElementById('volume-handle');
+  playerTitle = document.getElementById('player-title');
+  playerArtist = document.getElementById('player-artist');
+  playerCover = document.getElementById('player-cover');
+  
+  console.log('Reinitialized player elements:', {
+    player: !!player,
+    toggleBtn: !!toggleBtn,
+    playBtn: !!playBtn,
+    prevBtn: !!prevBtn,
+    nextBtn: !!nextBtn,
+    progressBar: !!progressBar,
+    volumeBar: !!volumeBar
+  });
+  
+  // 重新绑定事件
+  bindEvents();
+  
+  // 更新播放器UI状态
+  if (playerState.isPlaying) {
+    if (playBtn) {
+      playBtn.classList.add('playing');
+      playBtn.setAttribute('aria-label', '暂停');
+    }
+    if (player) {
+      player.classList.add('playing');
+    }
+  }
+  
+  // 更新播放信息
+  if (playerTitle && playerArtist && playerCover && playlist[currentIndex]) {
+    var song = playlist[currentIndex];
+    playerTitle.textContent = song.name;
+    playerArtist.textContent = song.artist;
+    playerCover.src = song.cover;
+  }
+}
