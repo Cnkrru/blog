@@ -314,7 +314,7 @@ comments: false
 
 <script>
     // 颜色工具功能
-    window.onload = function() {
+    function initColorTool() {
         console.log('初始化颜色工具');
         
         // 获取 DOM 元素
@@ -333,6 +333,11 @@ comments: false
             colorPreview: !!colorPreview,
             colorPalette: !!colorPalette
         });
+        
+        if (!colorInput || !colorFormat || !convertColorBtn || !colorResult) {
+            console.error('颜色工具：缺少必要的DOM元素');
+            return;
+        }
         
         // 颜色转换函数
         function hexToRgb(hex) {
@@ -432,6 +437,8 @@ comments: false
         
         // 生成调色板
         function generatePalette(r, g, b) {
+            if (!colorPalette) return;
+            
             colorPalette.innerHTML = '';
             
             // 生成不同色调的颜色
@@ -502,7 +509,7 @@ comments: false
                 }
                 
                 colorResult.value = result;
-                colorPreview.style.backgroundColor = result;
+                if (colorPreview) colorPreview.style.backgroundColor = result;
                 generatePalette(rgb.r, rgb.g, rgb.b);
                 
             } catch (error) {
@@ -512,11 +519,28 @@ comments: false
         }
         
         // 绑定事件
-        if (convertColorBtn) {
-            convertColorBtn.addEventListener('click', convertColor);
-        }
+        convertColorBtn.addEventListener('click', convertColor);
         
         // 初始转换
         convertColor();
-    };
+    }
+    
+    // 多种方式确保初始化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initColorTool);
+    } else {
+        initColorTool();
+    }
+    
+    // PJAX兼容
+    document.addEventListener('pjax:success', function() {
+        console.log('PJAX加载完成，重新初始化颜色工具');
+        setTimeout(initColorTool, 100);
+    });
+    
+    // 传统window.onload作为备用
+    window.addEventListener('load', function() {
+        console.log('Window load事件，确保颜色工具初始化');
+        setTimeout(initColorTool, 100);
+    });
 </script>

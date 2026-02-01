@@ -15,50 +15,52 @@ comments: false
 </div>
 
 <div class="tools-card-container">
-  <div class="tool-card">
-    <a href="/tools/text-tool/" class="tool-card-link" data-pjax="false">
+  <a href="/blog/tools/text-tool/" class="tool-card-link no-pjax">
+    <div class="tool-card">
       <div class="tool-card-icon">📝</div>
       <div class="tool-card-content">
         <h3>文本处理工具</h3>
         <p>文本格式化、大小写转换、字符统计等功能</p>
       </div>
       <div class="tool-card-arrow">→</div>
-    </a>
-  </div>
+    </div>
+  </a>
 
-  <div class="tool-card">
-    <a href="/tools/password-generator/" class="tool-card-link" data-pjax="false">
+  <a href="/blog/tools/password-generator/" class="tool-card-link no-pjax">
+    <div class="tool-card">
       <div class="tool-card-icon">🔒</div>
       <div class="tool-card-content">
         <h3>密码生成器</h3>
         <p>生成安全强度高的随机密码</p>
       </div>
       <div class="tool-card-arrow">→</div>
-    </a>
-  </div>
+    </div>
+  </a>
 
-  <div class="tool-card">
-    <a href="/tools/unit-converter/" class="tool-card-link" data-pjax="false">
-      <div class="tool-card-icon">📏</div>
-      <div class="tool-card-content">
-        <h3>单位转换器</h3>
-        <p>长度、重量、温度等单位之间的转换</p>
-      </div>
-      <div class="tool-card-arrow">→</div>
-    </a>
-  </div>
-
-  <div class="tool-card">
-    <a href="/tools/color-tool/" class="tool-card-link" data-pjax="false">
+  <a href="/blog/tools/color-tool/" class="tool-card-link no-pjax">
+    <div class="tool-card">
       <div class="tool-card-icon">🎨</div>
       <div class="tool-card-content">
         <h3>颜色工具</h3>
         <p>颜色代码转换、调色板生成等功能</p>
       </div>
       <div class="tool-card-arrow">→</div>
-    </a>
-  </div>
+    </div>
+  </a>
+
+  <a href="/blog/tools/base-converter/" class="tool-card-link no-pjax">
+    <div class="tool-card">
+      <div class="tool-card-icon">🔢</div>
+      <div class="tool-card-content">
+        <h3>进制转换器</h3>
+        <p>支持2-36进制之间的数值转换</p>
+      </div>
+      <div class="tool-card-arrow">→</div>
+    </div>
+  </a>
 </div>
+
+
 
 <style>
 .tools-header {
@@ -90,6 +92,14 @@ comments: false
   margin-bottom: 40px;
 }
 
+.tool-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}
+
 .tool-card {
   background: linear-gradient(135deg, rgba(255, 200, 210, 0.1), rgba(170, 210, 230, 0.1));
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -103,26 +113,13 @@ comments: false
   height: 200px;
   display: flex;
   flex-direction: column;
+  padding: 24px;
 }
 
-.tool-card:hover {
+.tool-card-link:hover .tool-card {
   transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(170, 210, 230, 0.2);
   border-color: rgba(255, 200, 210, 0.3);
-}
-
-.tool-card-link {
-  display: block;
-  padding: 24px;
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .tool-card-icon {

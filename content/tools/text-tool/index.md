@@ -277,7 +277,7 @@ comments: false
 
 <script>
     // 文本处理工具功能
-    window.onload = function() {
+    function initTextTool() {
         console.log('初始化文本处理工具');
         
         // 获取 DOM 元素
@@ -297,6 +297,11 @@ comments: false
             textResult: !!textResult,
             textStats: !!textStats
         });
+        
+        if (!textInput || !textOperation || !processBtn || !textResult) {
+            console.error('文本工具：缺少必要的DOM元素');
+            return;
+        }
         
         // 处理文本函数
         function processText() {
@@ -326,10 +331,10 @@ comments: false
                     case 'count':
                         result = text;
                         // 显示统计信息
-                        charCount.textContent = text.length;
-                        wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
-                        lineCount.textContent = text.split('\n').length;
-                        textStats.style.display = 'block';
+                        if (charCount) charCount.textContent = text.length;
+                        if (wordCount) wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
+                        if (lineCount) lineCount.textContent = text.split('\n').length;
+                        if (textStats) textStats.style.display = 'block';
                         break;
                     case 'trim':
                         result = text.trim();
@@ -341,7 +346,7 @@ comments: false
                 textResult.value = result;
                 
                 // 如果不是统计操作，隐藏统计信息
-                if (operation !== 'count') {
+                if (operation !== 'count' && textStats) {
                     textStats.style.display = 'none';
                 }
                 
@@ -352,8 +357,25 @@ comments: false
         }
         
         // 绑定事件
-        if (processBtn) {
-            processBtn.addEventListener('click', processText);
-        }
-    };
+        processBtn.addEventListener('click', processText);
+    }
+    
+    // 多种方式确保初始化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTextTool);
+    } else {
+        initTextTool();
+    }
+    
+    // PJAX兼容
+    document.addEventListener('pjax:success', function() {
+        console.log('PJAX加载完成，重新初始化文本工具');
+        setTimeout(initTextTool, 100);
+    });
+    
+    // 传统window.onload作为备用
+    window.addEventListener('load', function() {
+        console.log('Window load事件，确保文本工具初始化');
+        setTimeout(initTextTool, 100);
+    });
 </script>

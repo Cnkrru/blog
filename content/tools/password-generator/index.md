@@ -292,7 +292,7 @@ comments: false
 
 <script>
     // 密码生成器功能
-    window.onload = function() {
+    function initPasswordGenerator() {
         console.log('初始化密码生成器');
         
         // 获取 DOM 元素
@@ -319,6 +319,11 @@ comments: false
             strengthBar: !!strengthBar,
             strengthText: !!strengthText
         });
+        
+        if (!passwordLength || !generateBtn || !passwordResult) {
+            console.error('密码生成器：缺少必要的DOM元素');
+            return;
+        }
         
         // 字符集
         const charSets = {
@@ -349,6 +354,8 @@ comments: false
         
         // 更新强度显示
         function updateStrength(password) {
+            if (!strengthBar || !strengthText) return;
+            
             const strength = calculateStrength(password);
             strengthBar.style.width = `${strength}%`;
             
@@ -374,10 +381,10 @@ comments: false
             
             // 构建字符集
             let charset = '';
-            if (includeUppercase.checked) charset += charSets.uppercase;
-            if (includeLowercase.checked) charset += charSets.lowercase;
-            if (includeNumbers.checked) charset += charSets.numbers;
-            if (includeSymbols.checked) charset += charSets.symbols;
+            if (includeUppercase && includeUppercase.checked) charset += charSets.uppercase;
+            if (includeLowercase && includeLowercase.checked) charset += charSets.lowercase;
+            if (includeNumbers && includeNumbers.checked) charset += charSets.numbers;
+            if (includeSymbols && includeSymbols.checked) charset += charSets.symbols;
             
             if (!charset) {
                 passwordResult.value = '请至少选择一种字符类型';
@@ -402,17 +409,17 @@ comments: false
             document.execCommand('copy');
             
             // 显示复制成功提示
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = '已复制';
-            setTimeout(() => {
-                copyBtn.textContent = '复制';
-            }, 1500);
+            if (copyBtn) {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '已复制';
+                setTimeout(() => {
+                    copyBtn.textContent = '复制';
+                }, 1500);
+            }
         }
         
         // 绑定事件
-        if (generateBtn) {
-            generateBtn.addEventListener('click', generatePassword);
-        }
+        generateBtn.addEventListener('click', generatePassword);
         
         if (copyBtn) {
             copyBtn.addEventListener('click', copyPassword);
@@ -420,5 +427,24 @@ comments: false
         
         // 初始生成一个密码
         generatePassword();
-    };
+    }
+    
+    // 多种方式确保初始化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPasswordGenerator);
+    } else {
+        initPasswordGenerator();
+    }
+    
+    // PJAX兼容
+    document.addEventListener('pjax:success', function() {
+        console.log('PJAX加载完成，重新初始化密码生成器');
+        setTimeout(initPasswordGenerator, 100);
+    });
+    
+    // 传统window.onload作为备用
+    window.addEventListener('load', function() {
+        console.log('Window load事件，确保密码生成器初始化');
+        setTimeout(initPasswordGenerator, 100);
+    });
 </script>
