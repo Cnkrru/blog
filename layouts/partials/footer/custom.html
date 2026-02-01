@@ -190,6 +190,7 @@ function initTransparencyControl() {
 window.onload = function() {
   initTransparencyControl();
   initImmersiveReading();
+  initMouseBottomDetection();
 };
 
 // 初始化沉浸阅读功能
@@ -351,6 +352,40 @@ function initImmersiveReading() {
         if (exitIcon) exitIcon.style.display = 'block';
       }
     };
+  }
+}
+
+// 初始化鼠标底部检测功能
+function initMouseBottomDetection() {
+  var musicPlayer = document.getElementById('global-music-player');
+  var isPlayerHovered = false;
+  
+  // 鼠标移动事件
+  document.addEventListener('mousemove', function(e) {
+    // 检测鼠标是否在页面底部
+    var windowHeight = window.innerHeight;
+    var mouseY = e.clientY;
+    var bottomThreshold = windowHeight - 50; // 底部50px的区域
+    
+    if (mouseY >= bottomThreshold && !isPlayerHovered) {
+      // 鼠标在底部区域，显示播放器
+      if (musicPlayer) {
+        musicPlayer.classList.add('active');
+      }
+    }
+  });
+  
+  // 监听播放器的鼠标进入事件
+  if (musicPlayer) {
+    musicPlayer.addEventListener('mouseenter', function() {
+      isPlayerHovered = true;
+    });
+    
+    musicPlayer.addEventListener('mouseleave', function() {
+      isPlayerHovered = false;
+      // 鼠标离开播放器，隐藏播放器
+      musicPlayer.classList.remove('active');
+    });
   }
 }
 
