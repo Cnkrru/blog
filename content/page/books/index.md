@@ -6,6 +6,8 @@ slug: "books"
 menu:
     main:
         weight: -60
+        params:
+            icon: book
 
 comments: false
 ---
