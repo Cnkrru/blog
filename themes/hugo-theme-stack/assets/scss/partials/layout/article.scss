@@ -63,6 +63,10 @@
                     width: 20px;
                     height: 20px;
                     stroke-width: 1.33;
+                    color: var(--card-text-color-tertiary);
+                    stroke: currentColor;
+                    fill: none;
+                    transition: none;
                 }
             }
 

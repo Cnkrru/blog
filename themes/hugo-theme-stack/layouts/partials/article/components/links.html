@@ -1,4 +1,4 @@
-<div class="article-list--compact links">
+<div class="article-list--compact links" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
     {{ range $i, $link := .Params.links }}
         <article>
             <a href="{{ $link.website }}" target="_blank" rel="noopener">
