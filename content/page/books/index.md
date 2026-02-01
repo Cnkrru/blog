@@ -19,57 +19,13 @@ comments: false
 
 <!-- 书籍列表 -->
 <div class="books-container">
-    <!-- 书籍项示例 -->
-    <div class="book-item">
-        <div class="book-cover">
-            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=book%20cover%20design%20for%20a%20programming%20book%20with%20modern%20clean%20design&image_size=square" alt="书籍封面" />
-        </div>
-        <div class="book-info">
-            <h3 class="book-title">Hugo静态网站生成器实战</h3>
-            <p class="book-author">作者: 张三</p>
-            <p class="book-description">学习如何使用Hugo构建高性能静态网站的实用指南</p>
-            <div class="book-meta">
-                <span class="book-year">2026</span>
-                <span class="book-status">已读</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="book-item">
-        <div class="book-cover">
-            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=book%20cover%20design%20for%20a%20web%20development%20book%20with%20modern%20clean%20design&image_size=square" alt="书籍封面" />
-        </div>
-        <div class="book-info">
-            <h3 class="book-title">现代前端开发技术</h3>
-            <p class="book-author">作者: 李四</p>
-            <p class="book-description">探索现代前端开发的最新技术和最佳实践</p>
-            <div class="book-meta">
-                <span class="book-year">2025</span>
-                <span class="book-status">已读</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="book-item">
-        <div class="book-cover">
-            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=book%20cover%20design%20for%20a%20design%20book%20with%20modern%20clean%20design&image_size=square" alt="书籍封面" />
-        </div>
-        <div class="book-info">
-            <h3 class="book-title">设计思维与用户体验</h3>
-            <p class="book-author">作者: 王五</p>
-            <p class="book-description">学习如何应用设计思维创造出色的用户体验</p>
-            <div class="book-meta">
-                <span class="book-year">2026</span>
-                <span class="book-status">在读</span>
-            </div>
-        </div>
-    </div>
+    <!-- 书籍将在这里显示 -->
 </div>
 
 <style>
     /* 书籍页面样式 */
     .books-container {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
     }
