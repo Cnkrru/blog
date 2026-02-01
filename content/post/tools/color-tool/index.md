@@ -1,8 +1,9 @@
-+++
-date = '2026-02-02T10:00:00+08:00'
-draft = false
-title = '颜色工具'
-+++
+---
+date: '2026-02-02T10:00:00+08:00'
+draft: false
+title: '颜色工具'
+slug: 'tools/color-tool'
+---
 
 <div class="tool-page-header">
     <h2>颜色工具</h2>

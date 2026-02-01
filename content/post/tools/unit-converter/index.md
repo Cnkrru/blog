@@ -1,8 +1,9 @@
-+++
-date = '2026-02-02T10:00:00+08:00'
-draft = false
-title = '单位转换器'
-+++
+---
+date: '2026-02-02T10:00:00+08:00'
+draft: false
+title: '单位转换器'
+slug: 'tools/unit-converter'
+---
 
 <div class="tool-page-header">
     <h2>单位转换器</h2>

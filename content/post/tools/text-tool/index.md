@@ -1,8 +1,9 @@
-+++
-date = '2026-02-02T10:00:00+08:00'
-draft = false
-title = '文本处理工具'
-+++
+---
+date: '2026-02-02T10:00:00+08:00'
+draft: false
+title: '文本处理工具'
+slug: 'tools/text-tool'
+---
 
 <div class="tool-page-header">
     <h2>文本处理工具</h2>
