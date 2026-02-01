@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cnkrru'blog</title><link>https://Cnkrru.github.io/blog/</link><description>Recent content on Cnkrru'blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Cnkrru</copyright><atom:link href="https://Cnkrru.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>书籍</title><link>https://Cnkrru.github.io/blog/books/</link><pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/books/</guid><description>&lt;div style="text-align: center; margin-bottom: 40px;"&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cnkrru'blog</title><link>https://Cnkrru.github.io/blog/</link><description>Recent content on Cnkrru'blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>Cnkrru</copyright><atom:link href="https://Cnkrru.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>书籍</title><link>https://Cnkrru.github.io/blog/page/books/</link><pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/books/</guid><description>&lt;div style="text-align: center; margin-bottom: 40px;"&gt;
 &lt;h2 style="color: #FFB7C5; font-size: 24px; margin-bottom: 10px;"&gt;我的书架&lt;/h2&gt;
 &lt;p style="color: #AAB2C0; font-size: 14px;"&gt;记录我读过的书籍&lt;/p&gt;
 &lt;/div&gt;
@@ -145,7 +145,7 @@ margin-top: 12px;
 justify-content: center;
 }
 }
-&lt;/style&gt;</description></item><item><title>Hugo博客的搭建过程</title><link>https://Cnkrru.github.io/blog/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</link><pubDate>Sat, 31 Jan 2026 10:20:13 +0800</pubDate><guid>https://Cnkrru.github.io/blog/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</guid><description/></item><item><title>归档</title><link>https://Cnkrru.github.io/blog/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/archives/</guid><description/></item><item><title/><link>https://Cnkrru.github.io/blog/_index.ja/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/_index.ja/</guid><description/></item><item><title/><link>https://Cnkrru.github.io/blog/_index.zh-tw/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/_index.zh-tw/</guid><description/></item><item><title>404 - 页面找不到啦</title><link>https://Cnkrru.github.io/blog/404/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/404/</guid><description>&lt;div style="text-align: center; padding: 2rem 0; max-width: 800px; margin: 0 auto;"&gt; &lt;!-- 趣味 404 图标/文字 --&gt; &lt;h1 style="font-size: 6rem; margin: 1rem 0; color: var(--accent-color);"&gt;404&lt;/h1&gt; &lt;p style="font-size: 1.2rem; margin: 1rem 0; color: var(--primary);"&gt; 哎呀，你要找的页面迷路啦～ &lt;/p&gt; &lt;p style="font-size: 0.9rem; color: var(--secondary); margin: 1.5rem 0;"&gt; 可能是网址输错了，或者页面已经迁移/删除了 &lt;/p&gt; &lt;!-- 引导按钮 --&gt; &lt;div style="margin: 2rem 0; display: flex; gap: 1rem; justify-content: center;"&gt; &lt;a href="{{ .Site.BaseURL }}" style="padding: 0.6rem 1.2rem; background: var(--accent-color); color: white; border-radius: 4px; transition: all 0.2s;"&gt; 返回首页 &lt;/a&gt; &lt;a onclick="window.history.back()" style="padding: 0.6rem 1.2rem; background: var(--card-bg); border: 1px solid var(--border); color: var(--primary); border-radius: 4px; transition: all 0.2s; cursor: pointer;"&gt; 返回上一页 &lt;/a&gt; &lt;/div&gt; &lt;!-- 可选：显示热门文章/分类引导 --&gt; &lt;div style="margin-top: 3rem; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;"&gt; &lt;h3 style="margin-bottom: 1rem; font-size: 1.1rem;"&gt;热门文章推荐&lt;/h3&gt; &lt;ul style="list-style: none; padding: 0; gap: 0.8rem; display: flex; flex-direction: column;"&gt; {{ range first 3 (where .Site.RegularPages "Type" "post" | sort .Date "desc") }} &lt;li&gt; &lt;a href="{{ .Permalink }}" style="display: flex; align-items: center; gap: 0.5rem;"&gt; &lt;span&gt;👉&lt;/span&gt; &lt;span&gt;{{ .Title }}&lt;/span&gt; &lt;/a&gt; &lt;/li&gt; {{ end }} &lt;/ul&gt; &lt;/div&gt; &lt;/div&gt;</description></item><item><title>links</title><link>https://Cnkrru.github.io/blog/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/links/</guid><description>&lt;div style="text-align: center; margin-bottom: 40px;"&gt;
+&lt;/style&gt;</description></item><item><title>Hugo博客的搭建过程</title><link>https://Cnkrru.github.io/blog/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</link><pubDate>Sat, 31 Jan 2026 10:20:13 +0800</pubDate><guid>https://Cnkrru.github.io/blog/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</guid><description/></item><item><title>归档</title><link>https://Cnkrru.github.io/blog/page/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/archives/</guid><description/></item><item><title/><link>https://Cnkrru.github.io/blog/_index.ja/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/_index.ja/</guid><description/></item><item><title/><link>https://Cnkrru.github.io/blog/_index.zh-tw/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/_index.zh-tw/</guid><description/></item><item><title>404 - 页面找不到啦</title><link>https://Cnkrru.github.io/blog/404/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/404/</guid><description>&lt;div style="text-align: center; padding: 2rem 0; max-width: 800px; margin: 0 auto;"&gt; &lt;!-- 趣味 404 图标/文字 --&gt; &lt;h1 style="font-size: 6rem; margin: 1rem 0; color: var(--accent-color);"&gt;404&lt;/h1&gt; &lt;p style="font-size: 1.2rem; margin: 1rem 0; color: var(--primary);"&gt; 哎呀，你要找的页面迷路啦～ &lt;/p&gt; &lt;p style="font-size: 0.9rem; color: var(--secondary); margin: 1.5rem 0;"&gt; 可能是网址输错了，或者页面已经迁移/删除了 &lt;/p&gt; &lt;!-- 引导按钮 --&gt; &lt;div style="margin: 2rem 0; display: flex; gap: 1rem; justify-content: center;"&gt; &lt;a href="{{ .Site.BaseURL }}" style="padding: 0.6rem 1.2rem; background: var(--accent-color); color: white; border-radius: 4px; transition: all 0.2s;"&gt; 返回首页 &lt;/a&gt; &lt;a onclick="window.history.back()" style="padding: 0.6rem 1.2rem; background: var(--card-bg); border: 1px solid var(--border); color: var(--primary); border-radius: 4px; transition: all 0.2s; cursor: pointer;"&gt; 返回上一页 &lt;/a&gt; &lt;/div&gt; &lt;!-- 可选：显示热门文章/分类引导 --&gt; &lt;div style="margin-top: 3rem; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;"&gt; &lt;h3 style="margin-bottom: 1rem; font-size: 1.1rem;"&gt;热门文章推荐&lt;/h3&gt; &lt;ul style="list-style: none; padding: 0; gap: 0.8rem; display: flex; flex-direction: column;"&gt; {{ range first 3 (where .Site.RegularPages "Type" "post" | sort .Date "desc") }} &lt;li&gt; &lt;a href="{{ .Permalink }}" style="display: flex; align-items: center; gap: 0.5rem;"&gt; &lt;span&gt;👉&lt;/span&gt; &lt;span&gt;{{ .Title }}&lt;/span&gt; &lt;/a&gt; &lt;/li&gt; {{ end }} &lt;/ul&gt; &lt;/div&gt; &lt;/div&gt;</description></item><item><title>links</title><link>https://Cnkrru.github.io/blog/page/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/links/</guid><description>&lt;div style="text-align: center; margin-bottom: 40px;"&gt;
 &lt;h2 style="color: #FFB7C5; font-size: 24px; margin-bottom: 10px;"&gt;links&lt;/h2&gt;
 &lt;p style="color: #AAB2C0; font-size: 14px;"&gt;根据CC BY-NC-SA 4.0协议授权&lt;/p&gt;
 &lt;/div&gt;</description></item><item><title>工具</title><link>https://Cnkrru.github.io/blog/tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/tools/</guid><description>&lt;div class="tools-header"&gt;
@@ -154,7 +154,7 @@ justify-content: center;
 &lt;/div&gt;
 &lt;div class="tools-card-container"&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/p/tools/base-converter/" class="tool-card-link" data-pjax="false"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/post/进制转换器/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;🔢&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;进制转换器&lt;/h3&gt;
@@ -164,7 +164,7 @@ justify-content: center;
 &lt;/a&gt;
 &lt;/div&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/p/tools/text-tool/" class="tool-card-link" data-pjax="false"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/text-tool/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;📝&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;文本处理工具&lt;/h3&gt;
@@ -174,7 +174,7 @@ justify-content: center;
 &lt;/a&gt;
 &lt;/div&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/p/tools/password-generator/" class="tool-card-link" data-pjax="false"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/password-generator/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;🔒&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;密码生成器&lt;/h3&gt;
@@ -184,7 +184,7 @@ justify-content: center;
 &lt;/a&gt;
 &lt;/div&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/p/tools/unit-converter/" class="tool-card-link" data-pjax="false"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/unit-converter/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;📏&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;单位转换器&lt;/h3&gt;
@@ -194,7 +194,7 @@ justify-content: center;
 &lt;/a&gt;
 &lt;/div&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/p/tools/color-tool/" class="tool-card-link" data-pjax="false"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/color-tool/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;🎨&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;颜色工具&lt;/h3&gt;
@@ -378,4 +378,319 @@ grid-template-columns: 1fr;
 height: 140px;
 }
 }
-&lt;/style&gt;</description></item><item><title>关于</title><link>https://Cnkrru.github.io/blog/%E5%85%B3%E4%BA%8E/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/%E5%85%B3%E4%BA%8E/</guid><description>&lt;p&gt;This is a test page for i18n support.&lt;/p&gt;</description></item><item><title>搜索</title><link>https://Cnkrru.github.io/blog/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/search/</guid><description/></item></channel></rss>
+&lt;/style&gt;</description></item><item><title>工具模板</title><link>https://Cnkrru.github.io/blog/page/tools/tool-template/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/tools/tool-template/</guid><description>&lt;div class="tool-page-header"&gt;
+&lt;h2&gt;工具名称&lt;/h2&gt;
+&lt;p&gt;工具描述&lt;/p&gt;
+&lt;/div&gt;
+&lt;!-- 工具内容容器 --&gt;
+&lt;div class="tool-content-container"&gt;
+&lt;!-- 工具功能实现区域 --&gt;
+&lt;div class="tool-implementation"&gt;
+&lt;!-- 工具功能实现代码 --&gt;
+&lt;!-- 示例：进制转换器 --&gt;
+&lt;!-- &lt;div class="converter-container"&gt;
+&lt;div class="converter-content"&gt;
+&lt;div class="input-group"&gt;
+&lt;label for="input-value"&gt;输入值：&lt;/label&gt;
+&lt;input type="text" id="input-value" placeholder="请输入要转换的值"&gt;
+&lt;/div&gt;
+&lt;div class="input-group"&gt;
+&lt;label for="from-base"&gt;从进制：&lt;/label&gt;
+&lt;select id="from-base"&gt;
+&lt;option value="2"&gt;二进制 (2)&lt;/option&gt;
+&lt;option value="8"&gt;八进制 (8)&lt;/option&gt;
+&lt;option value="10" selected&gt;十进制 (10)&lt;/option&gt;
+&lt;option value="16"&gt;十六进制 (16)&lt;/option&gt;
+&lt;/select&gt;
+&lt;/div&gt;
+&lt;div class="input-group"&gt;
+&lt;label for="to-base"&gt;到进制：&lt;/label&gt;
+&lt;select id="to-base"&gt;
+&lt;option value="2"&gt;二进制 (2)&lt;/option&gt;
+&lt;option value="8"&gt;八进制 (8)&lt;/option&gt;
+&lt;option value="10"&gt;十进制 (10)&lt;/option&gt;
+&lt;option value="16" selected&gt;十六进制 (16)&lt;/option&gt;
+&lt;/select&gt;
+&lt;/div&gt;
+&lt;button id="convert-btn" class="convert-button"&gt;转换&lt;/button&gt;
+&lt;div class="result-group"&gt;
+&lt;label for="result-value"&gt;转换结果：&lt;/label&gt;
+&lt;input type="text" id="result-value" readonly&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt; --&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="tool-page-footer"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/" class="back-to-tools"&gt;← 返回工具列表&lt;/a&gt;
+&lt;/div&gt;
+&lt;style&gt;
+/* 工具页面头部 */
+.tool-page-header {
+text-align: center;
+margin-bottom: 40px;
+padding: 0 20px;
+}
+.tool-page-header h2 {
+color: #FFB7C5;
+font-size: 24px;
+margin-bottom: 10px;
+font-weight: 700;
+}
+.tool-page-header p {
+color: #AAB2C0;
+font-size: 14px;
+margin: 0;
+}
+/* 工具内容容器 */
+.tool-content-container {
+max-width: 1000px;
+margin: 0 auto;
+padding: 0 20px;
+margin-bottom: 40px;
+}
+/* 工具实现区域 */
+.tool-implementation {
+background: linear-gradient(135deg, rgba(255, 200, 210, 0.1), rgba(170, 210, 230, 0.1));
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 16px;
+padding: 30px;
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+margin-bottom: 30px;
+}
+/* 输入组样式 */
+.input-group {
+margin-bottom: 20px;
+}
+.input-group label {
+display: block;
+margin-bottom: 8px;
+font-size: 14px;
+font-weight: 500;
+color: #4a5568;
+}
+.input-group input,
+.input-group select,
+.input-group textarea {
+width: 100%;
+padding: 12px;
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 8px;
+font-size: 16px;
+background: rgba(255, 255, 255, 0.8);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+transition: all 0.3s ease;
+box-sizing: border-box;
+}
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+outline: none;
+border-color: #FFB7C5;
+box-shadow: 0 0 0 3px rgba(255, 183, 197, 0.1);
+}
+/* 按钮样式 */
+.convert-button,
+.tool-button {
+width: 100%;
+padding: 14px;
+background: linear-gradient(135deg, #4CAF50, #45a049);
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-bottom: 20px;
+}
+.convert-button:hover,
+.tool-button:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+/* 结果组样式 */
+.result-group {
+margin-top: 20px;
+}
+.result-group label {
+display: block;
+margin-bottom: 8px;
+font-size: 14px;
+font-weight: 500;
+color: #4a5568;
+}
+.result-group input,
+.result-group textarea {
+width: 100%;
+padding: 12px;
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 8px;
+font-size: 16px;
+background: rgba(249, 249, 249, 0.8);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+font-weight: 500;
+box-sizing: border-box;
+}
+/* 工具页面底部 */
+.tool-page-footer {
+text-align: center;
+margin-top: 40px;
+margin-bottom: 40px;
+}
+.back-to-tools {
+display: inline-block;
+color: #4CAF50;
+text-decoration: none;
+font-size: 14px;
+font-weight: 500;
+transition: color 0.3s ease;
+padding: 8px 16px;
+border-radius: 20px;
+background: rgba(76, 175, 80, 0.1);
+}
+.back-to-tools:hover {
+color: #45a049;
+background: rgba(76, 175, 80, 0.2);
+transform: translateX(-3px);
+}
+/* 暗黑模式适配 */
+.dark .tool-implementation {
+background: linear-gradient(135deg, rgba(255, 200, 210, 0.05), rgba(170, 210, 230, 0.05));
+border-color: rgba(255, 255, 255, 0.05);
+}
+.dark .input-group label,
+.dark .result-group label {
+color: #e2e8f0;
+}
+.dark .input-group input,
+.dark .input-group select,
+.dark .input-group textarea,
+.dark .result-group input,
+.dark .result-group textarea {
+border-color: rgba(255, 255, 255, 0.1);
+background: rgba(255, 255, 255, 0.1);
+color: #ffffff;
+}
+.dark .input-group input:focus,
+.dark .input-group select:focus,
+.dark .input-group textarea:focus {
+border-color: #FFB7C5;
+box-shadow: 0 0 0 3px rgba(255, 183, 197, 0.1);
+}
+.dark .back-to-tools {
+color: #4CAF50;
+background: rgba(76, 175, 80, 0.1);
+}
+.dark .back-to-tools:hover {
+color: #45a049;
+background: rgba(76, 175, 80, 0.2);
+}
+/* 响应式设计 */
+@media (max-width: 768px) {
+.tool-page-header {
+margin-bottom: 30px;
+}
+.tool-page-header h2 {
+font-size: 20px;
+}
+.tool-content-container {
+padding: 0 16px;
+}
+.tool-implementation {
+padding: 20px;
+}
+.input-group input,
+.input-group select,
+.input-group textarea,
+.result-group input,
+.result-group textarea {
+padding: 10px;
+font-size: 14px;
+}
+.convert-button,
+.tool-button {
+padding: 12px;
+font-size: 14px;
+}
+.tool-page-footer {
+margin-top: 30px;
+margin-bottom: 30px;
+}
+}
+/* 工具特定样式可以在此添加 */
+/* 例如：密码生成器样式 */
+/* .password-generator {
+/* 特定样式 */
+/* } */
+&lt;/style&gt;
+&lt;script&gt;
+// 工具功能实现脚本
+// 示例：进制转换器
+/*
+window.onload = function() {
+console.log('Window loaded, initializing tool');
+// 获取 DOM 元素
+const inputValue = document.getElementById('input-value');
+const fromBase = document.getElementById('from-base');
+const toBase = document.getElementById('to-base');
+const convertBtn = document.getElementById('convert-btn');
+const resultValue = document.getElementById('result-value');
+console.log('Tool elements:', {
+inputValue: !!inputValue,
+fromBase: !!fromBase,
+toBase: !!toBase,
+convertBtn: !!convertBtn,
+resultValue: !!resultValue
+});
+// 转换函数
+window.convertNumber = function() {
+console.log('Convert button clicked');
+const value = inputValue.value.trim();
+if (!value) {
+resultValue.value = '请输入要转换的值';
+console.log('No input value');
+return;
+}
+const from = parseInt(fromBase.value);
+const to = parseInt(toBase.value);
+console.log('Conversion details:', {
+value: value,
+from: from,
+to: to
+});
+try {
+// 将输入值转换为十进制
+const decimalValue = parseInt(value, from);
+if (isNaN(decimalValue)) {
+throw new Error('输入值不是有效的' + from + '进制数');
+}
+// 将十进制转换为目标进制
+let result;
+if (to === 16) {
+result = decimalValue.toString(16).toUpperCase();
+} else {
+result = decimalValue.toString(to);
+}
+resultValue.value = result;
+console.log('Conversion result:', result);
+} catch (error) {
+resultValue.value = error.message;
+console.error('Conversion error:', error.message);
+}
+};
+// 按下回车键时自动转换
+if (inputValue) {
+inputValue.addEventListener('keypress', function(e) {
+if (e.key === 'Enter') {
+console.log('Enter key pressed');
+window.convertNumber();
+}
+});
+}
+};
+*/
+&lt;/script&gt;</description></item><item><title>关于</title><link>https://Cnkrru.github.io/blog/page/%E5%85%B3%E4%BA%8E/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/%E5%85%B3%E4%BA%8E/</guid><description>&lt;p&gt;This is a test page for i18n support.&lt;/p&gt;</description></item><item><title>搜索</title><link>https://Cnkrru.github.io/blog/page/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/search/</guid><description/></item></channel></rss>
