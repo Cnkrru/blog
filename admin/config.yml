@@ -1,0 +1,51 @@
+backend:
+  name: github
+  repo: Cnkrru/blog  # 替换为你的GitHub用户名/仓库名
+  branch: main       # 主分支名
+  site_domain: cnkrru.github.io/blog  # 你的GitHub Pages域名
+
+publish_mode: editorial_workflow  # 启用草稿和审核流程
+media_folder: "static/media"       # 媒体文件存储位置
+public_folder: "/media"            # 媒体文件访问路径
+
+collections:
+  # 文章管理
+  - name: "posts"
+    label: "文章"
+    folder: "content/post"
+    create: true
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "日期", name: "date", widget: "datetime" }
+      - { label: "分类", name: "categories", widget: "list" }
+      - { label: "标签", name: "tags", widget: "list" }
+      - { label: "封面图", name: "image", widget: "image" }
+      - { label: "内容", name: "body", widget: "markdown" }
+
+  # 歌曲管理（编辑music-config.json文件）
+  - name: "music"
+    label: "歌曲"
+    files:
+      - name: "config"
+        label: "歌曲配置"
+        file: "static/audio/js/music-config.json"
+        fields:
+          - { label: "歌曲列表", name: "playlist", widget: "list", fields: [
+              { label: "歌曲名", name: "name", widget: "string" },
+              { label: "歌手", name: "artist", widget: "string" },
+              { label: "音频文件路径", name: "url", widget: "string" },
+              { label: "封面图路径", name: "cover", widget: "string" }
+            ] }
+
+  # 书籍管理
+  - name: "books"
+    label: "书籍"
+    folder: "content/page/books"
+    create: true
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "作者", name: "author", widget: "string" }
+      - { label: "年份", name: "year", widget: "number" }
+      - { label: "状态", name: "status", widget: "select", options: ["已读", "在读", "未读"] }
+      - { label: "封面图", name: "cover", widget: "image" }
+      - { label: "描述", name: "description", widget: "text" }

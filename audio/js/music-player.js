@@ -425,71 +425,82 @@ function bindEvents() {
 function initializePlayer() {
   console.log('Initializing player with state:', playerState);
   
-  // 创建音频对象
-  audio = new Audio();
+  // 只在audio对象不存在时创建新的
+  if (!audio) {
+    console.log('Creating new audio object');
+    // 创建音频对象
+    audio = new Audio();
+    
+    // 绑定音频事件
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', nextSong);
+    audio.addEventListener('loadedmetadata', function() {
+      console.log('Loaded metadata, duration:', audio.duration);
+      updateProgress();
+      // 加载完成后立即设置时间
+      if (playerState.currentTime) {
+        audio.currentTime = playerState.currentTime;
+        console.log('Set current time:', playerState.currentTime);
+      }
+    });
+    
+    // 当音频可以播放时立即恢复播放
+    audio.addEventListener('canplay', function() {
+      console.log('Can play, attempting to resume:', playerState.isPlaying);
+      // 恢复播放状态
+      if (playerState.isPlaying && audio.paused) {
+        audio.play().catch(error => {
+          console.warn('Auto-play failed:', error);
+        });
+      }
+    });
+    
+    // 当音频加载完成时立即恢复播放
+    audio.addEventListener('canplaythrough', function() {
+      console.log('Can play through, attempting to resume:', playerState.isPlaying);
+      if (playerState.isPlaying && audio.paused) {
+        audio.play().catch(error => {
+          console.warn('Auto-play failed:', error);
+        });
+      }
+    });
+    
+    // 播放时的处理
+    audio.addEventListener('play', function() {
+      console.log('Play event triggered');
+      if (player) {
+        player.classList.add('playing');
+        // 不自动添加active，让用户通过按钮或悬停控制显示
+      }
+      if (toggleBtn) {
+        // 不自动添加active，让用户通过按钮或悬停控制显示
+      }
+    });
+    
+    // 暂停时的处理
+    audio.addEventListener('pause', function() {
+      console.log('Pause event triggered');
+      if (playBtn) {
+        playBtn.classList.remove('playing');
+      }
+      if (player) {
+        player.classList.remove('playing');
+      }
+    });
+    
+    // 启动定期保存状态的定时器
+    if (saveStateInterval) {
+      clearInterval(saveStateInterval);
+    }
+    saveStateInterval = setInterval(savePlayerState, 500); // 每500毫秒保存一次状态
+    console.log('Started save state interval');
+  }
   
   // 恢复保存的状态
   currentIndex = playerState.currentIndex || 0;
   audio.volume = playerState.volume || 0.7;
   audio.muted = playerState.isMuted || false;
   playMode = playerState.playMode || 'order';
-  
-  // 绑定音频事件
-  audio.addEventListener('timeupdate', updateProgress);
-  audio.addEventListener('ended', nextSong);
-  audio.addEventListener('loadedmetadata', function() {
-    console.log('Loaded metadata, duration:', audio.duration);
-    updateProgress();
-    // 加载完成后立即设置时间
-    if (playerState.currentTime) {
-      audio.currentTime = playerState.currentTime;
-      console.log('Set current time:', playerState.currentTime);
-    }
-  });
-  
-  // 当音频可以播放时立即恢复播放
-  audio.addEventListener('canplay', function() {
-    console.log('Can play, attempting to resume:', playerState.isPlaying);
-    // 恢复播放状态
-    if (playerState.isPlaying && audio.paused) {
-      audio.play().catch(error => {
-        console.warn('Auto-play failed:', error);
-      });
-    }
-  });
-  
-  // 当音频加载完成时立即恢复播放
-  audio.addEventListener('canplaythrough', function() {
-    console.log('Can play through, attempting to resume:', playerState.isPlaying);
-    if (playerState.isPlaying && audio.paused) {
-      audio.play().catch(error => {
-        console.warn('Auto-play failed:', error);
-      });
-    }
-  });
-  
-  // 播放时的处理
-  audio.addEventListener('play', function() {
-    console.log('Play event triggered');
-    if (player) {
-      player.classList.add('playing');
-      // 不自动添加active，让用户通过按钮或悬停控制显示
-    }
-    if (toggleBtn) {
-      // 不自动添加active，让用户通过按钮或悬停控制显示
-    }
-  });
-  
-  // 暂停时的处理
-  audio.addEventListener('pause', function() {
-    console.log('Pause event triggered');
-    if (playBtn) {
-      playBtn.classList.remove('playing');
-    }
-    if (player) {
-      player.classList.remove('playing');
-    }
-  });
   
   // 加载当前歌曲
   loadSong(currentIndex);
@@ -521,13 +532,6 @@ function initializePlayer() {
   
   // 绑定事件
   bindEvents();
-  
-  // 启动定期保存状态的定时器
-  if (saveStateInterval) {
-    clearInterval(saveStateInterval);
-  }
-  saveStateInterval = setInterval(savePlayerState, 500); // 每500毫秒保存一次状态
-  console.log('Started save state interval');
 }
 
 // 页面加载完成后初始化
@@ -946,16 +950,21 @@ window.addEventListener('pageshow', function() {
 // 监听PJAX相关事件
 if (typeof window !== 'undefined') {
   // 监听PJAX开始事件
-  document.addEventListener('pjax:start', function() {
-    console.log('PJAX start, saving player state');
+  document.addEventListener('pjax:send', function() {
+    console.log('PJAX send, saving player state');
     savePlayerState();
+  });
+
+  // 监听PJAX成功事件
+  document.addEventListener('pjax:success', function() {
+    console.log('PJAX success, reinitializing player UI');
+    // 重新初始化播放器UI元素
+    reinitPlayerUI();
   });
 
   // 监听PJAX完成事件
   document.addEventListener('pjax:complete', function() {
-    console.log('PJAX complete, reinitializing player UI');
-    // 重新初始化播放器UI元素
-    reinitPlayerUI();
+    console.log('PJAX complete, resuming playback');
     // 恢复播放状态
     if (audio && playerState.isPlaying && audio.paused) {
       audio.play().catch(error => {
