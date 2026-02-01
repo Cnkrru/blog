@@ -162,24 +162,25 @@ function initTransparencyControl() {
   // 隐藏度调节按钮点击事件
   if (transparencyToggle) {
     console.log('Adding click event listener to transparency toggle');
+    var isPanelVisible = false;
     transparencyToggle.onclick = function() {
       console.log('Transparency toggle clicked');
-      var isVisible = transparencyPanel.style.transform === 'translateX(0%)' && transparencyPanel.style.opacity === '1';
+      isPanelVisible = !isPanelVisible;
       
-      console.log('Current panel visibility:', isVisible);
+      console.log('Current panel visibility:', isPanelVisible);
       
-      if (isVisible) {
-        // 隐藏面板
-        console.log('Hiding transparency panel');
-        transparencyPanel.style.transform = 'translateX(100%)';
-        transparencyPanel.style.opacity = '0';
-        transparencyPanel.style.pointerEvents = 'none';
-      } else {
+      if (isPanelVisible) {
         // 显示面板
         console.log('Showing transparency panel');
         transparencyPanel.style.transform = 'translateX(0%)';
         transparencyPanel.style.opacity = '1';
         transparencyPanel.style.pointerEvents = 'auto';
+      } else {
+        // 隐藏面板
+        console.log('Hiding transparency panel');
+        transparencyPanel.style.transform = 'translateX(100%)';
+        transparencyPanel.style.opacity = '0';
+        transparencyPanel.style.pointerEvents = 'none';
       }
     };
   }
