@@ -8,27 +8,27 @@
         --main-top-padding: 50px;
     }
 
-    --body-background: #f5f5fa;
+    --body-background: #f8f9fa;
 
-    --accent-color: #34495e;
-    --accent-color-darker: #2c3e50;
+    --accent-color: #4a6fa5;
+    --accent-color-darker: #3a5a8c;
     --accent-color-text: #fff;
-    --body-text-color: #707070;
+    --body-text-color: #495057;
 
     --tag-border-radius: 4px;
 
-    --section-separation: 40px;
+    --section-separation: 50px;
 
-    --scrollbar-thumb: hsl(0, 0%, 85%);
+    --scrollbar-thumb: hsl(0, 0%, 80%);
     --scrollbar-track: var(--body-background);
 
     &[data-scheme="dark"] {
-        --body-background: #303030;
-        --accent-color: #ecf0f1;
-        --accent-color-darker: #bdc3c7;
-        --accent-color-text: #000;
-        --body-text-color: rgba(255, 255, 255, 0.7);
-        --scrollbar-thumb: hsl(0, 0%, 40%);
+        --body-background: #1e1e1e;
+        --accent-color: #6c8ebf;
+        --accent-color-darker: #5b7ba6;
+        --accent-color-text: #fff;
+        --body-text-color: rgba(255, 255, 255, 0.8);
+        --scrollbar-thumb: hsl(0, 0%, 30%);
         --scrollbar-track: var(--body-background);
     }
 }
@@ -46,24 +46,24 @@
 *   Card style
 */
 :root {
-    --card-background: #fff;
-    --card-background-selected: #eaeaea;
+    --card-background: #ffffff;
+    --card-background-selected: #f0f4f8;
 
-    --card-text-color-main: #000;
-    --card-text-color-secondary: #747474;
-    --card-text-color-tertiary: #767676;
-    --card-separator-color: rgba(218, 218, 218, 0.5);
+    --card-text-color-main: #2d3748;
+    --card-text-color-secondary: #4a5568;
+    --card-text-color-tertiary: #718096;
+    --card-separator-color: rgba(226, 232, 240, 0.8);
 
-    --card-border-radius: 10px;
+    --card-border-radius: 12px;
 
-    --card-padding: 20px;
+    --card-padding: 24px;
 
     @include respond(md) {
-        --card-padding: 25px;
+        --card-padding: 28px;
     }
 
     @include respond(xl) {
-        --card-padding: 30px;
+        --card-padding: 32px;
     }
 
     --small-card-padding: 25px 20px;
@@ -73,12 +73,12 @@
     }
 
     &[data-scheme="dark"] {
-        --card-background: #424242;
-        --card-background-selected: rgba(255, 255, 255, 0.16);
-        --card-text-color-main: rgba(255, 255, 255, 0.9);
-        --card-text-color-secondary: rgba(255, 255, 255, 0.7);
-        --card-text-color-tertiary: rgba(255, 255, 255, 0.5);
-        --card-separator-color: rgba(255, 255, 255, 0.12);
+        --card-background: #2d3748;
+        --card-background-selected: rgba(255, 255, 255, 0.12);
+        --card-text-color-main: rgba(255, 255, 255, 0.95);
+        --card-text-color-secondary: rgba(255, 255, 255, 0.8);
+        --card-text-color-tertiary: rgba(255, 255, 255, 0.6);
+        --card-separator-color: rgba(255, 255, 255, 0.15);
     }
 }
 
@@ -93,7 +93,11 @@
         --article-font-size: 1.7rem;
     }
 
-    --article-line-height: 1.85;
+    --article-line-height: 1.9;
+    --heading-font-weight: 600;
+    --body-font-weight: 400;
+    --light-font-weight: 300;
+    --bold-font-weight: 700;
 }
 
 /*
@@ -157,6 +161,34 @@
 
 :root {
     --menu-icon-separation: 40px;
-    --container-padding: 15px;
-    --widget-separation: var(--section-separation);
+    --container-padding: 20px;
+    --widget-separation: calc(var(--section-separation) * 0.8);
+    --element-spacing: 16px;
+    --small-spacing: 8px;
+    --large-spacing: 24px;
+    
+    /* 过渡效果 */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-bounce: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* 交互元素 */
+    --button-background: var(--accent-color);
+    --button-background-hover: var(--accent-color-darker);
+    --button-text-color: var(--accent-color-text);
+    --button-border-radius: 8px;
+    --button-padding: 10px 20px;
+    
+    --link-color: var(--accent-color);
+    --link-color-hover: var(--accent-color-darker);
+    --link-underline-color: rgba(var(--link-background-color), var(--link-background-opacity));
+    --link-underline-color-hover: rgba(var(--link-background-color), var(--link-background-opacity-hover));
+    
+    /* 阴影效果 */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
 }

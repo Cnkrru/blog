@@ -2,7 +2,7 @@
 /* 按钮基础样式 */
 #back-to-top {
     position: fixed;
-    bottom: 80px;
+    bottom: 90px;
     right: 20px;
     width: 50px;
     height: 50px;
@@ -20,7 +20,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 9998;
+    z-index: 9999;
     box-shadow: 0 4px 16px rgba(170, 210, 230, 0.4);
     outline: none;
 }

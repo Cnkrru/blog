@@ -1,2 +1,356 @@
-<!-- 全局音乐播放器 -->
+<!-- 背景图片 -->
+{{ partial "footer/background-image.html" . }}
+
+<!-- 三个板块样式 -->
+{{ partial "footer/section-styles.html" . }}
+
+<!-- 字体颜色优化 -->
+{{ partial "footer/font-colors.html" . }}
+
+<!-- 音乐播放器（移到可扩展控制按钮容器外部） -->
 {{ partial "footer/music-player.html" . }}
+
+<!-- 可扩展控制按钮容器 -->
+<div class="expandable-controls-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 99999; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
+  <div class="controls-wrapper" style="display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, rgba(255, 200, 210, 0.8), rgba(170, 210, 230, 0.8)); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; padding: 8px; box-shadow: 0 4px 16px rgba(170, 210, 230, 0.4); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 50px; height: 50px; overflow: hidden; flex-direction: row-reverse;">
+    <!-- 展开/收起箭头 -->
+    <button id="expand-toggle" class="expand-toggle" aria-label="展开/收起控制按钮" title="展开/收起控制按钮" style="width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333; transition: all 0.3s ease; flex-shrink: 0;">
+      <span class="expand-arrow" style="display: block; transition: transform 0.3s ease;">☰</span>
+    </button>
+    
+    <!-- 控制按钮 -->
+    <div class="control-buttons" style="display: flex; gap: 16px; transition: all 0.3s ease; transform: translateX(-20px); opacity: 0; pointer-events: none;">
+      <!-- 音乐播放器控制按钮 -->
+      <button id="music-player-toggle" class="music-player-toggle control-button" aria-label="音乐播放器" title="音乐播放器" style="width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333; transition: all 0.3s ease;">
+        <span class="toggle-icon play-icon" style="display: block; transition: all 0.3s ease;">♪</span>
+        <span class="toggle-icon close-icon" style="display: none; transition: all 0.3s ease; font-size: 16px; font-weight: bold;">×</span>
+      </button>
+      
+      <!-- 主题切换按钮 -->
+      {{ partial "footer/theme-toggle.html" . }}
+      
+      <!-- 隐藏度调节按钮 -->
+      <button id="transparency-toggle" class="transparency-toggle control-button" aria-label="隐藏度调节" title="隐藏度调节" style="width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333; transition: all 0.3s ease;">
+        <span class="transparency-icon" style="display: block; transition: all 0.3s ease;">👁</span>
+      </button>
+      
+      <!-- 沉浸阅读按钮 -->
+      <button id="immersive-reading-button" class="immersive-reading-button control-button" aria-label="沉浸阅读" title="沉浸阅读" style="width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333; transition: all 0.3s ease;">
+        <span class="immersive-icon book-icon" style="display: block; transition: all 0.3s ease;">📖</span>
+        <span class="immersive-icon exit-icon" style="display: none; transition: all 0.3s ease;">×</span>
+      </button>
+    </div>
+    
+    <!-- 隐藏度调节面板 -->
+    <div id="transparency-panel" class="transparency-panel" style="position: absolute; bottom: 70px; right: 0; width: 200px; background: linear-gradient(135deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9)); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 16px; box-shadow: 0 8px 32px rgba(170, 210, 230, 0.4); z-index: 99999; transform: translateX(100%); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
+      <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #333; text-align: center;">隐藏度调节</h4>
+      <div class="transparency-slider-container" style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: #333;">完全隐藏</span>
+          <span style="font-size: 12px; color: #333;">完全显示</span>
+        </div>
+        <input type="range" id="transparency-slider" class="transparency-slider" min="0" max="100" value="100" style="width: 100%; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.5); outline: none; -webkit-appearance: none; appearance: none; transition: all 0.3s ease;">
+        <div style="text-align: center;">
+          <span id="transparency-value" style="font-size: 12px; color: #333; font-weight: 600;">100%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 展开/收起控制脚本 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const expandToggle = document.getElementById('expand-toggle');
+    const controlButtons = document.querySelector('.control-buttons');
+    const expandArrow = document.querySelector('.expand-arrow');
+    const controlsWrapper = document.querySelector('.controls-wrapper');
+    
+    let isExpanded = false;
+    
+    expandToggle.addEventListener('click', function() {
+      isExpanded = !isExpanded;
+      
+      if (isExpanded) {
+        // 展开状态
+        expandArrow.textContent = '✕';
+        controlsWrapper.style.width = 'auto';
+        controlsWrapper.style.minWidth = '180px';
+        controlsWrapper.style.borderRadius = '25px';
+        controlButtons.style.transform = 'translateX(0)';
+        controlButtons.style.opacity = '1';
+        controlButtons.style.pointerEvents = 'auto';
+      } else {
+        // 收起状态
+        expandArrow.textContent = '☰';
+        controlsWrapper.style.width = '50px';
+        controlsWrapper.style.minWidth = '50px';
+        controlsWrapper.style.borderRadius = '50px';
+        controlButtons.style.transform = 'translateX(-20px)';
+        controlButtons.style.opacity = '0';
+        controlButtons.style.pointerEvents = 'none';
+      }
+  });
+
+  // 初始状态：收起（圆形）
+  isExpanded = false;
+  expandArrow.textContent = '☰';
+  controlsWrapper.style.width = '50px';
+  controlsWrapper.style.minWidth = '50px';
+  controlsWrapper.style.borderRadius = '50px';
+  controlButtons.style.transform = 'translateX(-20px)';
+  controlButtons.style.opacity = '0';
+  controlButtons.style.pointerEvents = 'none';
+});
+</script>
+
+<!-- 隐藏度调节脚本 -->
+<script>
+function initTransparencyControl() {
+  var transparencyToggle = document.getElementById('transparency-toggle');
+  var transparencyPanel = document.getElementById('transparency-panel');
+  var transparencySlider = document.getElementById('transparency-slider');
+  var transparencyValue = document.getElementById('transparency-value');
+  
+  // 三个区块元素
+  var mainContent = document.querySelector('.main');
+  var sidebarLeft = document.querySelector('.sidebar.left-sidebar');
+  var sidebarRight = document.querySelector('.sidebar.right-sidebar');
+  
+  // 初始透明度设置（完全不透明，默认状态）
+  var initialOpacity = 1.0;
+  
+  // 应用透明度
+  function applyOpacity(opacity) {
+    if (mainContent) {
+      mainContent.style.opacity = opacity;
+    }
+    if (sidebarLeft) {
+      sidebarLeft.style.opacity = '1'; // 左侧侧边栏始终显示
+    }
+    if (sidebarRight) {
+      sidebarRight.style.opacity = opacity;
+      // 确保右侧侧边栏内的所有内容也被隐藏
+      var sidebarRightContents = sidebarRight.querySelectorAll('*');
+      for (var i = 0; i < sidebarRightContents.length; i++) {
+        sidebarRightContents[i].style.opacity = opacity;
+      }
+    }
+  }
+  
+  // 初始应用默认透明度
+  applyOpacity(initialOpacity);
+  
+  // 隐藏度调节按钮点击事件
+  if (transparencyToggle) {
+    transparencyToggle.onclick = function() {
+      var isVisible = transparencyPanel.style.transform === 'translateX(0%)' && transparencyPanel.style.opacity === '1';
+      
+      if (isVisible) {
+        // 隐藏面板
+        transparencyPanel.style.transform = 'translateX(100%)';
+        transparencyPanel.style.opacity = '0';
+        transparencyPanel.style.pointerEvents = 'none';
+      } else {
+        // 显示面板
+        transparencyPanel.style.transform = 'translateX(0%)';
+        transparencyPanel.style.opacity = '1';
+        transparencyPanel.style.pointerEvents = 'auto';
+      }
+    };
+  }
+  
+  // 滑块变化事件
+  if (transparencySlider) {
+    transparencySlider.oninput = function() {
+      var value = parseInt(this.value);
+      var opacity = value / 100;
+      
+      // 应用透明度
+      applyOpacity(opacity);
+      
+      // 更新显示值
+      if (transparencyValue) {
+        transparencyValue.textContent = value + '%';
+      }
+    };
+  }
+  
+  // 点击页面其他地方关闭面板
+  document.onclick = function(event) {
+    if (transparencyPanel && transparencyToggle && !transparencyPanel.contains(event.target) && !transparencyToggle.contains(event.target)) {
+      transparencyPanel.style.transform = 'translateX(100%)';
+      transparencyPanel.style.opacity = '0';
+      transparencyPanel.style.pointerEvents = 'none';
+    }
+  };
+}
+
+// 页面加载完成后初始化
+window.onload = function() {
+  initTransparencyControl();
+  initImmersiveReading();
+};
+
+// 初始化沉浸阅读功能
+function initImmersiveReading() {
+  var immersiveButton = document.getElementById('immersive-reading-button');
+  var body = document.body;
+  var mainContent = document.querySelector('.main');
+  var sidebarLeft = document.querySelector('.sidebar.left-sidebar');
+  var sidebarRight = document.querySelector('.sidebar.right-sidebar');
+  var musicPlayer = document.getElementById('global-music-player');
+  var expandableContainer = document.querySelector('.expandable-controls-container');
+  var container = document.querySelector('.container.main-container');
+  
+  // 隐藏右侧边栏，无论是否为文章页面
+  if (sidebarRight) {
+    sidebarRight.style.display = 'none';
+  }
+  
+  // 调整容器布局，确保主内容区域在左侧边栏的右边显示
+  if (container) {
+    container.classList.remove('extended');
+    container.classList.add('compact');
+  }
+  
+  // 重置主内容区域的样式，让其按照默认布局显示
+  if (mainContent) {
+    mainContent.style.width = '';
+    mainContent.style.maxWidth = '';
+    mainContent.style.margin = '';
+    mainContent.style.padding = '';
+    mainContent.style.borderRadius = '';
+    mainContent.style.boxShadow = '';
+    mainContent.style.background = '';
+    mainContent.style.backdropFilter = '';
+    mainContent.style.webkitBackdropFilter = '';
+  }
+  
+  if (immersiveButton) {
+    immersiveButton.onclick = function() {
+      var isImmersive = body.classList.contains('immersive-reading');
+      
+      if (isImmersive) {
+        // 退出沉浸阅读模式
+        body.classList.remove('immersive-reading');
+        immersiveButton.classList.remove('active');
+        immersiveButton.setAttribute('aria-label', '沉浸阅读');
+        immersiveButton.setAttribute('title', '沉浸阅读');
+        
+        // 显示左侧边栏
+        if (sidebarLeft) {
+          sidebarLeft.style.display = '';
+        }
+        
+        // 保持右侧边栏隐藏
+        if (sidebarRight) {
+          sidebarRight.style.display = 'none';
+        }
+        
+        if (musicPlayer) {
+          musicPlayer.style.display = '';
+        }
+        if (expandableContainer) {
+          expandableContainer.style.display = '';
+        }
+        
+        // 重置主内容区域的样式
+        if (mainContent) {
+          mainContent.style.width = '';
+          mainContent.style.maxWidth = '';
+          mainContent.style.margin = '';
+          mainContent.style.padding = '';
+          mainContent.style.borderRadius = '';
+          mainContent.style.boxShadow = '';
+          mainContent.style.background = '';
+          mainContent.style.backdropFilter = '';
+          mainContent.style.webkitBackdropFilter = '';
+        }
+        
+        // 调整容器布局
+        if (container) {
+          container.classList.remove('extended');
+          container.classList.add('compact');
+          container.style.display = '';
+          container.style.maxWidth = '';
+          container.style.padding = '';
+        }
+        
+        // 切换图标
+        var bookIcon = immersiveButton.querySelector('.book-icon');
+        var exitIcon = immersiveButton.querySelector('.exit-icon');
+        if (bookIcon) bookIcon.style.display = 'block';
+        if (exitIcon) exitIcon.style.display = 'none';
+      } else {
+        // 进入沉浸阅读模式
+        body.classList.add('immersive-reading');
+        immersiveButton.classList.add('active');
+        immersiveButton.setAttribute('aria-label', '退出沉浸阅读');
+        immersiveButton.setAttribute('title', '退出沉浸阅读');
+        
+        // 隐藏左侧边栏
+        if (sidebarLeft) {
+          sidebarLeft.style.display = 'none';
+        }
+        
+        // 保持右侧边栏隐藏
+        if (sidebarRight) {
+          sidebarRight.style.display = 'none';
+        }
+        
+        // 隐藏音乐播放器
+        if (musicPlayer) {
+          musicPlayer.style.display = 'none';
+        }
+        
+        // 保留右下角按钮面板
+        if (expandableContainer) {
+          expandableContainer.style.display = '';
+        }
+        
+        // 调整主内容区域，使其占据所有三个区域
+        if (mainContent) {
+          mainContent.style.width = '100%';
+          mainContent.style.maxWidth = '100%';
+          mainContent.style.margin = '0';
+          mainContent.style.padding = '40px';
+          mainContent.style.borderRadius = '0';
+          mainContent.style.boxShadow = 'none';
+          mainContent.style.background = 'transparent';
+          mainContent.style.backdropFilter = 'none';
+          mainContent.style.webkitBackdropFilter = 'none';
+        }
+        
+        // 调整容器布局
+        if (container) {
+          container.style.display = 'block';
+          container.style.maxWidth = '100%';
+          container.style.padding = '0';
+          container.style.width = '100%';
+        }
+        
+        // 调整文章内容区域，使其占据所有可用空间
+        var articleContent = document.querySelector('article');
+        if (articleContent) {
+          articleContent.style.maxWidth = '100%';
+          articleContent.style.width = '100%';
+        }
+        
+        // 调整文章容器，使其占据所有可用空间
+        var mainArticle = document.querySelector('.main-article');
+        if (mainArticle) {
+          mainArticle.style.maxWidth = '100%';
+          mainArticle.style.width = '100%';
+        }
+        
+        // 切换图标
+        var bookIcon = immersiveButton.querySelector('.book-icon');
+        var exitIcon = immersiveButton.querySelector('.exit-icon');
+        if (bookIcon) bookIcon.style.display = 'none';
+        if (exitIcon) exitIcon.style.display = 'block';
+      }
+    };
+  }
+}
+</script>

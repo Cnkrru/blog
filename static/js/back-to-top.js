@@ -1,16 +1,14 @@
 // 回到顶部按钮功能
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     try {
-        const backToTop = document.createElement('button');
-        backToTop.id = 'back-to-top';
-        backToTop.innerHTML = '↑';
+        console.log('开始初始化回到顶部按钮');
+        const backToTop = document.getElementById('back-to-top');
         
-        // 安全地添加到body
-        if (document.body) {
-            document.body.appendChild(backToTop);
-        } else {
-            throw new Error('Document body not found');
+        if (!backToTop) {
+            throw new Error('回到顶部按钮未找到');
         }
+        
+        console.log('找到回到顶部按钮:', backToTop);
 
         // 滚动显示/隐藏
         function handleScroll() {
@@ -38,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
 
-        window.addEventListener('scroll', debounce(handleScroll, 16));
+        window.addEventListener('scroll', debounce(handleScroll, 16));  
 
         // 点击平滑回到顶部
         backToTop.addEventListener('click', function() {

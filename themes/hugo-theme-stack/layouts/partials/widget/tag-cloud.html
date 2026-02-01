@@ -1,10 +1,12 @@
 {{- $context := .Context -}}
 {{- $limit := default 10 .Params.limit -}}
 <section class="widget tagCloud widget-enhanced">
-    <div class="widget-icon">
-        {{ partial "helper/icon" "tag" }}
+    <div class="widget-header">
+        <div class="widget-icon">
+            {{ partial "helper/icon" "tag" }}
+        </div>
+        <h2 class="widget-title section-title">{{ T "widget.tagCloud.title" }}</h2>
     </div>
-    <h2 class="widget-title section-title">{{ T "widget.tagCloud.title" }}</h2>
 
     <div class="tagCloud-tags">
         {{ range $index, $item := first $limit $context.Site.Taxonomies.tags.ByCount }}
@@ -25,60 +27,7 @@
 </section>
 
 <style>
-/* Tag Cloud Widget Enhancements */
-.widget.tagCloud {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background-color: var(--card-background);
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-}
-
-.widget.tagCloud:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-.widget.tagCloud .widget-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    border-radius: 8px;
-    color: white;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-}
-
-.widget.tagCloud .widget-icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
-}
-
-.widget.tagCloud .widget-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 1.2rem;
-    color: var(--primary);
-    position: relative;
-    padding-left: 12px;
-}
-
-.widget.tagCloud .widget-title:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 20px;
-    background: linear-gradient(to bottom, var(--primary), var(--primary-light));
-    border-radius: 2px;
-}
-
+/* Tag Cloud Widget Specific Styles */
 .tagCloud-tags {
     display: flex;
     flex-wrap: wrap;
@@ -148,14 +97,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .widget.tagCloud {
-        padding: 1.2rem;
-    }
-
-    .widget.tagCloud .widget-title {
-        font-size: 1rem;
-    }
-
     .tagCloud-tags {
         gap: 0.5rem;
     }
@@ -172,15 +113,6 @@
 }
 
 /* Dark Mode Support */
-body.dark .widget.tagCloud {
-    background-color: var(--card-background);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-}
-
-body.dark .widget.tagCloud:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
 body.dark .tag-cloud-item {
     background: linear-gradient(135deg, var(--accent), var(--accent-light));
     color: var(--primary);

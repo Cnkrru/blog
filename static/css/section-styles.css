@@ -1,0 +1,34 @@
+/* 三个板块样式 */
+
+/* 确保三个板块有背景色，避免背景图片影响可读性 */
+.main-container {
+  background-color: transparent;
+}
+
+/* 左侧边栏 */
+.sidebar.left-sidebar {
+  background-color: #ffffff;
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+}
+
+/* 中间文字板块 */
+.main.full-width {
+  background-color: #ffffff;
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+}
+
+/* 右侧边栏 */
+.sidebar.right-sidebar {
+  background-color: #ffffff;
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+}
+
+/* 暗黑模式适配 */
+[data-scheme="dark"] .sidebar.left-sidebar,
+[data-scheme="dark"] .main.full-width,
+[data-scheme="dark"] .sidebar.right-sidebar {
+  background-color: var(--card-background);
+}

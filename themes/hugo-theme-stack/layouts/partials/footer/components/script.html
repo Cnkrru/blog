@@ -10,3 +10,6 @@
     {{- $customScript := . | js.Build $opts | fingerprint -}}
     <script type="text/javascript" src="{{ $customScript.RelPermalink }}" defer></script>
 {{- end -}}
+
+<!-- PJAX脚本，实现页面切换时音乐不中断 -->
+<script type="text/javascript" src="/blog/js/pjax.js"></script>
