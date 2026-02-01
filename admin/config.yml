@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Cnkrru/blog  # 替换为你的GitHub用户名/仓库名
   branch: main       # 主分支名
-  site_domain: cnkrru.github.io/blog  # 你的GitHub Pages域名
+  base_url: https://api.netlify.com/auth/done
 
 publish_mode: editorial_workflow  # 启用草稿和审核流程
 media_folder: "static/media"       # 媒体文件存储位置
