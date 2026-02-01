@@ -1,9 +1,18 @@
+# 本地开发模式配置
+# 本地运行 hugo server -D，然后访问 http://localhost:1313/blog/admin/
 backend:
-  name: github
-  repo: Cnkrru/blog  # 替换为你的GitHub用户名/仓库名
-  branch: main       # 主分支名
-  auth_type: implicit
-  app_id: Ov23li1rmZx4UrN1zcZF  # GitHub OAuth应用的Client ID
+  name: git-gateway
+  branch: main
+  # 本地开发模式
+  local_backend: true
+
+# 线上模式配置（注释掉本地模式后使用）
+# backend:
+#   name: github
+#   repo: Cnkrru/blog
+#   branch: main
+#   auth_type: implicit
+#   app_id: Ov23li1rmZx4UrN1zcZF
 
 publish_mode: editorial_workflow  # 启用草稿和审核流程
 media_folder: "static/media"       # 媒体文件存储位置
