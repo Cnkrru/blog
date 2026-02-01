@@ -1,0 +1,35 @@
+/* 优化白天模式字体颜色，提高可读性 */
+[data-scheme="light"] {
+  --body-text-color: #2d3748;
+  --card-text-color-main: #1a202c;
+  --card-text-color-secondary: #2d3748;
+  --card-text-color-tertiary: #4a5568;
+}
+
+/* 直接设置三个板块的字体颜色，确保优先级 */
+[data-scheme="light"] .sidebar.left-sidebar,
+[data-scheme="light"] .main.full-width,
+[data-scheme="light"] .sidebar.right-sidebar {
+  color: #2d3748;
+}
+
+/* 左侧边栏文字颜色 */
+[data-scheme="light"] .sidebar.left-sidebar .menu a,
+[data-scheme="light"] .sidebar.left-sidebar .site-description {
+  color: #2d3748;
+}
+
+/* 中间板块文字颜色 */
+[data-scheme="light"] .main.full-width h1,
+[data-scheme="light"] .main.full-width h2,
+[data-scheme="light"] .main.full-width h3,
+[data-scheme="light"] .main.full-width p,
+[data-scheme="light"] .main.full-width a {
+  color: #2d3748;
+}
+
+/* 右侧边栏文字颜色 */
+[data-scheme="light"] .sidebar.right-sidebar .widget-title,
+[data-scheme="light"] .sidebar.right-sidebar .widget-content {
+  color: #2d3748;
+}

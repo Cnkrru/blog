@@ -53,14 +53,7 @@
         font-size: 0.75rem;
     }
     
-    /* 回到顶部按钮适配 */
-    #back-to-top {
-        bottom: var(--spacing-lg);
-        right: var(--spacing-lg);
-        width: 2.2rem;
-        height: 2.2rem;
-        font-size: 0.9rem;
-    }
+
     
     /* 文章目录适配 */
     .sidebar-widget__toc {
@@ -99,15 +92,6 @@
         padding: 2px 6px;
         margin: 0 3px 3px 0;
         font-size: 0.7rem;
-    }
-    
-    /* 回到顶部按钮适配 */
-    #back-to-top {
-        bottom: var(--spacing-md);
-        right: var(--spacing-md);
-        width: 2rem;
-        height: 2rem;
-        font-size: 0.8rem;
     }
     
     /* 文章目录适配 */
