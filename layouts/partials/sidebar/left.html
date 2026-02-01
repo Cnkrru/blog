@@ -67,9 +67,14 @@
     <ol class="menu" id="main-menu">
         {{ $currentPage := . }}
         {{ range .Site.Menus.main }}
-        {{ $active := or (eq $currentPage.RelPermalink .URL) (or ($currentPage.HasMenuCurrent "main" .) ($currentPage.IsMenuCurrent "main" .)) }}
+        {{ $menuURL := .URL | absLangURL }}
+        {{ $pageURL := $currentPage.RelPermalink | absLangURL }}
+        {{ $menuPath := replaceRE "^/|/$" "" .URL }}
+        {{ $pagePath := replaceRE "^/|/$" "" $currentPage.RelPermalink }}
+        {{ $pathMatch := or (eq $menuPath $pagePath) (in $pagePath $menuPath) (in $menuPath $pagePath) }}
+        {{ $active := or (eq $pageURL $menuURL) (or ($currentPage.HasMenuCurrent "main" .) ($currentPage.IsMenuCurrent "main" .) $pathMatch) }}
         <li {{ if $active }} class='current' {{ end }}>
-            <a href='{{ .URL }}' {{ if eq .Params.newTab true }}target="_blank"{{ end }} class="menu-link">
+            <a href='{{ .URL }}' {{ if eq .Params.newTab true }}target="_blank"{{ end }} class="menu-link {{ if $active }}current{{ end }}" data-menu-url="{{ $menuURL }}">
                 {{ $icon := default .Pre .Params.Icon }}
                 {{ if .Pre }}
                     {{ warnf "Menu item [%s] is using [pre] field to set icon, please use [params.icon] instead.\nMore information: https://stack.jimmycai.com/config/menu" .URL }}
@@ -186,8 +191,10 @@
     }
     
     .menu-link.current {
-        background: rgba(255, 107, 129, 0.1);
+        background: rgba(76, 175, 80, 0.1);
         font-weight: 600;
+        color: #4CAF50;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
     }
     
     .menu-link.current::before {
@@ -196,10 +203,10 @@
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 3px;
-        height: 60%;
-        background: linear-gradient(180deg, #FF6B81, #4ECDC4);
-        border-radius: 0 3px 3px 0;
+        width: 4px;
+        height: 70%;
+        background: linear-gradient(180deg, #4CAF50, #45a049);
+        border-radius: 0 4px 4px 0;
     }
     
     /* 菜单徽章 */
@@ -300,7 +307,13 @@
     }
     
     .dark .menu-link.current {
-        background: rgba(255, 107, 129, 0.15);
+        background: rgba(76, 175, 80, 0.2);
+        color: #66BB6A;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+    }
+    
+    .dark .menu-link.current::before {
+        background: linear-gradient(180deg, #66BB6A, #4CAF50);
     }
     
     .dark .language-switch:hover,

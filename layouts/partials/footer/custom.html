@@ -191,6 +191,7 @@ window.onload = function() {
   initTransparencyControl();
   initImmersiveReading();
   initMouseBottomDetection();
+  initPjaxEvents();
 };
 
 // 初始化沉浸阅读功能
@@ -387,6 +388,42 @@ function initMouseBottomDetection() {
       musicPlayer.classList.remove('active');
     });
   }
+}
+
+// 初始化PJAX事件监听
+function initPjaxEvents() {
+  // 监听PJAX开始事件
+  document.addEventListener('pjax:send', function() {
+    console.log('PJAX send event');
+    // 保存播放器状态
+    if (typeof savePlayerState === 'function') {
+      savePlayerState();
+    }
+  });
+  
+  // 监听PJAX成功事件
+  document.addEventListener('pjax:success', function() {
+    console.log('PJAX success event');
+    // 重新初始化鼠标底部检测功能
+    initMouseBottomDetection();
+    // 重新初始化沉浸阅读功能
+    initImmersiveReading();
+  });
+  
+  // 监听PJAX完成事件
+  document.addEventListener('pjax:complete', function() {
+    console.log('PJAX complete event');
+    // 重新初始化播放器UI
+    if (typeof reinitPlayerUI === 'function') {
+      reinitPlayerUI();
+    }
+    // 恢复播放状态
+    if (typeof audio !== 'undefined' && audio && typeof playerState !== 'undefined' && playerState.isPlaying && audio.paused) {
+      audio.play().catch(error => {
+        console.warn('Resume play on PJAX complete failed:', error);
+      });
+    }
+  });
 }
 
 
