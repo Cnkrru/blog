@@ -33,12 +33,21 @@
     
     // 设置评论加载监听器
     function setupCommentsLoadingListener() {
+        console.log('Setting up comments loading listener');
+        
         // 监听iframe加载完成（适用于Giscus、Utterances等）
         const observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 mutation.addedNodes.forEach(function(node) {
+                    console.log('Added node:', node.tagName);
                     if (node.tagName === 'IFRAME') {
+                        console.log('Found iframe:', node.src);
                         handleIframeLoad(node);
+                    } else if (node.tagName === 'DIV' || node.tagName === 'SECTION') {
+                        // 检查是否是评论容器或无评论提示
+                        setTimeout(function() {
+                            checkCommentsStatus();
+                        }, 500);
                     }
                 });
             });
@@ -48,33 +57,167 @@
         
         // 通用加载完成检测
         setTimeout(function() {
-            if (commentsContainer.children.length > 0) {
+            console.log('Checking comments status after 3 seconds');
+            checkCommentsStatus();
+        }, 3000); // 3秒后检查评论状态
+        
+        // 强制超时检测：如果6秒后还在加载，直接隐藏加载动画
+        setTimeout(function() {
+            console.log('Forcing hide loading after 6 seconds');
+            if (commentsLoading && commentsLoading.style.display !== 'none') {
                 hideLoading();
-            } else {
-                showError();
             }
-        }, 5000); // 5秒后如果还没加载完成，显示错误
+        }, 6000);
+    }
+    
+    // 检查评论状态
+    function checkCommentsStatus() {
+        console.log('Checking comments status');
+        console.log('Comments container children:', commentsContainer.children.length);
+        
+        if (commentsContainer.children.length > 0) {
+            // 检查是否有 Giscus iframe
+            const giscusIframe = commentsContainer.querySelector('iframe.giscus-frame');
+            console.log('Found giscus iframe:', !!giscusIframe);
+            
+            if (giscusIframe) {
+                // Giscus 特定处理
+                console.log('Handling Giscus status');
+                handleGiscusStatus(giscusIframe);
+            } else {
+                // 其他评论系统处理
+                console.log('Handling other comments system');
+                // 检查是否有评论内容或无评论提示
+                const hasContent = checkCommentsExistence();
+                console.log('Has comments content:', hasContent);
+                
+                const hasNoCommentsMessage = checkNoCommentsMessage();
+                console.log('Has no comments message:', hasNoCommentsMessage);
+                
+                if (hasContent || hasNoCommentsMessage) {
+                    console.log('Hiding loading animation');
+                    hideLoading();
+                } else {
+                    // 没有评论但加载完成，显示无评论提示
+                    console.log('Showing no comments message');
+                    showNoCommentsMessage();
+                }
+            }
+        } else {
+            // 没有任何内容，显示错误
+            console.log('Showing error message');
+            showError();
+        }
+    }
+    
+    // 处理 Giscus 状态
+    function handleGiscusStatus(iframe) {
+        console.log('Handling Giscus status');
+        console.log('Iframe contentDocument:', !!iframe.contentDocument);
+        
+        // 检查 Giscus iframe 是否已添加到 DOM 中
+        if (iframe.parentNode) {
+            console.log('Giscus iframe is in DOM, hiding loading animation');
+            // 只要 iframe 已添加到 DOM 中，就隐藏加载动画
+            // 这样用户就不会看到一直在加载的状态
+            hideLoading();
+        } else {
+            console.log('Giscus iframe not in DOM yet, checking again in 500ms');
+            // Giscus 还在加载中，再等一会儿检查
+            setTimeout(function() {
+                handleGiscusStatus(iframe);
+            }, 500);
+        }
+    }
+    
+    // 检查 Giscus 是否显示无评论
+    function checkGiscusNoComments(iframe) {
+        try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (!iframeDoc) return false;
+            
+            // 检查 Giscus 常见的无评论提示
+            const noCommentTexts = ['暂无评论', 'No comments', '没有评论', 'Be the first to comment'];
+            const iframeText = iframeDoc.body.textContent.toLowerCase();
+            
+            return noCommentTexts.some(text => iframeText.includes(text.toLowerCase()));
+        } catch (e) {
+            // 跨域访问可能会出错，忽略
+            return false;
+        }
+    }
+    
+    // 检查是否有无评论提示
+    function checkNoCommentsMessage() {
+        // 检查常见的无评论提示文本
+        const noCommentTexts = ['暂无评论', 'No comments', '没有评论', 'Be the first to comment'];
+        const containerText = commentsContainer.textContent.toLowerCase();
+        
+        return noCommentTexts.some(text => containerText.includes(text.toLowerCase()));
+    }
+    
+    // 显示无评论提示
+    function showNoCommentsMessage() {
+        if (commentsLoading) {
+            commentsLoading.style.display = 'none';
+        }
+        
+        // 检查是否已有无评论提示
+        let noCommentsMessage = document.getElementById('no-comments-message');
+        if (!noCommentsMessage) {
+            noCommentsMessage = document.createElement('div');
+            noCommentsMessage.id = 'no-comments-message';
+            noCommentsMessage.className = 'no-comments-message';
+            noCommentsMessage.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">💭</div>
+                    <h4 style="margin: 0 0 8px 0; color: var(--color-text-secondary);">暂无评论</h4>
+                    <p style="margin: 0; color: var(--color-text-tertiary); font-size: 14px;">成为第一个发表评论的人吧！</p>
+                </div>
+            `;
+            
+            // 清空容器并添加无评论提示
+            commentsContainer.innerHTML = '';
+            commentsContainer.appendChild(noCommentsMessage);
+        }
     }
     
     // 处理iframe加载
     function handleIframeLoad(iframe) {
+        console.log('Handling iframe load:', iframe.src);
+        
         iframe.onload = function() {
-            hideLoading();
+            console.log('Iframe loaded:', iframe.src);
+            // iframe加载完成后检查评论状态
+            setTimeout(function() {
+                console.log('Checking comments status after iframe load');
+                checkCommentsStatus();
+            }, 500);
         };
         
         // 处理iframe加载错误
         iframe.onerror = function() {
+            console.log('Iframe load error:', iframe.src);
             showError();
         };
+        
+        // 立即检查iframe状态
+        console.log('Immediately checking iframe status');
+        handleGiscusStatus(iframe);
     }
     
     // 隐藏加载动画
     function hideLoading() {
+        console.log('Hiding loading animation');
         if (commentsLoading) {
+            console.log('Comments loading element found:', commentsLoading);
             commentsLoading.classList.add('hidden');
             setTimeout(function() {
+                console.log('Setting loading display to none');
                 commentsLoading.style.display = 'none';
             }, 300);
+        } else {
+            console.log('Comments loading element not found');
         }
     }
     

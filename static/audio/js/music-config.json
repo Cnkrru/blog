@@ -3,32 +3,32 @@
     {
       "name": "MY ALL",
       "artist": "浜崎あゆみ",
-      "url": "/blog/audio/music/MY ALL.mp3",
-      "cover": "/blog/audio/covers/my-all.jpg"
+      "url": "audio/music/MY ALL.mp3",
+      "cover": "audio/covers/my-all.jpg"
     },
     {
       "name": "半点心",
       "artist": "草蜢",
-      "url": "/blog/audio/music/半点心.mp3",
-      "cover": "/blog/audio/covers/ban-dian-xin.jpg"
+      "url": "audio/music/半点心.mp3",
+      "cover": "audio/covers/ban-dian-xin.jpg"
     },
     {
       "name": "Stay With Me",
       "artist": "未知艺术家",
-      "url": "/blog/audio/music/Stay With Me.mp3",
-      "cover": "/blog/audio/covers/stay-with-me.jpg"
+      "url": "audio/music/Stay With Me.mp3",
+      "cover": "audio/covers/stay-with-me.jpg"
     },
     {
       "name": "打上花火",
       "artist": "未知艺术家",
-      "url": "/blog/audio/music/打上花火.mp3",
-      "cover": "/blog/audio/covers/da-shang-hua-huo.jpg"
+      "url": "audio/music/打上花火.mp3",
+      "cover": "audio/covers/da-shang-hua-huo.jpg"
     },
     {
       "name": "生生世世爱",
       "artist": "未知艺术家",
-      "url": "/blog/audio/music/生生世世爱.mp3",
-      "cover": "/blog/audio/covers/sheng-sheng-shi-shi-ai.jpg"
+      "url": "audio/music/生生世世爱.mp3",
+      "cover": "audio/covers/sheng-sheng-shi-shi-ai.jpg"
     }
   ]
 }
