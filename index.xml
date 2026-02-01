@@ -153,46 +153,46 @@ justify-content: center;
 &lt;p&gt;为你提供各种实用的在线工具&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="tools-card-container"&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/text-tool/" class="tool-card-link no-pjax"&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/tools/text-tool/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;📝&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;文本处理工具&lt;/h3&gt;
 &lt;p&gt;文本格式化、大小写转换、字符统计等功能&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="tool-card-arrow"&gt;→&lt;/div&gt;
-&lt;/a&gt;
 &lt;/div&gt;
+&lt;/a&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/password-generator/" class="tool-card-link no-pjax"&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/tools/password-generator/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;🔒&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;密码生成器&lt;/h3&gt;
 &lt;p&gt;生成安全强度高的随机密码&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="tool-card-arrow"&gt;→&lt;/div&gt;
+&lt;/div&gt;
 &lt;/a&gt;
-&lt;/div&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/color-tool/" class="tool-card-link no-pjax"&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/tools/unit-converter/" class="tool-card-link" data-pjax="false"&gt;
-&lt;div class="tool-card-icon"&gt;📏&lt;/div&gt;
-&lt;div class="tool-card-content"&gt;
-&lt;h3&gt;单位转换器&lt;/h3&gt;
-&lt;p&gt;长度、重量、温度等单位之间的转换&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="tool-card-arrow"&gt;→&lt;/div&gt;
-&lt;/a&gt;
-&lt;/div&gt;
-&lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/tools/color-tool/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;🎨&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
 &lt;h3&gt;颜色工具&lt;/h3&gt;
 &lt;p&gt;颜色代码转换、调色板生成等功能&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="tool-card-arrow"&gt;→&lt;/div&gt;
-&lt;/a&gt;
 &lt;/div&gt;
+&lt;/a&gt;
+&lt;a href="https://Cnkrru.github.io/blog/tools/base-converter/" class="tool-card-link no-pjax"&gt;
+&lt;div class="tool-card"&gt;
+&lt;div class="tool-card-icon"&gt;🔢&lt;/div&gt;
+&lt;div class="tool-card-content"&gt;
+&lt;h3&gt;进制转换器&lt;/h3&gt;
+&lt;p&gt;支持2-36进制之间的数值转换&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="tool-card-arrow"&gt;→&lt;/div&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 &lt;/div&gt;
 &lt;style&gt;
 .tools-header {
@@ -220,6 +220,13 @@ grid-template-columns: repeat(4, 1fr);
 gap: 20px;
 margin-bottom: 40px;
 }
+.tool-card-link {
+display: block;
+text-decoration: none;
+color: inherit;
+width: 100%;
+height: 100%;
+}
 .tool-card {
 background: linear-gradient(135deg, rgba(255, 200, 210, 0.1), rgba(170, 210, 230, 0.1));
 border: 1px solid rgba(255, 255, 255, 0.1);
@@ -233,24 +240,12 @@ position: relative;
 height: 200px;
 display: flex;
 flex-direction: column;
+padding: 24px;
 }
-.tool-card:hover {
+.tool-card-link:hover .tool-card {
 transform: translateY(-8px);
 box-shadow: 0 15px 35px rgba(170, 210, 230, 0.2);
 border-color: rgba(255, 200, 210, 0.3);
-}
-.tool-card-link {
-display: block;
-padding: 24px;
-text-decoration: none;
-color: inherit;
-position: relative;
-overflow: hidden;
-width: 100%;
-height: 100%;
-flex: 1;
-display: flex;
-flex-direction: column;
 }
 .tool-card-icon {
 font-size: 48px;
