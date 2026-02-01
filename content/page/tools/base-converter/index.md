@@ -1,7 +1,6 @@
 ---
 title: 进制转换器
 layout: "page"
-type: "page"
 comments: false
 ---
 
@@ -15,36 +14,49 @@ comments: false
     <!-- 工具功能实现区域 -->
     <div class="tool-implementation">
         <div class="input-group">
-            <label for="input-value">输入数值：</label>
-            <input type="text" id="input-value" placeholder="请输入要转换的数值" value="255">
+            <label for="input-number">输入数值：</label>
+            <input type="text" id="input-number" placeholder="请输入要转换的数值" value="255">
         </div>
         <div class="input-group">
             <label for="from-base">源进制：</label>
             <select id="from-base">
-                <option value="2">二进制 (Binary)</option>
-                <option value="8">八进制 (Octal)</option>
-                <option value="10" selected>十进制 (Decimal)</option>
-                <option value="16">十六进制 (Hexadecimal)</option>
+                <option value="2">二进制 (2)</option>
+                <option value="8">八进制 (8)</option>
+                <option value="10" selected>十进制 (10)</option>
+                <option value="16">十六进制 (16)</option>
+                <option value="custom-from">自定义进制</option>
             </select>
+        </div>
+        <div class="input-group" id="custom-from-group" style="display: none;">
+            <label for="custom-from-base">自定义源进制 (2-36)：</label>
+            <input type="number" id="custom-from-base" min="2" max="36" value="10">
         </div>
         <div class="input-group">
             <label for="to-base">目标进制：</label>
             <select id="to-base">
-                <option value="2">二进制 (Binary)</option>
-                <option value="8">八进制 (Octal)</option>
-                <option value="10">十进制 (Decimal)</option>
-                <option value="16" selected>十六进制 (Hexadecimal)</option>
+                <option value="2">二进制 (2)</option>
+                <option value="8">八进制 (8)</option>
+                <option value="10">十进制 (10)</option>
+                <option value="16" selected>十六进制 (16)</option>
+                <option value="custom-to">自定义进制</option>
             </select>
+        </div>
+        <div class="input-group" id="custom-to-group" style="display: none;">
+            <label for="custom-to-base">自定义目标进制 (2-36)：</label>
+            <input type="number" id="custom-to-base" min="2" max="36" value="16">
         </div>
         <button id="convert-btn" class="tool-button">转换</button>
         <div class="result-group">
-            <label for="result-value">转换结果：</label>
-            <input type="text" id="result-value" readonly>
+            <label for="result-number">转换结果：</label>
+            <input type="text" id="result-number" readonly>
         </div>
         <div class="result-group">
             <label>常用进制对照：</label>
-            <div id="conversion-table" style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
-                <!-- 转换表格将通过 JavaScript 生成 -->
+            <div id="common-bases" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                <div>二进制: <span id="binary-result">-</span></div>
+                <div>八进制: <span id="octal-result">-</span></div>
+                <div>十进制: <span id="decimal-result">-</span></div>
+                <div>十六进制: <span id="hex-result">-</span></div>
             </div>
         </div>
     </div>
@@ -204,6 +216,21 @@ comments: false
         transform: translateX(-3px);
     }
 
+    /* 常用进制对照样式 */
+    #common-bases {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 14px;
+    }
+
+    #common-bases div {
+        padding: 5px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
     /* 暗黑模式适配 */
     .dark .tool-implementation {
         background: linear-gradient(135deg, rgba(255, 200, 210, 0.05), rgba(170, 210, 230, 0.05));
@@ -240,6 +267,15 @@ comments: false
     .dark .back-to-tools:hover {
         color: #45a049;
         background: rgba(76, 175, 80, 0.2);
+    }
+
+    .dark #common-bases {
+        background: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+    }
+
+    .dark #common-bases div {
+        background: rgba(255, 255, 255, 0.05);
     }
 
     /* 响应式设计 */
@@ -279,6 +315,11 @@ comments: false
             margin-top: 30px;
             margin-bottom: 30px;
         }
+
+        #common-bases {
+            grid-template-columns: 1fr;
+            font-size: 12px;
+        }
     }
 </style>
 
@@ -288,97 +329,131 @@ comments: false
         console.log('初始化进制转换器');
         
         // 获取 DOM 元素
-        const inputValue = document.getElementById('input-value');
+        const inputNumber = document.getElementById('input-number');
         const fromBase = document.getElementById('from-base');
         const toBase = document.getElementById('to-base');
+        const customFromGroup = document.getElementById('custom-from-group');
+        const customToGroup = document.getElementById('custom-to-group');
+        const customFromBase = document.getElementById('custom-from-base');
+        const customToBase = document.getElementById('custom-to-base');
         const convertBtn = document.getElementById('convert-btn');
-        const resultValue = document.getElementById('result-value');
-        const conversionTable = document.getElementById('conversion-table');
+        const resultNumber = document.getElementById('result-number');
+        const binaryResult = document.getElementById('binary-result');
+        const octalResult = document.getElementById('octal-result');
+        const decimalResult = document.getElementById('decimal-result');
+        const hexResult = document.getElementById('hex-result');
         
         console.log('工具元素:', {
-            inputValue: !!inputValue,
+            inputNumber: !!inputNumber,
             fromBase: !!fromBase,
             toBase: !!toBase,
             convertBtn: !!convertBtn,
-            resultValue: !!resultValue,
-            conversionTable: !!conversionTable
+            resultNumber: !!resultNumber
         });
         
-        if (!inputValue || !fromBase || !toBase || !convertBtn || !resultValue) {
+        if (!inputNumber || !fromBase || !toBase || !convertBtn || !resultNumber) {
             console.error('进制转换器：缺少必要的DOM元素');
             return;
         }
         
-        // 转换数值函数
-        function convertNumber() {
-            console.log('转换数值按钮点击');
-            const value = inputValue.value.trim();
-            if (!value) {
-                resultValue.value = '请输入要转换的值';
+        // 显示/隐藏自定义进制输入
+        function toggleCustomBase() {
+            if (customFromGroup) {
+                customFromGroup.style.display = fromBase.value === 'custom-from' ? 'block' : 'none';
+            }
+            if (customToGroup) {
+                customToGroup.style.display = toBase.value === 'custom-to' ? 'block' : 'none';
+            }
+        }
+        
+        // 获取实际进制值
+        function getActualBase(selectElement, customElement) {
+            const value = selectElement.value;
+            if (value === 'custom-from' || value === 'custom-to') {
+                return parseInt(customElement.value) || 10;
+            }
+            return parseInt(value);
+        }
+        
+        // 验证数字在指定进制下是否有效
+        function isValidNumber(number, base) {
+            const validChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slice(0, base);
+            return number.toUpperCase().split('').every(char => validChars.includes(char));
+        }
+        
+        // 进制转换函数
+        function convertBase() {
+            console.log('进制转换按钮点击');
+            const input = inputNumber.value.trim();
+            
+            if (!input) {
+                resultNumber.value = '请输入数值';
                 return;
             }
             
-            const from = parseInt(fromBase.value);
-            const to = parseInt(toBase.value);
-            
-            console.log('转换详情:', {
-                value: value,
-                from: from,
-                to: to
-            });
-            
             try {
-                // 将输入值转换为十进制
-                const decimalValue = parseInt(value, from);
+                const fromBaseValue = getActualBase(fromBase, customFromBase);
+                const toBaseValue = getActualBase(toBase, customToBase);
+                
+                console.log('转换详情:', {
+                    input: input,
+                    fromBase: fromBaseValue,
+                    toBase: toBaseValue
+                });
+                
+                // 验证进制范围
+                if (fromBaseValue < 2 || fromBaseValue > 36 || toBaseValue < 2 || toBaseValue > 36) {
+                    resultNumber.value = '进制必须在2-36之间';
+                    return;
+                }
+                
+                // 验证输入数字在源进制下是否有效
+                if (!isValidNumber(input, fromBaseValue)) {
+                    resultNumber.value = `输入的数字在${fromBaseValue}进制下无效`;
+                    return;
+                }
+                
+                // 转换为十进制
+                const decimalValue = parseInt(input, fromBaseValue);
+                
                 if (isNaN(decimalValue)) {
-                    throw new Error(`输入值不是有效的${from}进制数`);
+                    resultNumber.value = '无效的数字格式';
+                    return;
                 }
                 
-                // 将十进制转换为目标进制
-                let result;
-                if (to === 16) {
-                    result = decimalValue.toString(16).toUpperCase();
-                } else {
-                    result = decimalValue.toString(to);
-                }
+                // 转换为目标进制
+                const result = decimalValue.toString(toBaseValue).toUpperCase();
+                resultNumber.value = result;
                 
-                resultValue.value = result;
+                // 更新常用进制对照
+                if (binaryResult) binaryResult.textContent = decimalValue.toString(2);
+                if (octalResult) octalResult.textContent = decimalValue.toString(8);
+                if (decimalResult) decimalResult.textContent = decimalValue.toString(10);
+                if (hexResult) hexResult.textContent = decimalValue.toString(16).toUpperCase();
                 
-                // 生成对照表
-                if (conversionTable) {
-                    conversionTable.innerHTML = '';
-                    const bases = [2, 8, 10, 16];
-                    const names = ['二进制', '八进制', '十进制', '十六进制'];
-                    
-                    bases.forEach((base, index) => {
-                        const div = document.createElement('div');
-                        div.style.cssText = 'margin: 5px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; min-width: 120px; text-align: center;';
-                        let val = decimalValue.toString(base);
-                        if (base === 16) val = val.toUpperCase();
-                        div.innerHTML = `<strong>${names[index]}:</strong><br>${val}`;
-                        conversionTable.appendChild(div);
-                    });
-                }
-                
-                console.log('转换结果:', result);
             } catch (error) {
-                resultValue.value = error.message;
-                console.error('转换错误:', error.message);
+                console.error('进制转换时出错:', error);
+                resultNumber.value = '转换失败，请检查输入';
             }
         }
         
         // 绑定事件
-        convertBtn.addEventListener('click', convertNumber);
+        convertBtn.addEventListener('click', convertBase);
         
-        // 按下回车键时自动转换
-        inputValue.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                convertNumber();
-            }
-        });
+        // 进制选择变化时显示/隐藏自定义输入
+        fromBase.addEventListener('change', toggleCustomBase);
+        toBase.addEventListener('change', toggleCustomBase);
         
-        // 初始转换
-        convertNumber();
+        // 输入时实时转换
+        inputNumber.addEventListener('input', convertBase);
+        if (customFromBase) customFromBase.addEventListener('input', convertBase);
+        if (customToBase) customToBase.addEventListener('input', convertBase);
+        fromBase.addEventListener('change', convertBase);
+        toBase.addEventListener('change', convertBase);
+        
+        // 初始化
+        toggleCustomBase();
+        convertBase();
     }
     
     // 多种方式确保初始化

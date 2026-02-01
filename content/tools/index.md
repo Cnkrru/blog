@@ -15,7 +15,7 @@ comments: false
 </div>
 
 <div class="tools-card-container">
-  <a href="/blog/tools/text-tool/" class="tool-card-link no-pjax">
+  <a href="/blog/page/tools/text-tool/" class="tool-card-link no-pjax">
     <div class="tool-card">
       <div class="tool-card-icon">📝</div>
       <div class="tool-card-content">
@@ -26,7 +26,7 @@ comments: false
     </div>
   </a>
 
-  <a href="/blog/tools/password-generator/" class="tool-card-link no-pjax">
+  <a href="/blog/page/tools/password-generator/" class="tool-card-link no-pjax">
     <div class="tool-card">
       <div class="tool-card-icon">🔒</div>
       <div class="tool-card-content">
@@ -37,7 +37,7 @@ comments: false
     </div>
   </a>
 
-  <a href="/blog/tools/color-tool/" class="tool-card-link no-pjax">
+  <a href="/blog/page/tools/color-tool/" class="tool-card-link no-pjax">
     <div class="tool-card">
       <div class="tool-card-icon">🎨</div>
       <div class="tool-card-content">
@@ -48,7 +48,7 @@ comments: false
     </div>
   </a>
 
-  <a href="/blog/tools/base-converter/" class="tool-card-link no-pjax">
+  <a href="/blog/page/tools/base-converter/" class="tool-card-link no-pjax">
     <div class="tool-card">
       <div class="tool-card-icon">🔢</div>
       <div class="tool-card-content">

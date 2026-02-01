@@ -1,7 +1,6 @@
 ---
 title: 密码生成器
 layout: "page"
-type: "page"
 comments: false
 ---
 

@@ -1,7 +1,6 @@
 ---
 title: 颜色工具
 layout: "page"
-type: "page"
 comments: false
 ---
 
@@ -15,32 +14,29 @@ comments: false
     <!-- 工具功能实现区域 -->
     <div class="tool-implementation">
         <div class="input-group">
-            <label for="color-input">颜色输入：</label>
-            <input type="text" id="color-input" placeholder="请输入颜色代码（如 #FF0000、rgb(255,0,0)）" value="#FF0000">
+            <label for="color-input">输入颜色值：</label>
+            <input type="text" id="color-input" placeholder="例如: #FF5733, rgb(255,87,51), hsl(9,100%,60%)" value="#FF5733">
         </div>
         <div class="input-group">
-            <label for="color-format">输出格式：</label>
-            <select id="color-format">
-                <option value="hex">十六进制 (#RRGGBB)</option>
-                <option value="rgb">RGB (rgb(r,g,b))</option>
-                <option value="rgba">RGBA (rgba(r,g,b,a))</option>
-                <option value="hsl">HSL (hsl(h,s,l))</option>
-            </select>
-        </div>
-        <button id="convert-color-btn" class="tool-button">转换颜色</button>
-        <div class="result-group">
-            <label for="color-result">转换结果：</label>
-            <input type="text" id="color-result" readonly>
-        </div>
-        <div class="result-group">
             <label>颜色预览：</label>
-            <div id="color-preview" style="width: 100%; height: 100px; background-color: #FF0000; border-radius: 8px; transition: background-color 0.3s ease;"></div>
+            <div id="color-preview" style="width: 100%; height: 60px; border: 1px solid #ccc; border-radius: 8px; background-color: #FF5733;"></div>
+        </div>
+        <button id="convert-btn" class="tool-button">转换颜色</button>
+        <div class="result-group">
+            <label for="hex-result">HEX：</label>
+            <input type="text" id="hex-result" readonly>
         </div>
         <div class="result-group">
-            <label>调色板生成：</label>
-            <div id="color-palette" style="display: flex; gap: 10px; margin-top: 10px;">
-                <!-- 调色板将通过 JavaScript 生成 -->
-            </div>
+            <label for="rgb-result">RGB：</label>
+            <input type="text" id="rgb-result" readonly>
+        </div>
+        <div class="result-group">
+            <label for="hsl-result">HSL：</label>
+            <input type="text" id="hsl-result" readonly>
+        </div>
+        <div class="result-group">
+            <label for="hsv-result">HSV：</label>
+            <input type="text" id="hsv-result" readonly>
         </div>
     </div>
 </div>
@@ -174,33 +170,6 @@ comments: false
         box-sizing: border-box;
     }
 
-    /* 调色板样式 */
-    .palette-color {
-        width: 100px;
-        height: 100px;
-        border-radius: 8px;
-        position: relative;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-    }
-
-    .palette-color:hover {
-        transform: translateY(-5px);
-    }
-
-    .palette-color span {
-        position: absolute;
-        bottom: 5px;
-        left: 5px;
-        right: 5px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        font-size: 12px;
-        padding: 3px;
-        border-radius: 4px;
-        text-align: center;
-    }
-
     /* 工具页面底部 */
     .tool-page-footer {
         text-align: center;
@@ -301,15 +270,6 @@ comments: false
             margin-top: 30px;
             margin-bottom: 30px;
         }
-
-        .palette-color {
-            width: 80px;
-            height: 80px;
-        }
-
-        .palette-color span {
-            font-size: 10px;
-        }
     }
 </style>
 
@@ -320,38 +280,40 @@ comments: false
         
         // 获取 DOM 元素
         const colorInput = document.getElementById('color-input');
-        const colorFormat = document.getElementById('color-format');
-        const convertColorBtn = document.getElementById('convert-color-btn');
-        const colorResult = document.getElementById('color-result');
         const colorPreview = document.getElementById('color-preview');
-        const colorPalette = document.getElementById('color-palette');
+        const convertBtn = document.getElementById('convert-btn');
+        const hexResult = document.getElementById('hex-result');
+        const rgbResult = document.getElementById('rgb-result');
+        const hslResult = document.getElementById('hsl-result');
+        const hsvResult = document.getElementById('hsv-result');
         
         console.log('工具元素:', {
             colorInput: !!colorInput,
-            colorFormat: !!colorFormat,
-            convertColorBtn: !!convertColorBtn,
-            colorResult: !!colorResult,
             colorPreview: !!colorPreview,
-            colorPalette: !!colorPalette
+            convertBtn: !!convertBtn,
+            hexResult: !!hexResult,
+            rgbResult: !!rgbResult,
+            hslResult: !!hslResult,
+            hsvResult: !!hsvResult
         });
         
-        if (!colorInput || !colorFormat || !convertColorBtn || !colorResult) {
+        if (!colorInput || !convertBtn || !hexResult) {
             console.error('颜色工具：缺少必要的DOM元素');
             return;
         }
         
         // 颜色转换函数
         function hexToRgb(hex) {
-            hex = hex.replace('#', '');
-            const bigint = parseInt(hex, 16);
-            const r = (bigint >> 16) & 255;
-            const g = (bigint >> 8) & 255;
-            const b = bigint & 255;
-            return { r, g, b };
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
         }
         
         function rgbToHex(r, g, b) {
-            return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
         }
         
         function rgbToHsl(r, g, b) {
@@ -375,152 +337,147 @@ comments: false
                 h /= 6;
             }
             
-            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
         }
         
-        function parseColor(color) {
-            color = color.trim();
+        function rgbToHsv(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, v = max;
             
-            // 处理十六进制颜色
-            if (color.startsWith('#')) {
-                if (color.length === 4) {
-                    // 缩写形式 #RGB
-                    color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
+            const d = max - min;
+            s = max === 0 ? 0 : d / max;
+            
+            if (max === min) {
+                h = 0;
+            } else {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
                 }
-                if (color.length === 7) {
-                    const rgb = hexToRgb(color);
-                    return { type: 'hex', value: color, rgb: rgb };
-                }
+                h /= 6;
             }
             
-            // 处理 RGB 颜色
-            if (color.startsWith('rgb(')) {
-                const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-                if (match) {
-                    const r = parseInt(match[1]);
-                    const g = parseInt(match[2]);
-                    const b = parseInt(match[3]);
-                    if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
-                        return { type: 'rgb', value: color, rgb: { r, g, b } };
-                    }
-                }
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                v: Math.round(v * 100)
+            };
+        }
+        
+        // 解析颜色输入
+        function parseColor(input) {
+            input = input.trim();
+            
+            // HEX格式
+            if (input.match(/^#?[0-9a-f]{6}$/i)) {
+                if (!input.startsWith('#')) input = '#' + input;
+                return hexToRgb(input);
             }
             
-            // 处理 RGBA 颜色
-            if (color.startsWith('rgba(')) {
-                const match = color.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
-                if (match) {
-                    const r = parseInt(match[1]);
-                    const g = parseInt(match[2]);
-                    const b = parseInt(match[3]);
-                    const a = parseFloat(match[4]);
-                    if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255 && a >= 0 && a <= 1) {
-                        return { type: 'rgba', value: color, rgb: { r, g, b, a } };
-                    }
-                }
+            // RGB格式
+            const rgbMatch = input.match(/rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i);
+            if (rgbMatch) {
+                return {
+                    r: parseInt(rgbMatch[1]),
+                    g: parseInt(rgbMatch[2]),
+                    b: parseInt(rgbMatch[3])
+                };
             }
             
-            // 处理 HSL 颜色
-            if (color.startsWith('hsl(')) {
-                const match = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-                if (match) {
-                    const h = parseInt(match[1]);
-                    const s = parseInt(match[2]);
-                    const l = parseInt(match[3]);
-                    if (h >= 0 && h <= 360 && s >= 0 && s <= 100 && l >= 0 && l <= 100) {
-                        return { type: 'hsl', value: color, hsl: { h, s, l } };
-                    }
+            // HSL格式
+            const hslMatch = input.match(/hsl\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)/i);
+            if (hslMatch) {
+                const h = parseInt(hslMatch[1]) / 360;
+                const s = parseInt(hslMatch[2]) / 100;
+                const l = parseInt(hslMatch[3]) / 100;
+                
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                
+                let r, g, b;
+                if (s === 0) {
+                    r = g = b = l;
+                } else {
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    r = hue2rgb(p, q, h + 1/3);
+                    g = hue2rgb(p, q, h);
+                    b = hue2rgb(p, q, h - 1/3);
                 }
+                
+                return {
+                    r: Math.round(r * 255),
+                    g: Math.round(g * 255),
+                    b: Math.round(b * 255)
+                };
             }
             
             return null;
         }
         
-        // 生成调色板
-        function generatePalette(r, g, b) {
-            if (!colorPalette) return;
-            
-            colorPalette.innerHTML = '';
-            
-            // 生成不同色调的颜色
-            const colors = [
-                rgbToHex(r, g, b), // 原始颜色
-                rgbToHex(Math.max(0, r - 50), Math.max(0, g - 50), Math.max(0, b - 50)), // 变暗
-                rgbToHex(Math.min(255, r + 50), Math.min(255, g + 50), Math.min(255, b + 50)), // 变亮
-                rgbToHex(g, b, r), // 色调偏移
-                rgbToHex(b, r, g) // 色调偏移
-            ];
-            
-            colors.forEach(color => {
-                const colorDiv = document.createElement('div');
-                colorDiv.className = 'palette-color';
-                colorDiv.style.backgroundColor = color;
-                
-                const colorText = document.createElement('span');
-                colorText.textContent = color;
-                colorDiv.appendChild(colorText);
-                
-                // 点击复制颜色代码
-                colorDiv.addEventListener('click', () => {
-                    navigator.clipboard.writeText(color).then(() => {
-                        const originalText = colorText.textContent;
-                        colorText.textContent = '已复制!';
-                        setTimeout(() => {
-                            colorText.textContent = originalText;
-                        }, 1500);
-                    });
-                });
-                
-                colorPalette.appendChild(colorDiv);
-            });
-        }
-        
-        // 转换颜色
+        // 转换颜色函数
         function convertColor() {
             console.log('转换颜色按钮点击');
             const input = colorInput.value;
-            const format = colorFormat.value;
+            const rgb = parseColor(input);
             
-            const parsedColor = parseColor(input);
-            if (!parsedColor) {
-                colorResult.value = '请输入有效的颜色代码';
+            if (!rgb) {
+                hexResult.value = '无效的颜色格式';
+                rgbResult.value = '';
+                hslResult.value = '';
+                hsvResult.value = '';
                 return;
             }
             
             try {
-                let result;
-                const rgb = parsedColor.rgb;
-                
-                switch (format) {
-                    case 'hex':
-                        result = rgbToHex(rgb.r, rgb.g, rgb.b);
-                        break;
-                    case 'rgb':
-                        result = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-                        break;
-                    case 'rgba':
-                        result = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`;
-                        break;
-                    case 'hsl':
-                        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-                        result = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
-                        break;
-                    default:
-                        result = input;
+                // 更新预览
+                const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+                if (colorPreview) {
+                    colorPreview.style.backgroundColor = hex;
                 }
                 
-                colorResult.value = result;
-                if (colorPreview) colorPreview.style.backgroundColor = result;
-                generatePalette(rgb.r, rgb.g, rgb.b);
+                // 转换到各种格式
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+                
+                // 显示结果
+                hexResult.value = hex.toUpperCase();
+                rgbResult.value = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                hslResult.value = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+                hsvResult.value = `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)`;
                 
             } catch (error) {
                 console.error('转换颜色时出错:', error);
-                colorResult.value = '转换颜色时出错，请重试';
+                hexResult.value = '转换失败，请检查输入格式';
             }
         }
         
         // 绑定事件
-        convertColorBtn.addEventListener('click', convertColor);
+        convertBtn.addEventListener('click', convertColor);
+        
+        // 输入时实时预览
+        colorInput.addEventListener('input', function() {
+            const rgb = parseColor(this.value);
+            if (rgb && colorPreview) {
+                const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+                colorPreview.style.backgroundColor = hex;
+            }
+        });
         
         // 初始转换
         convertColor();
