@@ -1,5 +1,6 @@
 ---
 title: 进制转换器
+slug: base-converter
 layout: "page"
 comments: false
 ---

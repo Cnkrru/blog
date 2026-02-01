@@ -1,5 +1,6 @@
 ---
 title: 文本处理工具
+slug: text-tool
 layout: "page"
 comments: false
 ---

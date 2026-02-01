@@ -1,5 +1,6 @@
 ---
 title: 颜色工具
+slug: color-tool
 layout: "page"
 comments: false
 ---

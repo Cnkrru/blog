@@ -1,5 +1,6 @@
 ---
 title: 密码生成器
+slug: password-generator
 layout: "page"
 comments: false
 ---
