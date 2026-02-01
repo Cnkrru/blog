@@ -13,6 +13,10 @@
         <h4 id="player-title">Stay With Me</h4>
         <p id="player-artist">未知艺术家</p>
       </div>
+      <!-- 音乐列表按钮 -->
+      <button type="button" id="player-list-btn" class="control-btn list-btn" aria-label="音乐列表" title="音乐列表">
+        <span class="control-icon">☰</span>
+      </button>
     </div>
     <div class="player-controls">
       <button type="button" id="player-prev" class="control-btn" aria-label="上一首" title="上一首">
@@ -24,6 +28,10 @@
       </button>
       <button type="button" id="player-next" class="control-btn" aria-label="下一首" title="下一首">
         <span class="control-icon">→</span>
+      </button>
+      <!-- 随机播放按钮 -->
+      <button type="button" id="player-random-btn" class="control-btn random-btn" aria-label="随机播放" title="随机播放">
+        <span class="control-icon">🔀</span>
       </button>
     </div>
     <div class="player-progress">
@@ -45,6 +53,21 @@
         <div id="volume-fill" class="volume-fill"></div>
         <div id="volume-handle" class="volume-handle"></div>
       </div>
+    </div>
+  </div>
+  
+  <!-- 音乐列表面板 -->
+  <div id="player-playlist" class="player-playlist">
+    <div class="playlist-header">
+      <h3>音乐列表</h3>
+      <button type="button" id="playlist-close-btn" class="control-btn close-btn" aria-label="关闭列表" title="关闭列表">
+        <span class="control-icon">✕</span>
+      </button>
+    </div>
+    <div class="playlist-content">
+      <ul id="playlist-items" class="playlist-items">
+        <!-- 播放列表项将通过JavaScript动态生成 -->
+      </ul>
     </div>
   </div>
 </div>

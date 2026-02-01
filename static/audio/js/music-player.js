@@ -12,7 +12,7 @@
  */
 
 // 全局变量
-var player, toggleBtn, playBtn, prevBtn, nextBtn;
+var player, toggleBtn, playBtn, prevBtn, nextBtn, listBtn, randomBtn, playlistPanel, playlistCloseBtn, playlistItems;
 var progressBar, progressFill, progressHandle, currentTimeEl, totalTimeEl;
 var volumeBtn, volumeBar, volumeFill, volumeHandle;
 var playerTitle, playerArtist, playerCover;
@@ -20,6 +20,8 @@ var audio = null;
 var playlist = [];
 var currentIndex = 0;
 var isPlayerVisible = false;
+var isRandomMode = false;
+var isPlaylistVisible = false;
 var saveStateInterval = null;
 
 // 全局播放器状态存储
@@ -28,7 +30,8 @@ var playerState = {
   currentTime: 0,
   isPlaying: false,
   volume: 0.7,
-  isMuted: false
+  isMuted: false,
+  isRandomMode: false
 };
 
 // 保存播放器状态到localStorage
@@ -39,6 +42,7 @@ function savePlayerState() {
     playerState.volume = audio.volume;
     playerState.isMuted = audio.muted;
     playerState.currentIndex = currentIndex;
+    playerState.isRandomMode = isRandomMode;
     
     try {
       localStorage.setItem('musicPlayerState', JSON.stringify(playerState));
@@ -360,6 +364,21 @@ function bindEvents() {
     toggleBtn.addEventListener('click', togglePlayer);
   }
   
+  // 音乐列表按钮点击事件
+  if (listBtn) {
+    listBtn.addEventListener('click', togglePlaylist);
+  }
+  
+  // 随机播放按钮点击事件
+  if (randomBtn) {
+    randomBtn.addEventListener('click', toggleRandomMode);
+  }
+  
+  // 播放列表关闭按钮点击事件
+  if (playlistCloseBtn) {
+    playlistCloseBtn.addEventListener('click', closePlaylist);
+  }
+  
   // 播放器区域鼠标事件 - 移除悬停显示，只通过点击控制
   if (player) {
     player.addEventListener('mouseenter', function() {
@@ -389,6 +408,13 @@ function bindEvents() {
     });
   }
   
+  // 点击页面其他地方关闭播放列表
+  document.addEventListener('click', function(e) {
+    if (isPlaylistVisible && playlistPanel && !playlistPanel.contains(e.target) && !listBtn.contains(e.target)) {
+      closePlaylist();
+    }
+  });
+  
   // 控制按钮鼠标事件 - 移除悬停显示，只通过点击控制
   if (toggleBtn) {
     // 移除鼠标悬停事件监听器，只保留点击事件
@@ -406,6 +432,7 @@ function initializePlayer() {
   currentIndex = playerState.currentIndex || 0;
   audio.volume = playerState.volume || 0.7;
   audio.muted = playerState.isMuted || false;
+  isRandomMode = playerState.isRandomMode || false;
   
   // 绑定音频事件
   audio.addEventListener('timeupdate', updateProgress);
@@ -486,6 +513,16 @@ function initializePlayer() {
     isPlayerVisible = false; // 默认隐藏
   }
   
+  // 恢复随机模式状态
+  if (isRandomMode) {
+    if (randomBtn) {
+      randomBtn.classList.add('active');
+    }
+  }
+  
+  // 生成播放列表
+  generatePlaylist();
+  
   // 绑定事件
   bindEvents();
   
@@ -507,6 +544,11 @@ function initPlayer() {
   playBtn = document.getElementById('player-play');
   prevBtn = document.getElementById('player-prev');
   nextBtn = document.getElementById('player-next');
+  listBtn = document.getElementById('player-list-btn');
+  randomBtn = document.getElementById('player-random-btn');
+  playlistPanel = document.getElementById('player-playlist');
+  playlistCloseBtn = document.getElementById('playlist-close-btn');
+  playlistItems = document.getElementById('playlist-items');
   progressBar = document.querySelector('.progress-bar');
   progressFill = document.getElementById('progress-fill');
   progressHandle = document.getElementById('progress-handle');
@@ -526,6 +568,11 @@ function initPlayer() {
     playBtn: !!playBtn,
     prevBtn: !!prevBtn,
     nextBtn: !!nextBtn,
+    listBtn: !!listBtn,
+    randomBtn: !!randomBtn,
+    playlistPanel: !!playlistPanel,
+    playlistCloseBtn: !!playlistCloseBtn,
+    playlistItems: !!playlistItems,
     progressBar: !!progressBar,
     volumeBar: !!volumeBar
   });
@@ -595,6 +642,144 @@ function initPlayer() {
       console.log('Using default playlist:', playlist);
       initializePlayer();
     });
+}
+
+// 生成播放列表
+function generatePlaylist() {
+  if (!playlistItems || playlist.length === 0) return;
+  
+  // 清空现有列表
+  playlistItems.innerHTML = '';
+  
+  // 生成新的列表项
+  playlist.forEach((song, index) => {
+    const listItem = document.createElement('li');
+    listItem.className = `playlist-item ${index === currentIndex ? 'active' : ''}`;
+    listItem.dataset.index = index;
+    
+    listItem.innerHTML = `
+      <div class="playlist-item-cover">
+        <img src="${song.cover}" alt="${song.name} 封面" />
+      </div>
+      <div class="playlist-item-info">
+        <h4 class="playlist-item-title">${song.name}</h4>
+        <p class="playlist-item-artist">${song.artist}</p>
+      </div>
+      <div class="playlist-item-status">▶</div>
+    `;
+    
+    // 添加点击事件
+    listItem.addEventListener('click', function() {
+      const selectedIndex = parseInt(this.dataset.index);
+      if (selectedIndex !== currentIndex) {
+        currentIndex = selectedIndex;
+        loadSong(currentIndex);
+        if (!audio.paused) {
+          audio.play().catch(error => {
+            console.warn('Play failed:', error);
+          });
+        }
+        // 更新播放列表UI
+        updatePlaylistUI();
+        savePlayerState();
+      }
+    });
+    
+    playlistItems.appendChild(listItem);
+  });
+}
+
+// 更新播放列表UI
+function updatePlaylistUI() {
+  if (!playlistItems) return;
+  
+  const items = playlistItems.querySelectorAll('.playlist-item');
+  items.forEach((item, index) => {
+    if (index === currentIndex) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+}
+
+// 切换随机播放模式
+function toggleRandomMode() {
+  isRandomMode = !isRandomMode;
+  
+  if (randomBtn) {
+    if (isRandomMode) {
+      randomBtn.classList.add('active');
+      randomBtn.setAttribute('aria-label', '关闭随机播放');
+      randomBtn.setAttribute('title', '关闭随机播放');
+    } else {
+      randomBtn.classList.remove('active');
+      randomBtn.setAttribute('aria-label', '随机播放');
+      randomBtn.setAttribute('title', '随机播放');
+    }
+  }
+  
+  savePlayerState();
+}
+
+// 随机选择一首歌曲
+function selectRandomSong() {
+  if (playlist.length === 0) return;
+  
+  let randomIndex;
+  do {
+    randomIndex = Math.floor(Math.random() * playlist.length);
+  } while (randomIndex === currentIndex && playlist.length > 1);
+  
+  currentIndex = randomIndex;
+  loadSong(currentIndex);
+  if (!audio.paused) {
+    audio.play().catch(error => {
+      console.warn('Play failed:', error);
+    });
+  }
+  // 更新播放列表UI
+  updatePlaylistUI();
+  savePlayerState();
+}
+
+// 切换播放列表面板
+function togglePlaylist() {
+  isPlaylistVisible = !isPlaylistVisible;
+  
+  if (playlistPanel) {
+    if (isPlaylistVisible) {
+      playlistPanel.classList.add('active');
+    } else {
+      playlistPanel.classList.remove('active');
+    }
+  }
+}
+
+// 关闭播放列表面板
+function closePlaylist() {
+  isPlaylistVisible = false;
+  if (playlistPanel) {
+    playlistPanel.classList.remove('active');
+  }
+}
+
+// 重写nextSong函数，支持随机模式
+function nextSong() {
+  if (isRandomMode) {
+    selectRandomSong();
+  } else {
+    currentIndex = (currentIndex + 1) % playlist.length;
+    loadSong(currentIndex);
+    if (!audio.paused) {
+      audio.play().catch(error => {
+        console.warn('Play failed:', error);
+      });
+    }
+    // 更新播放列表UI
+    updatePlaylistUI();
+    savePlayerState();
+  }
 }
 
 // 立即尝试初始化，不等待DOMContentLoaded
@@ -744,6 +929,11 @@ function reinitPlayerUI() {
   playBtn = document.getElementById('player-play');
   prevBtn = document.getElementById('player-prev');
   nextBtn = document.getElementById('player-next');
+  listBtn = document.getElementById('player-list-btn');
+  randomBtn = document.getElementById('player-random-btn');
+  playlistPanel = document.getElementById('player-playlist');
+  playlistCloseBtn = document.getElementById('playlist-close-btn');
+  playlistItems = document.getElementById('playlist-items');
   progressBar = document.querySelector('.progress-bar');
   progressFill = document.getElementById('progress-fill');
   progressHandle = document.getElementById('progress-handle');
@@ -763,9 +953,17 @@ function reinitPlayerUI() {
     playBtn: !!playBtn,
     prevBtn: !!prevBtn,
     nextBtn: !!nextBtn,
+    listBtn: !!listBtn,
+    randomBtn: !!randomBtn,
+    playlistPanel: !!playlistPanel,
+    playlistCloseBtn: !!playlistCloseBtn,
+    playlistItems: !!playlistItems,
     progressBar: !!progressBar,
     volumeBar: !!volumeBar
   });
+  
+  // 重新生成播放列表
+  generatePlaylist();
   
   // 重新绑定事件
   bindEvents();
@@ -778,6 +976,19 @@ function reinitPlayerUI() {
     }
     if (player) {
       player.classList.add('playing');
+    }
+  }
+  
+  // 更新随机模式状态
+  if (randomBtn) {
+    if (isRandomMode) {
+      randomBtn.classList.add('active');
+      randomBtn.setAttribute('aria-label', '关闭随机播放');
+      randomBtn.setAttribute('title', '关闭随机播放');
+    } else {
+      randomBtn.classList.remove('active');
+      randomBtn.setAttribute('aria-label', '随机播放');
+      randomBtn.setAttribute('title', '随机播放');
     }
   }
   
