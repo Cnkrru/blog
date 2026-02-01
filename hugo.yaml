@@ -80,7 +80,7 @@ pagination:
 permalinks:
 # 配置页面链接格式
     post: /p/:slug/
-    page: /:slug/
+    page: /:sections/:slug/
     categories: /categories/:slug/
     tags: /tags/:slug/
     archive: /archives/:slug/
