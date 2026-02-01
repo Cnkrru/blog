@@ -20,7 +20,7 @@ var audio = null;
 var playlist = [];
 var currentIndex = 0;
 var isPlayerVisible = false;
-var isRandomMode = false;
+var playMode = 'order'; // order: 顺序播放, random: 随机播放, repeat: 循环播放
 var isPlaylistVisible = false;
 var saveStateInterval = null;
 
@@ -31,7 +31,7 @@ var playerState = {
   isPlaying: false,
   volume: 0.7,
   isMuted: false,
-  isRandomMode: false
+  playMode: 'order'
 };
 
 // 保存播放器状态到localStorage
@@ -42,7 +42,7 @@ function savePlayerState() {
     playerState.volume = audio.volume;
     playerState.isMuted = audio.muted;
     playerState.currentIndex = currentIndex;
-    playerState.isRandomMode = isRandomMode;
+    playerState.playMode = playMode;
     
     try {
       localStorage.setItem('musicPlayerState', JSON.stringify(playerState));
@@ -369,9 +369,9 @@ function bindEvents() {
     listBtn.addEventListener('click', togglePlaylist);
   }
   
-  // 随机播放按钮点击事件
+  // 播放模式切换按钮点击事件
   if (randomBtn) {
-    randomBtn.addEventListener('click', toggleRandomMode);
+    randomBtn.addEventListener('click', togglePlayMode);
   }
   
   // 播放列表关闭按钮点击事件
@@ -432,7 +432,7 @@ function initializePlayer() {
   currentIndex = playerState.currentIndex || 0;
   audio.volume = playerState.volume || 0.7;
   audio.muted = playerState.isMuted || false;
-  isRandomMode = playerState.isRandomMode || false;
+  playMode = playerState.playMode || 'order';
   
   // 绑定音频事件
   audio.addEventListener('timeupdate', updateProgress);
@@ -513,12 +513,8 @@ function initializePlayer() {
     isPlayerVisible = false; // 默认隐藏
   }
   
-  // 恢复随机模式状态
-  if (isRandomMode) {
-    if (randomBtn) {
-      randomBtn.classList.add('active');
-    }
-  }
+  // 恢复播放模式状态
+  updatePlayModeUI();
   
   // 生成播放列表
   generatePlaylist();
@@ -703,23 +699,55 @@ function updatePlaylistUI() {
   });
 }
 
-// 切换随机播放模式
-function toggleRandomMode() {
-  isRandomMode = !isRandomMode;
+// 更新播放模式UI
+function updatePlayModeUI() {
+  if (!randomBtn) return;
   
-  if (randomBtn) {
-    if (isRandomMode) {
+  // 移除所有状态类
+  randomBtn.classList.remove('active');
+  
+  // 根据当前播放模式更新UI
+  switch (playMode) {
+    case 'order':
+      randomBtn.innerHTML = '<span class="control-icon">▸▸</span>';
+      randomBtn.setAttribute('aria-label', '顺序播放');
+      randomBtn.setAttribute('title', '点击切换到随机播放');
+      break;
+    case 'random':
+      randomBtn.innerHTML = '<span class="control-icon">🔀</span>';
       randomBtn.classList.add('active');
-      randomBtn.setAttribute('aria-label', '关闭随机播放');
-      randomBtn.setAttribute('title', '关闭随机播放');
-    } else {
-      randomBtn.classList.remove('active');
       randomBtn.setAttribute('aria-label', '随机播放');
-      randomBtn.setAttribute('title', '随机播放');
-    }
+      randomBtn.setAttribute('title', '点击切换到循环播放');
+      break;
+    case 'repeat':
+      randomBtn.innerHTML = '<span class="control-icon">🔂</span>';
+      randomBtn.classList.add('active');
+      randomBtn.setAttribute('aria-label', '循环播放');
+      randomBtn.setAttribute('title', '点击切换到顺序播放');
+      break;
+  }
+}
+
+// 切换播放模式
+function togglePlayMode() {
+  // 循环切换播放模式：顺序播放 -> 随机播放 -> 循环播放 -> 顺序播放
+  switch (playMode) {
+    case 'order':
+      playMode = 'random';
+      break;
+    case 'random':
+      playMode = 'repeat';
+      break;
+    case 'repeat':
+      playMode = 'order';
+      break;
   }
   
+  // 更新UI
+  updatePlayModeUI();
   savePlayerState();
+  
+  console.log('Play mode changed to:', playMode);
 }
 
 // 随机选择一首歌曲
@@ -764,21 +792,34 @@ function closePlaylist() {
   }
 }
 
-// 重写nextSong函数，支持随机模式
+// 重写nextSong函数，支持不同播放模式
 function nextSong() {
-  if (isRandomMode) {
-    selectRandomSong();
-  } else {
-    currentIndex = (currentIndex + 1) % playlist.length;
-    loadSong(currentIndex);
-    if (!audio.paused) {
-      audio.play().catch(error => {
-        console.warn('Play failed:', error);
-      });
-    }
-    // 更新播放列表UI
-    updatePlaylistUI();
-    savePlayerState();
+  switch (playMode) {
+    case 'random':
+      selectRandomSong();
+      break;
+    case 'repeat':
+      // 循环播放，保持当前歌曲
+      loadSong(currentIndex);
+      if (!audio.paused) {
+        audio.play().catch(error => {
+          console.warn('Play failed:', error);
+        });
+      }
+      break;
+    case 'order':
+    default:
+      currentIndex = (currentIndex + 1) % playlist.length;
+      loadSong(currentIndex);
+      if (!audio.paused) {
+        audio.play().catch(error => {
+          console.warn('Play failed:', error);
+        });
+      }
+      // 更新播放列表UI
+      updatePlaylistUI();
+      savePlayerState();
+      break;
   }
 }
 
@@ -979,18 +1020,8 @@ function reinitPlayerUI() {
     }
   }
   
-  // 更新随机模式状态
-  if (randomBtn) {
-    if (isRandomMode) {
-      randomBtn.classList.add('active');
-      randomBtn.setAttribute('aria-label', '关闭随机播放');
-      randomBtn.setAttribute('title', '关闭随机播放');
-    } else {
-      randomBtn.classList.remove('active');
-      randomBtn.setAttribute('aria-label', '随机播放');
-      randomBtn.setAttribute('title', '随机播放');
-    }
-  }
+  // 更新播放模式状态
+  updatePlayModeUI();
   
   // 更新播放信息
   if (playerTitle && playerArtist && playerCover && playlist[currentIndex]) {
