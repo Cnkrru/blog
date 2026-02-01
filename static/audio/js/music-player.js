@@ -670,14 +670,22 @@ function generatePlaylist() {
       if (selectedIndex !== currentIndex) {
         currentIndex = selectedIndex;
         loadSong(currentIndex);
-        if (!audio.paused) {
-          audio.play().catch(error => {
-            console.warn('Play failed:', error);
-          });
-        }
+        // 无论播放器当前状态如何，点击列表项后都自动播放歌曲
+        audio.play().catch(error => {
+          console.warn('Play failed:', error);
+        });
         // 更新播放列表UI
         updatePlaylistUI();
         savePlayerState();
+      } else {
+        // 如果点击的是当前播放的歌曲，则切换播放/暂停状态
+        if (audio.paused) {
+          audio.play().catch(error => {
+            console.warn('Play failed:', error);
+          });
+        } else {
+          audio.pause();
+        }
       }
     });
     
@@ -761,11 +769,10 @@ function selectRandomSong() {
   
   currentIndex = randomIndex;
   loadSong(currentIndex);
-  if (!audio.paused) {
-    audio.play().catch(error => {
-      console.warn('Play failed:', error);
-    });
-  }
+  // 无论播放器当前状态如何，随机选择歌曲后都继续播放
+  audio.play().catch(error => {
+    console.warn('Play failed:', error);
+  });
   // 更新播放列表UI
   updatePlaylistUI();
   savePlayerState();
@@ -801,21 +808,19 @@ function nextSong() {
     case 'repeat':
       // 循环播放，保持当前歌曲
       loadSong(currentIndex);
-      if (!audio.paused) {
-        audio.play().catch(error => {
-          console.warn('Play failed:', error);
-        });
-      }
+      // 无论播放器当前状态如何，切换歌曲后都继续播放
+      audio.play().catch(error => {
+        console.warn('Play failed:', error);
+      });
       break;
     case 'order':
     default:
       currentIndex = (currentIndex + 1) % playlist.length;
       loadSong(currentIndex);
-      if (!audio.paused) {
-        audio.play().catch(error => {
-          console.warn('Play failed:', error);
-        });
-      }
+      // 无论播放器当前状态如何，切换歌曲后都继续播放
+      audio.play().catch(error => {
+        console.warn('Play failed:', error);
+      });
       // 更新播放列表UI
       updatePlaylistUI();
       savePlayerState();
