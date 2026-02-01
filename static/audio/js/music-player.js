@@ -950,16 +950,21 @@ window.addEventListener('pageshow', function() {
 // 监听PJAX相关事件
 if (typeof window !== 'undefined') {
   // 监听PJAX开始事件
-  document.addEventListener('pjax:start', function() {
-    console.log('PJAX start, saving player state');
+  document.addEventListener('pjax:send', function() {
+    console.log('PJAX send, saving player state');
     savePlayerState();
+  });
+
+  // 监听PJAX成功事件
+  document.addEventListener('pjax:success', function() {
+    console.log('PJAX success, reinitializing player UI');
+    // 重新初始化播放器UI元素
+    reinitPlayerUI();
   });
 
   // 监听PJAX完成事件
   document.addEventListener('pjax:complete', function() {
-    console.log('PJAX complete, reinitializing player UI');
-    // 重新初始化播放器UI元素
-    reinitPlayerUI();
+    console.log('PJAX complete, resuming playback');
     // 恢复播放状态
     if (audio && playerState.isPlaying && audio.paused) {
       audio.play().catch(error => {
