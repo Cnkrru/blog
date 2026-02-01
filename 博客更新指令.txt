@@ -1,0 +1,49 @@
+# 博客更新指令
+
+## 成功的Git推送方式
+
+### 步骤1：检查当前Git状态
+```bash
+git status
+```
+
+### 步骤2：添加所有更改到暂存区
+```bash
+git add .
+```
+
+### 步骤3：提交更改
+```bash
+git commit -m "修改说明：描述您的更改内容"
+```
+
+### 步骤4：推送更改到GitHub
+```bash
+git push origin main
+```
+
+## 本地预览博客
+```bash
+hugo server -D
+```
+
+## 常见问题解决
+
+### 如果推送失败
+1. 检查网络连接
+2. 确保GitHub凭证正确
+3. 尝试使用详细模式查看错误信息：
+   ```bash
+   git push origin main --verbose
+   ```
+
+### 确认推送成功
+```bash
+git status
+# 应该显示 "Your branch is up to date with 'origin/main'"
+```
+
+## 工具导航页面维护
+- 工具页面位于 `content/tools/` 目录
+- 工具模板位于 `content/page/tools/tool-template.md`
+- 确保工具页面的frontmatter中包含正确的菜单配置
