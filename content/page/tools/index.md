@@ -17,7 +17,7 @@ comments: false
 
 <div class="tools-card-container">
   <div class="tool-card">
-    <a href="/p/tools/base-converter/" class="tool-card-link" data-pjax="false">
+    <a href="/p/进制转换器/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">🔢</div>
       <div class="tool-card-content">
         <h3>进制转换器</h3>
@@ -28,7 +28,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/p/tools/text-tool/" class="tool-card-link" data-pjax="false">
+    <a href="/p/文本处理工具/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">📝</div>
       <div class="tool-card-content">
         <h3>文本处理工具</h3>
@@ -39,7 +39,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/p/tools/password-generator/" class="tool-card-link" data-pjax="false">
+    <a href="/p/密码生成器/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">🔒</div>
       <div class="tool-card-content">
         <h3>密码生成器</h3>
@@ -50,7 +50,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/p/tools/unit-converter/" class="tool-card-link" data-pjax="false">
+    <a href="/p/单位转换器/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">📏</div>
       <div class="tool-card-content">
         <h3>单位转换器</h3>
@@ -61,7 +61,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/p/tools/color-tool/" class="tool-card-link" data-pjax="false">
+    <a href="/p/颜色工具/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">🎨</div>
       <div class="tool-card-content">
         <h3>颜色工具</h3>
