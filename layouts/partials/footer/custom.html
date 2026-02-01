@@ -356,38 +356,10 @@ function initImmersiveReading() {
   }
 }
 
-// 初始化鼠标底部检测功能
+// 初始化鼠标底部检测功能 - 已修改：移除自动显示/隐藏播放器的功能，由音乐按钮控制
 function initMouseBottomDetection() {
-  var musicPlayer = document.getElementById('global-music-player');
-  var isPlayerHovered = false;
-  
-  // 鼠标移动事件
-  document.addEventListener('mousemove', function(e) {
-    // 检测鼠标是否在页面底部
-    var windowHeight = window.innerHeight;
-    var mouseY = e.clientY;
-    var bottomThreshold = windowHeight - 50; // 底部50px的区域
-    
-    if (mouseY >= bottomThreshold && !isPlayerHovered) {
-      // 鼠标在底部区域，显示播放器
-      if (musicPlayer) {
-        musicPlayer.classList.add('active');
-      }
-    }
-  });
-  
-  // 监听播放器的鼠标进入事件
-  if (musicPlayer) {
-    musicPlayer.addEventListener('mouseenter', function() {
-      isPlayerHovered = true;
-    });
-    
-    musicPlayer.addEventListener('mouseleave', function() {
-      isPlayerHovered = false;
-      // 鼠标离开播放器，隐藏播放器
-      musicPlayer.classList.remove('active');
-    });
-  }
+  // 此函数保留用于其他可能的底部检测功能
+  // 播放器的显示/隐藏现在只由音乐按钮控制
 }
 
 // 初始化PJAX事件监听

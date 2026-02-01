@@ -1,0 +1,26 @@
+<!-- 页脚统计信息组件 -->
+<div class="site-footer__stats">
+    <!-- 运行时间 -->
+    <div class="site-footer__stat-item">
+        <div class="site-footer__stat-value" id="site-runtime">0</div>
+        <div class="site-footer__stat-label">运行时间</div>
+    </div>
+    
+    <!-- 文章总数 -->
+    <div class="site-footer__stat-item">
+        <div class="site-footer__stat-value">{{ len (where .Site.RegularPages "Type" "post") }}</div>
+        <div class="site-footer__stat-label">文章总数</div>
+    </div>
+    
+    <!-- 标签总数 -->
+    <div class="site-footer__stat-item">
+        <div class="site-footer__stat-value">{{ len .Site.Taxonomies.tags }}</div>
+        <div class="site-footer__stat-label">标签总数</div>
+    </div>
+    
+    <!-- 分类总数 -->
+    <div class="site-footer__stat-item">
+        <div class="site-footer__stat-value">{{ len .Site.Taxonomies.categories }}</div>
+        <div class="site-footer__stat-label">分类总数</div>
+    </div>
+</div>

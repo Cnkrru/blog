@@ -2,6 +2,7 @@
 <article class="article-compact">
     <a href="{{ .RelPermalink }}">
         <div class="article-details">
+            <!-- 文章标题 -->
             <h2 class="article-title">
                 {{- .Title -}}
             </h2>
@@ -13,6 +14,7 @@
                 </div>
             {{ end }}
             
+            <!-- 文章时间信息 -->
             <footer class="article-time">
                 <time datetime='{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}'>
                     {{- .Date | time.Format (or .Site.Params.dateFormat.published "Jan 02, 2006") -}}
@@ -36,6 +38,7 @@
             {{ end }}
         </div>
 
+        <!-- 文章缩略图 -->
         {{- $image := partialCached "helper/image" (dict "Context" . "Type" "articleList") .RelPermalink "articleList" -}}
         {{ if $image.exists }}
             <div class="article-image">
@@ -57,3 +60,6 @@
         {{ end }}
     </a>
 </article>
+
+<!-- 列表页面增强 -->
+{{ partial "article-list/components/list-enhanced" . }}

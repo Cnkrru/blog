@@ -16,10 +16,7 @@
         
         <div class="comments-content">
             <!-- 评论系统加载动画 -->
-            <div class="comments-loading">
-                <div class="comments-loading-spinner"></div>
-                <p>{{ i18n "article.comments.loading" | default "Loading comments..." }}</p>
-            </div>
+            {{ partial "comments/components/comment-loading" . }}
             
             <!-- 评论系统容器 -->
             <div id="comments-container">
@@ -27,10 +24,7 @@
             </div>
             
             <!-- 评论系统错误提示 -->
-            <div class="comments-error" style="display: none;">
-                <p>{{ i18n "article.comments.error" | default "Failed to load comments. Please try again later." }}</p>
-                <button class="comments-retry">{{ i18n "article.comments.retry" | default "Retry" }}</button>
-            </div>
+            {{ partial "comments/components/comment-error" . }}
         </div>
     </section>
     

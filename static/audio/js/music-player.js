@@ -20,9 +20,11 @@ var audio = null;
 var playlist = [];
 var currentIndex = 0;
 var isPlayerVisible = false;
+var isAutoShowEnabled = false; // 是否开启自动显示/隐藏功能
 var playMode = 'order'; // order: 顺序播放, random: 随机播放, repeat: 循环播放
 var isPlaylistVisible = false;
 var saveStateInterval = null;
+var mouseBottomDetected = false; // 鼠标是否在底部区域
 
 // 全局播放器状态存储
 var playerState = {
@@ -31,7 +33,8 @@ var playerState = {
   isPlaying: false,
   volume: 0.7,
   isMuted: false,
-  playMode: 'order'
+  playMode: 'order',
+  isAutoShowEnabled: false
 };
 
 // 保存播放器状态到localStorage
@@ -43,6 +46,7 @@ function savePlayerState() {
     playerState.isMuted = audio.muted;
     playerState.currentIndex = currentIndex;
     playerState.playMode = playMode;
+    playerState.isAutoShowEnabled = isAutoShowEnabled;
     
     try {
       localStorage.setItem('musicPlayerState', JSON.stringify(playerState));
@@ -111,7 +115,21 @@ function loadSong(index) {
   };
   img.src = song.cover;
   
+  // 确保 audio 对象存在
+  if (!audio) {
+    console.error('Audio object is not initialized');
+    return;
+  }
+  
+  // 添加错误处理
+  audio.onerror = function(e) {
+    console.error('Error loading audio:', e);
+    console.error('Audio error code:', e.target.error.code);
+  };
+  
+  console.log('Setting audio src:', song.url);
   audio.src = song.url;
+  
   if (playerTitle) playerTitle.textContent = song.name;
   if (playerArtist) playerArtist.textContent = song.artist;
   if (playerCover) playerCover.alt = song.name;
@@ -359,9 +377,9 @@ function bindEvents() {
     isDraggingVolume = false;
   });
   
-  // 按钮点击事件
+  // 按钮点击事件 - 修改为切换自动显示/隐藏功能
   if (toggleBtn) {
-    toggleBtn.addEventListener('click', togglePlayer);
+    toggleBtn.addEventListener('click', toggleAutoShow);
   }
   
   // 音乐列表按钮点击事件
@@ -379,30 +397,28 @@ function bindEvents() {
     playlistCloseBtn.addEventListener('click', closePlaylist);
   }
   
-  // 播放器区域鼠标事件 - 移除悬停显示，只通过点击控制
+  // 播放器区域鼠标事件
   if (player) {
     player.addEventListener('mouseenter', function() {
       // 鼠标悬停在播放器上时保持显示
-      if (isPlayerVisible && player) {
+      if (player) {
         player.classList.add('active');
+      }
+      if (toggleBtn) {
+        toggleBtn.classList.add('active');
       }
     });
     player.addEventListener('mouseleave', function() {
-      // 鼠标离开播放器时，隐藏播放器并重新显示多功能展开按钮
-      if (isPlayerVisible && player) {
-        player.classList.remove('active');
-        isPlayerVisible = false;
-        if (toggleBtn) {
-          toggleBtn.classList.remove('active');
-          toggleBtn.setAttribute('aria-label', '音乐播放器');
-          toggleBtn.setAttribute('title', '音乐播放器');
-        }
-        // 显示多功能展开按钮
-        const expandableContainer = document.querySelector('.expandable-controls-container');
-        if (expandableContainer) {
-          expandableContainer.style.opacity = '1';
-          expandableContainer.style.pointerEvents = 'auto';
-          expandableContainer.style.visibility = 'visible';
+      // 鼠标离开播放器时，只有在暂停且不在底部区域时才自动收回
+      if (!audio || audio.paused) {
+        // 检查鼠标是否还在底部区域
+        if (!mouseBottomDetected) {
+          if (player) {
+            player.classList.remove('active');
+          }
+          if (toggleBtn) {
+            toggleBtn.classList.remove('active');
+          }
         }
       }
     });
@@ -415,9 +431,70 @@ function bindEvents() {
     }
   });
   
-  // 控制按钮鼠标事件 - 移除悬停显示，只通过点击控制
+  // 添加鼠标移动事件监听器，检测鼠标是否在页面底部区域
+  document.addEventListener('mousemove', function(e) {
+    if (isAutoShowEnabled) {
+      var windowHeight = window.innerHeight;
+      var mouseY = e.clientY;
+      var bottomThreshold = windowHeight - 50; // 底部50px区域
+      
+      if (mouseY > bottomThreshold) {
+        // 鼠标在底部区域，显示播放器
+        if (player) {
+          player.classList.add('active');
+        }
+        if (toggleBtn) {
+          toggleBtn.classList.add('active');
+        }
+        mouseBottomDetected = true;
+      } else {
+        // 鼠标不在底部区域，只有在暂停时才隐藏播放器
+        if (!audio || audio.paused) {
+          if (player) {
+            player.classList.remove('active');
+          }
+          if (toggleBtn) {
+            toggleBtn.classList.remove('active');
+          }
+        }
+        mouseBottomDetected = false;
+      }
+    }
+  });
+  
+  // 初始化音乐按钮状态
+  updateMusicButtonState();
+}
+
+// 切换自动显示/隐藏功能
+function toggleAutoShow() {
+  isAutoShowEnabled = !isAutoShowEnabled;
+  savePlayerState();
+  updateMusicButtonState();
+  
+  // 如果关闭自动显示功能，隐藏播放器
+  if (!isAutoShowEnabled) {
+    if (player) {
+      player.classList.remove('active');
+    }
+    if (toggleBtn) {
+      toggleBtn.classList.remove('active');
+    }
+  }
+}
+
+// 更新音乐按钮状态
+function updateMusicButtonState() {
   if (toggleBtn) {
-    // 移除鼠标悬停事件监听器，只保留点击事件
+    if (isAutoShowEnabled) {
+      toggleBtn.classList.add('active');
+      toggleBtn.setAttribute('aria-label', '关闭音乐播放器自动显示');
+      toggleBtn.setAttribute('title', '关闭音乐播放器自动显示');
+    } else {
+      toggleBtn.classList.remove('active');
+      toggleBtn.setAttribute('aria-label', '开启音乐播放器自动显示');
+      toggleBtn.setAttribute('title', '开启音乐播放器自动显示');
+    }
   }
 }
 
@@ -470,10 +547,11 @@ function initializePlayer() {
       console.log('Play event triggered');
       if (player) {
         player.classList.add('playing');
-        // 不自动添加active，让用户通过按钮或悬停控制显示
+        // 播放时保持播放器显示
+        player.classList.add('active');
       }
       if (toggleBtn) {
-        // 不自动添加active，让用户通过按钮或悬停控制显示
+        toggleBtn.classList.add('active');
       }
     });
     
@@ -485,6 +563,13 @@ function initializePlayer() {
       }
       if (player) {
         player.classList.remove('playing');
+        // 暂停时，只有在自动显示功能开启且鼠标在底部区域时才保持显示
+        if (!isAutoShowEnabled || !mouseBottomDetected) {
+          player.classList.remove('active');
+        }
+      }
+      if (toggleBtn && (!isAutoShowEnabled || !mouseBottomDetected)) {
+        toggleBtn.classList.remove('active');
       }
     });
     
@@ -497,10 +582,11 @@ function initializePlayer() {
   }
   
   // 恢复保存的状态
-  currentIndex = playerState.currentIndex || 0;
-  audio.volume = playerState.volume || 0.7;
-  audio.muted = playerState.isMuted || false;
-  playMode = playerState.playMode || 'order';
+    currentIndex = playerState.currentIndex || 0;
+    audio.volume = playerState.volume || 0.7;
+    audio.muted = playerState.isMuted || false;
+    playMode = playerState.playMode || 'order';
+    isAutoShowEnabled = playerState.isAutoShowEnabled || false;
   
   // 加载当前歌曲
   loadSong(currentIndex);
@@ -514,12 +600,12 @@ function initializePlayer() {
     }
     if (player) {
       player.classList.add('playing');
-      // 不自动添加active，让用户通过按钮或悬停控制显示
+      player.classList.add('active'); // 播放时保持显示
     }
     if (toggleBtn) {
-      // 不自动添加active，让用户通过按钮或悬停控制显示
+      toggleBtn.classList.add('active'); // 播放时保持显示
     }
-    isPlayerVisible = false; // 默认隐藏
+    isPlayerVisible = true; // 播放时可见
   } else {
     isPlayerVisible = false; // 默认隐藏
   }
@@ -532,6 +618,9 @@ function initializePlayer() {
   
   // 绑定事件
   bindEvents();
+  
+  // 更新音乐按钮状态
+  updateMusicButtonState();
 }
 
 // 页面加载完成后初始化
@@ -580,8 +669,11 @@ function initPlayer() {
   // 加载保存的播放器状态
   loadPlayerState();
   
+  // 为播放器资源添加时间戳，避免缓存
+  const timestamp = new Date().getTime();
+  
   // 从 JSON 文件加载播放列表
-  fetch('/blog/audio/js/music-config.json')
+  fetch(`/blog/audio/js/music-config.json?${timestamp}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -595,8 +687,8 @@ function initPlayer() {
         return {
           name: song.name,
           artist: song.artist,
-          url: song.url,
-          cover: song.cover
+          url: `${song.url}?${timestamp}`,
+          cover: `${song.cover}?${timestamp}`
         };
       });
       console.log('Processed playlist:', playlist);
@@ -611,32 +703,32 @@ function initPlayer() {
         {
           name: "Stay With Me",
           artist: "未知艺术家",
-          url: "/blog/audio/music/Stay With Me.mp3",
-          cover: "/blog/audio/covers/stay-with-me.jpg"
+          url: `/blog/audio/music/Stay With Me.mp3?${timestamp}`,
+          cover: `/blog/audio/covers/stay-with-me.jpg?${timestamp}`
         },
         {
           name: "半点心",
           artist: "未知艺术家",
-          url: "/blog/audio/music/半点心.mp3",
-          cover: "/blog/audio/covers/ban-dian-xin.jpg"
+          url: `/blog/audio/music/半点心.mp3?${timestamp}`,
+          cover: `/blog/audio/covers/ban-dian-xin.jpg?${timestamp}`
         },
         {
           name: "打上花火",
           artist: "未知艺术家",
-          url: "/blog/audio/music/打上花火.mp3",
-          cover: "/blog/audio/covers/da-shang-hua-huo.jpg"
+          url: `/blog/audio/music/打上花火.mp3?${timestamp}`,
+          cover: `/blog/audio/covers/da-shang-hua-huo.jpg?${timestamp}`
         },
         {
           name: "生生世世爱",
           artist: "未知艺术家",
-          url: "/blog/audio/music/生生世世爱.mp3",
-          cover: "/blog/audio/covers/sheng-sheng-shi-shi-ai.jpg"
+          url: `/blog/audio/music/生生世世爱.mp3?${timestamp}`,
+          cover: `/blog/audio/covers/sheng-sheng-shi-shi-ai.jpg?${timestamp}`
         },
         {
           name: "MY ALL",
           artist: "未知艺术家",
-          url: "/blog/audio/music/MY ALL.mp3",
-          cover: "/blog/audio/covers/my-all.jpg"
+          url: `/blog/audio/music/MY ALL.mp3?${timestamp}`,
+          cover: `/blog/audio/covers/my-all.jpg?${timestamp}`
         }
       ];
       console.log('Using default playlist:', playlist);
@@ -878,8 +970,8 @@ if (typeof window !== 'undefined') {
           return {
             name: song.name,
             artist: song.artist,
-            url: `/blog${song.url}?${timestamp}`,
-            cover: `/blog${song.cover}?${timestamp}`
+            url: `${song.url}?${timestamp}`,
+            cover: `${song.cover}?${timestamp}`
           };
         });
         console.log('Processed playlist with timestamp:', playlist);
@@ -1031,11 +1123,29 @@ function reinitPlayerUI() {
     }
     if (player) {
       player.classList.add('playing');
+      player.classList.add('active'); // 播放时保持显示
+    }
+    if (toggleBtn) {
+      toggleBtn.classList.add('active'); // 播放时保持显示
+    }
+  } else {
+    // 暂停时，只有在自动显示功能开启且鼠标在底部区域时才保持显示
+    if (player) {
+      player.classList.remove('playing');
+      if (!isAutoShowEnabled || !mouseBottomDetected) {
+        player.classList.remove('active');
+      }
+    }
+    if (toggleBtn && (!isAutoShowEnabled || !mouseBottomDetected)) {
+      toggleBtn.classList.remove('active');
     }
   }
   
   // 更新播放模式状态
   updatePlayModeUI();
+  
+  // 更新音乐按钮状态
+  updateMusicButtonState();
   
   // 更新播放信息
   if (playerTitle && playerArtist && playerCover && playlist[currentIndex]) {

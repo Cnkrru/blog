@@ -1,15 +1,29 @@
+<!-- 增强版文章页面结构 -->
 <article class="{{ if .Params.image }}has-image {{ end }}main-article">
+    <!-- 文章头部 -->
     {{ partial "article/components/header" . }}
 
-    <!-- 使用增强版的内容组件 -->
+    <!-- 文章内容 -->
     {{ partial "article/components/content-enhanced" . }}
 
+    <!-- 文章尾部 -->
     {{ partial "article/components/footer" . }}
 
+    <!-- 数学公式支持 -->
     {{ if or .Params.math .Site.Params.article.math }}
         {{ partialCached "article/components/math.html" . }}
     {{ end }}
     
-    <!-- 使用增强版评论系统 -->
+    <!-- 评论系统 -->
     {{ partial "comments/include-enhanced" . }}
 </article>
+
+<!-- 代码块增强 -->
+{{ partial "article/components/code-enhanced" . }}
+
+<!-- 文章结束增强 -->
+<link rel="stylesheet" href="/blog/css/article-end.css">
+<script src="/blog/js/article-end.js"></script>
+
+<!-- 文章增强样式 -->
+<link rel="stylesheet" href="/blog/css/article-enhanced.css">

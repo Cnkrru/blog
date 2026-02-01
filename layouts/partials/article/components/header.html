@@ -1,5 +1,6 @@
 <!-- 增强版文章头部组件 -->
 <header class="article-header">
+    <!-- 文章特色图片 -->
     {{- $image := partialCached "helper/image" (dict "Context" . "Type" "article") .RelPermalink "article" -}}
     {{ if $image.exists }}
         <div class="article-image">
@@ -32,7 +33,9 @@
         </div>
     {{ end }}
 
+    <!-- 文章详细信息 -->
     <div class="article-details">
+        <!-- 文章标题 -->
         <h1 class="article-title">{{ .Title }}</h1>
         
         <!-- 文章元信息 -->
@@ -56,13 +59,13 @@
         </div>
         
         <!-- 文章摘要 -->
-        {{ if .Description }}
+        {{ if or .Description .Summary }}
             <div class="article-description">
-                {{ .Description }}
-            </div>
-        {{ else if .Summary }}
-            <div class="article-description">
-                {{ .Summary | plainify }}
+                {{ if .Description }}
+                    {{ .Description }}
+                {{ else }}
+                    {{ .Summary | plainify }}
+                {{ end }}
             </div>
         {{ end }}
     </div>
