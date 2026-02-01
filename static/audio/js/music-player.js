@@ -590,13 +590,13 @@ function initPlayer() {
     })
     .then(data => {
       console.log('Loaded music config:', data);
-      // 修正路径，确保音频和封面文件路径正确
+      // 使用原始路径，Hugo会自动处理路径
       playlist = data.playlist.map(song => {
         return {
           name: song.name,
           artist: song.artist,
-          url: '/blog' + song.url,
-          cover: '/blog' + song.cover
+          url: song.url,
+          cover: song.cover
         };
       });
       console.log('Processed playlist:', playlist);
