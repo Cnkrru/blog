@@ -16,7 +16,7 @@ comments: false
 
 <div class="tools-card-container">
   <div class="tool-card">
-    <a href="/blog/tools/text-tool/" class="tool-card-link" data-pjax="false">
+    <a href="/tools/text-tool/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">📝</div>
       <div class="tool-card-content">
         <h3>文本处理工具</h3>
@@ -27,7 +27,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/blog/tools/password-generator/" class="tool-card-link" data-pjax="false">
+    <a href="/tools/password-generator/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">🔒</div>
       <div class="tool-card-content">
         <h3>密码生成器</h3>
@@ -38,7 +38,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/blog/tools/unit-converter/" class="tool-card-link" data-pjax="false">
+    <a href="/tools/unit-converter/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">📏</div>
       <div class="tool-card-content">
         <h3>单位转换器</h3>
@@ -49,7 +49,7 @@ comments: false
   </div>
 
   <div class="tool-card">
-    <a href="/blog/tools/color-tool/" class="tool-card-link" data-pjax="false">
+    <a href="/tools/color-tool/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">🎨</div>
       <div class="tool-card-content">
         <h3>颜色工具</h3>
