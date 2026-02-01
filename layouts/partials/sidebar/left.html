@@ -5,6 +5,62 @@
         </span>
     </button>
 
+    <script>
+    // 防抖函数
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // 侧边栏激活状态处理
+    function updateSidebarActiveState() {
+        const currentPath = window.location.pathname;
+        const menuLinks = document.querySelectorAll('.menu-link');
+        
+        menuLinks.forEach(link => {
+            const menuPath = link.getAttribute('href');
+            const isActive = currentPath === menuPath || currentPath.startsWith(menuPath) || menuPath.startsWith(currentPath);
+            
+            if (isActive) {
+                link.classList.add('current');
+                link.parentElement.classList.add('current');
+            } else {
+                link.classList.remove('current');
+                link.parentElement.classList.remove('current');
+            }
+        });
+    }
+
+    // 初始化侧边栏状态
+    function initSidebar() {
+        // 初始更新激活状态
+        updateSidebarActiveState();
+        
+        // 监听页面加载和哈希变化
+        window.addEventListener('load', debounce(updateSidebarActiveState, 100));
+        window.addEventListener('hashchange', debounce(updateSidebarActiveState, 100));
+        
+        // 监听PJAX事件（如果使用PJAX）
+        if (window.pjax) {
+            document.addEventListener('pjax:complete', debounce(updateSidebarActiveState, 100));
+        }
+    }
+
+    // 页面加载完成后初始化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSidebar);
+    } else {
+        initSidebar();
+    }
+    </script>
+
     <header>
         {{ with .Site.Params.sidebar.avatar }}
             {{ if (default true .enabled) }}
@@ -195,6 +251,7 @@
         font-weight: 600;
         color: #4CAF50;
         box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+        transition: all 0.3s ease;
     }
     
     .menu-link.current::before {
@@ -207,6 +264,18 @@
         height: 70%;
         background: linear-gradient(180deg, #4CAF50, #45a049);
         border-radius: 0 4px 4px 0;
+        transition: all 0.3s ease;
+    }
+    
+    /* 确保当前菜单项的父元素也有绿色高亮 */
+    .menu li.current {
+        position: relative;
+    }
+    
+    .menu li.current .menu-link {
+        background: rgba(76, 175, 80, 0.1);
+        color: #4CAF50;
+        font-weight: 600;
     }
     
     /* 菜单徽章 */
@@ -310,10 +379,19 @@
         background: rgba(76, 175, 80, 0.2);
         color: #66BB6A;
         box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+        transition: all 0.3s ease;
     }
     
     .dark .menu-link.current::before {
         background: linear-gradient(180deg, #66BB6A, #4CAF50);
+        transition: all 0.3s ease;
+    }
+    
+    /* 确保暗黑模式下当前菜单项的父元素也有绿色高亮 */
+    .dark .menu li.current .menu-link {
+        background: rgba(76, 175, 80, 0.2);
+        color: #66BB6A;
+        font-weight: 600;
     }
     
     .dark .language-switch:hover,
