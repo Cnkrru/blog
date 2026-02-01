@@ -1,7 +1,6 @@
 ---
 title: 工具
-layout: "tools"
-slug: "tools"
+layout: "page"
 menu:
     main:
         params:
@@ -16,17 +15,6 @@ comments: false
 </div>
 
 <div class="tools-card-container">
-  <div class="tool-card">
-    <a href="/blog/post/进制转换器/" class="tool-card-link" data-pjax="false">
-      <div class="tool-card-icon">🔢</div>
-      <div class="tool-card-content">
-        <h3>进制转换器</h3>
-        <p>支持二进制、八进制、十进制、十六进制之间的转换</p>
-      </div>
-      <div class="tool-card-arrow">→</div>
-    </a>
-  </div>
-
   <div class="tool-card">
     <a href="/blog/tools/text-tool/" class="tool-card-link" data-pjax="false">
       <div class="tool-card-icon">📝</div>

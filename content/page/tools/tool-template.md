@@ -1,12 +1,6 @@
 ---
 title: 工具模板
-layout: "tools"
-slug: "tools/tool-template"
-menu:
-    main:
-        params:
-            icon: tools
-
+layout: "page"
 comments: false
 ---
 
