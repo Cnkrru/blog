@@ -25,8 +25,15 @@
         const menuLinks = document.querySelectorAll('.menu-link');
         
         menuLinks.forEach(link => {
-            const menuPath = link.getAttribute('href');
-            const isActive = currentPath === menuPath || currentPath.startsWith(menuPath) || menuPath.startsWith(currentPath);
+            // 获取链接的完整路径
+            const href = link.getAttribute('href');
+            const menuPath = href.startsWith('/') ? href : window.location.origin + href;
+            const menuPathname = new URL(menuPath, window.location.origin).pathname;
+            
+            // 精确匹配路径
+            const isActive = currentPath === menuPathname || 
+                           (currentPath.startsWith(menuPathname) && menuPathname !== '/') ||
+                           (menuPathname.startsWith(currentPath) && currentPath !== '/');
             
             if (isActive) {
                 link.classList.add('current');
@@ -51,6 +58,18 @@
         if (window.pjax) {
             document.addEventListener('pjax:complete', debounce(updateSidebarActiveState, 100));
         }
+        
+        // 监听鼠标移动事件，解决栏目之间抖动问题
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.addEventListener('mousemove', debounce(function(e) {
+                // 当鼠标在侧边栏内移动时，不触发状态更新
+                // 只有当鼠标离开侧边栏或点击时才更新
+            }, 50));
+        }
+        
+        // 监听点击事件
+        document.addEventListener('click', debounce(updateSidebarActiveState, 100));
     }
 
     // 页面加载完成后初始化
