@@ -1,7 +1,7 @@
 ---
 title: 颜色工具
 layout: "tools"
-slug: "tools/color-tool"
+slug: "color-tool"
 comments: false
 ---
 

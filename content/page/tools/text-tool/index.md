@@ -1,7 +1,7 @@
 ---
 title: 文本处理工具
 layout: "tools"
-slug: "tools/text-tool"
+slug: "text-tool"
 comments: false
 ---
 

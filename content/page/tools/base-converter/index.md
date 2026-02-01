@@ -1,7 +1,7 @@
 ---
 title: 进制转换器
 layout: "tools"
-slug: "tools/base-converter"
+slug: "base-converter"
 comments: false
 ---
 

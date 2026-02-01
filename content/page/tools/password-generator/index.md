@@ -1,7 +1,7 @@
 ---
 title: 密码生成器
 layout: "tools"
-slug: "tools/password-generator"
+slug: "password-generator"
 comments: false
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: 单位转换器
 layout: "tools"
-slug: "tools/unit-converter"
+slug: "unit-converter"
 comments: false
 ---
 
