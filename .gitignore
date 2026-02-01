@@ -20,6 +20,5 @@ resources
 .DS_Store
 Thumbs.db
 
-# ai辅助手册
-操作手册.txt
-代码规范.txt
+# 辅助手册
+用户指导手册
