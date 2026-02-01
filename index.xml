@@ -154,16 +154,6 @@ justify-content: center;
 &lt;/div&gt;
 &lt;div class="tools-card-container"&gt;
 &lt;div class="tool-card"&gt;
-&lt;a href="https://Cnkrru.github.io/blog/post/进制转换器/" class="tool-card-link" data-pjax="false"&gt;
-&lt;div class="tool-card-icon"&gt;🔢&lt;/div&gt;
-&lt;div class="tool-card-content"&gt;
-&lt;h3&gt;进制转换器&lt;/h3&gt;
-&lt;p&gt;支持二进制、八进制、十进制、十六进制之间的转换&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="tool-card-arrow"&gt;→&lt;/div&gt;
-&lt;/a&gt;
-&lt;/div&gt;
-&lt;div class="tool-card"&gt;
 &lt;a href="https://Cnkrru.github.io/blog/tools/text-tool/" class="tool-card-link" data-pjax="false"&gt;
 &lt;div class="tool-card-icon"&gt;📝&lt;/div&gt;
 &lt;div class="tool-card-content"&gt;
@@ -378,7 +368,7 @@ grid-template-columns: 1fr;
 height: 140px;
 }
 }
-&lt;/style&gt;</description></item><item><title>工具模板</title><link>https://Cnkrru.github.io/blog/page/tools/tool-template/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/tools/tool-template/</guid><description>&lt;div class="tool-page-header"&gt;
+&lt;/style&gt;</description></item><item><title>工具模板</title><link>https://Cnkrru.github.io/blog/page/%E5%B7%A5%E5%85%B7%E6%A8%A1%E6%9D%BF/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://Cnkrru.github.io/blog/page/%E5%B7%A5%E5%85%B7%E6%A8%A1%E6%9D%BF/</guid><description>&lt;div class="tool-page-header"&gt;
 &lt;h2&gt;工具名称&lt;/h2&gt;
 &lt;p&gt;工具描述&lt;/p&gt;
 &lt;/div&gt;
