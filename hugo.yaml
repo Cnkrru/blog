@@ -267,8 +267,14 @@ params:
 ### See https://stack.jimmycai.com/config/menu
 ### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
 menu:
-# 配置菜单
-    main: []
+# 配置菜单 - 留空让Hugo从页面front matter自动生成
+    main: 
+        - identifier: tools
+          name: 工具
+          url: /tools/
+          weight: -50
+          params:
+              icon: tools
 # 配置社媒
     social:
     # 配置GitHub

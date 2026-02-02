@@ -3,6 +3,8 @@ title: 颜色工具
 slug: color-tool
 layout: "page"
 comments: false
+_build:
+  list: false
 ---
 
 <div class="tool-page-header">

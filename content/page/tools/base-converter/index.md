@@ -3,6 +3,8 @@ title: 进制转换器
 slug: base-converter
 layout: "page"
 comments: false
+_build:
+  list: false
 ---
 
 <div class="tool-page-header">
