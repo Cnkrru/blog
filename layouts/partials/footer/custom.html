@@ -108,10 +108,21 @@
 <script>
 function initTransparencyControl() {
   console.log('Initializing transparency control');
-  var transparencyToggle = document.getElementById('transparency-toggle');
-  var transparencyPanel = document.getElementById('transparency-panel');
-  var transparencySlider = document.getElementById('transparency-slider');
-  var transparencyValue = document.getElementById('transparency-value');
+  
+  // 使用更安全的元素获取方式
+  function safeGetElement(id) {
+    try {
+      return document.getElementById(id);
+    } catch (e) {
+      console.warn('Failed to get element:', id, e);
+      return null;
+    }
+  }
+  
+  var transparencyToggle = safeGetElement('transparency-toggle');
+  var transparencyPanel = safeGetElement('transparency-panel');
+  var transparencySlider = safeGetElement('transparency-slider');
+  var transparencyValue = safeGetElement('transparency-value');
   
   console.log('Transparency control elements:', {
     toggle: !!transparencyToggle,
@@ -120,10 +131,17 @@ function initTransparencyControl() {
     value: !!transparencyValue
   });
   
-  // 三个区块元素
-  var mainContent = document.querySelector('.main');
-  var sidebarLeft = document.querySelector('.sidebar.left-sidebar');
-  var sidebarRight = document.querySelector('.sidebar.right-sidebar');
+  // 如果关键元素不存在，延迟重试
+  if (!transparencyToggle || !transparencyPanel || !transparencySlider || !transparencyValue) {
+    console.warn('Some transparency elements not found, retrying in 1 second...');
+    setTimeout(initTransparencyControl, 1000);
+    return;
+  }
+  
+  // 三个区块元素 - 使用更通用的选择器
+  var mainContent = document.querySelector('.main') || document.querySelector('main') || document.querySelector('.main-content');
+  var sidebarLeft = document.querySelector('.sidebar.left-sidebar') || document.querySelector('.left-sidebar') || document.querySelector('.sidebar:first-child');
+  var sidebarRight = document.querySelector('.sidebar.right-sidebar') || document.querySelector('.right-sidebar') || document.querySelector('.sidebar:last-child');
   
   console.log('Content elements:', {
     main: !!mainContent,
@@ -133,97 +151,182 @@ function initTransparencyControl() {
   
   // 初始透明度设置（完全不透明，默认状态）
   var initialOpacity = 1.0;
+  var currentOpacity = initialOpacity;
+  
+  // 从localStorage加载保存的设置
+  try {
+    var savedOpacity = localStorage.getItem('transparencyOpacity');
+    if (savedOpacity !== null) {
+      currentOpacity = parseFloat(savedOpacity);
+      if (isNaN(currentOpacity) || currentOpacity < 0 || currentOpacity > 1) {
+        currentOpacity = initialOpacity;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to load transparency settings:', e);
+  }
   
   // 应用透明度
   function applyOpacity(opacity) {
     console.log('Applying opacity:', opacity);
-    if (mainContent) {
-      mainContent.style.opacity = opacity;
-      console.log('Applied opacity to main content:', opacity);
-    }
-    if (sidebarLeft) {
-      sidebarLeft.style.opacity = '1'; // 左侧侧边栏始终显示
-      console.log('Applied opacity to left sidebar:', 1);
-    }
-    if (sidebarRight) {
-      sidebarRight.style.opacity = opacity;
-      console.log('Applied opacity to right sidebar:', opacity);
-      // 确保右侧侧边栏内的所有内容也被隐藏
-      var sidebarRightContents = sidebarRight.querySelectorAll('*');
-      for (var i = 0; i < sidebarRightContents.length; i++) {
-        sidebarRightContents[i].style.opacity = opacity;
+    try {
+      if (mainContent) {
+        mainContent.style.opacity = opacity;
+        console.log('Applied opacity to main content:', opacity);
       }
+      if (sidebarLeft) {
+        sidebarLeft.style.opacity = '1'; // 左侧侧边栏始终显示
+        console.log('Applied opacity to left sidebar:', 1);
+      }
+      if (sidebarRight) {
+        sidebarRight.style.opacity = opacity;
+        console.log('Applied opacity to right sidebar:', opacity);
+        // 确保右侧侧边栏内的所有内容也被隐藏
+        var sidebarRightContents = sidebarRight.querySelectorAll('*');
+        for (var i = 0; i < sidebarRightContents.length; i++) {
+          sidebarRightContents[i].style.opacity = opacity;
+        }
+      }
+      
+      // 保存设置到localStorage
+      try {
+        localStorage.setItem('transparencyOpacity', opacity.toString());
+      } catch (e) {
+        console.warn('Failed to save transparency settings:', e);
+      }
+    } catch (e) {
+      console.error('Failed to apply opacity:', e);
     }
   }
   
-  // 初始应用默认透明度
-  applyOpacity(initialOpacity);
+  // 初始应用透明度
+  applyOpacity(currentOpacity);
+  
+  // 更新滑块和显示值
+  if (transparencySlider) {
+    transparencySlider.value = Math.round(currentOpacity * 100);
+  }
+  if (transparencyValue) {
+    transparencyValue.textContent = Math.round(currentOpacity * 100) + '%';
+  }
   
   // 隐藏度调节按钮点击事件
   if (transparencyToggle) {
     console.log('Adding click event listener to transparency toggle');
     var isPanelVisible = false;
-    transparencyToggle.onclick = function() {
-      console.log('Transparency toggle clicked');
-      isPanelVisible = !isPanelVisible;
-      
-      console.log('Current panel visibility:', isPanelVisible);
-      
-      if (isPanelVisible) {
-        // 显示面板
-        console.log('Showing transparency panel');
-        transparencyPanel.style.transform = 'translateX(0%)';
-        transparencyPanel.style.opacity = '1';
-        transparencyPanel.style.pointerEvents = 'auto';
-      } else {
-        // 隐藏面板
-        console.log('Hiding transparency panel');
-        transparencyPanel.style.transform = 'translateX(100%)';
-        transparencyPanel.style.opacity = '0';
-        transparencyPanel.style.pointerEvents = 'none';
+    
+    function togglePanel() {
+      try {
+        console.log('Transparency toggle clicked');
+        isPanelVisible = !isPanelVisible;
+        
+        console.log('Current panel visibility:', isPanelVisible);
+        
+        if (isPanelVisible) {
+          // 显示面板
+          console.log('Showing transparency panel');
+          transparencyPanel.style.transform = 'translateX(0%)';
+          transparencyPanel.style.opacity = '1';
+          transparencyPanel.style.pointerEvents = 'auto';
+        } else {
+          // 隐藏面板
+          console.log('Hiding transparency panel');
+          transparencyPanel.style.transform = 'translateX(100%)';
+          transparencyPanel.style.opacity = '0';
+          transparencyPanel.style.pointerEvents = 'none';
+        }
+      } catch (e) {
+        console.error('Failed to toggle transparency panel:', e);
       }
-    };
+    }
+    
+    // 使用多种事件绑定方式确保兼容性
+    transparencyToggle.onclick = togglePanel;
+    transparencyToggle.addEventListener('click', togglePanel);
   }
   
   // 滑块变化事件
   if (transparencySlider) {
     console.log('Adding input event listener to transparency slider');
-    transparencySlider.oninput = function() {
-      var value = parseInt(this.value);
-      var opacity = value / 100;
-      
-      console.log('Slider value changed:', value, 'Opacity:', opacity);
-      
-      // 应用透明度
-      applyOpacity(opacity);
-      
-      // 更新显示值
-      if (transparencyValue) {
-        transparencyValue.textContent = value + '%';
-        console.log('Updated transparency value:', value + '%');
+    
+    function handleSliderChange() {
+      try {
+        var value = parseInt(this.value);
+        var opacity = value / 100;
+        
+        console.log('Slider value changed:', value, 'Opacity:', opacity);
+        
+        // 应用透明度
+        applyOpacity(opacity);
+        currentOpacity = opacity;
+        
+        // 更新显示值
+        if (transparencyValue) {
+          transparencyValue.textContent = value + '%';
+          console.log('Updated transparency value:', value + '%');
+        }
+      } catch (e) {
+        console.error('Failed to handle slider change:', e);
       }
-    };
+    }
+    
+    // 使用多种事件绑定方式确保兼容性
+    transparencySlider.oninput = handleSliderChange;
+    transparencySlider.addEventListener('input', handleSliderChange);
+    transparencySlider.addEventListener('change', handleSliderChange);
   }
   
   // 点击页面其他地方关闭面板
   console.log('Adding click event listener to document for panel closing');
-  document.addEventListener('click', function(event) {
-    if (transparencyPanel && transparencyToggle && !transparencyPanel.contains(event.target) && !transparencyToggle.contains(event.target)) {
-      console.log('Click outside transparency panel, hiding panel');
-      transparencyPanel.style.transform = 'translateX(100%)';
-      transparencyPanel.style.opacity = '0';
-      transparencyPanel.style.pointerEvents = 'none';
+  function handleDocumentClick(event) {
+    try {
+      if (transparencyPanel && transparencyToggle && 
+          !transparencyPanel.contains(event.target) && 
+          !transparencyToggle.contains(event.target)) {
+        console.log('Click outside transparency panel, hiding panel');
+        transparencyPanel.style.transform = 'translateX(100%)';
+        transparencyPanel.style.opacity = '0';
+        transparencyPanel.style.pointerEvents = 'none';
+        isPanelVisible = false;
+      }
+    } catch (e) {
+      console.error('Failed to handle document click:', e);
     }
-  });
+  }
+  
+  document.addEventListener('click', handleDocumentClick);
+  
+  console.log('Transparency control initialization completed');
 }
 
+// 多种初始化方式确保兼容性
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initTransparencyControl);
+} else {
+  initTransparencyControl();
+}
+
+// 备用初始化
+setTimeout(initTransparencyControl, 500);
+</script>
+
 // 页面加载完成后初始化
-window.onload = function() {
+window.addEventListener('load', function() {
   initTransparencyControl();
   initImmersiveReading();
   initMouseBottomDetection();
   initPjaxEvents();
-};
+});
+
+// 备用初始化 - 确保在各种环境下都能工作
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    initTransparencyControl();
+    initImmersiveReading();
+    initMouseBottomDetection();
+    initPjaxEvents();
+  }, 100);
+});
 
 // 初始化沉浸阅读功能
 function initImmersiveReading() {
