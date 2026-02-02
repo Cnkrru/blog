@@ -29,31 +29,11 @@
       <!-- 主题切换按钮 -->
       {{ partial "footer/theme-toggle.html" . }}
       
-      <!-- 透明度调节按钮 -->
-      <button id="transparency-toggle" class="transparency-toggle control-button" aria-label="透明度调节" title="透明度调节" style="width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333; transition: all 0.3s ease;">
-        <span class="transparency-icon" style="display: block; transition: all 0.3s ease;">👁</span>
-      </button>
-      
       <!-- 沉浸阅读按钮 -->
       <button id="immersive-reading-button" class="immersive-reading-button control-button" aria-label="沉浸阅读" title="沉浸阅读" style="width: 34px; height: 34px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333; transition: all 0.3s ease;">
         <span class="immersive-icon book-icon" style="display: block; transition: all 0.3s ease;">📖</span>
         <span class="immersive-icon exit-icon" style="display: none; transition: all 0.3s ease;">×</span>
       </button>
-    </div>
-    
-    <!-- 透明度调节面板 -->
-    <div id="transparency-panel" class="transparency-panel" style="position: absolute; bottom: 70px; right: 0; width: 200px; background: linear-gradient(135deg, rgba(255, 200, 210, 0.9), rgba(170, 210, 230, 0.9)); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 16px; box-shadow: 0 8px 32px rgba(170, 210, 230, 0.4); z-index: 99999; transform: translateX(100%); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
-      <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #333; text-align: center;">透明度调节</h4>
-      <div class="transparency-slider-container" style="display: flex; flex-direction: column; gap: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 12px; color: #333;">透明</span>
-          <span style="font-size: 12px; color: #333;">不透明</span>
-        </div>
-        <input type="range" id="transparency-slider" class="transparency-slider" min="0" max="100" value="100" style="width: 100%; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.5); outline: none; -webkit-appearance: none; appearance: none; transition: all 0.3s ease;">
-        <div style="text-align: center;">
-          <span id="transparency-value" style="font-size: 12px; color: #333; font-weight: 600;">100%</span>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -103,130 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
   controlButtons.style.pointerEvents = 'none';
 });
 
-// 透明度调节功能
-function initTransparencyControl() {
-  const transparencyToggle = document.getElementById('transparency-toggle');
-  const transparencyPanel = document.getElementById('transparency-panel');
-  const transparencySlider = document.getElementById('transparency-slider');
-  const transparencyValue = document.getElementById('transparency-value');
-  
-  if (!transparencyToggle || !transparencyPanel || !transparencySlider || !transparencyValue) {
-    console.warn('透明度调节元素不存在');
-    return;
-  }
-  
-  let isPanelVisible = false;
-  
-  // 点击透明度按钮
-  transparencyToggle.addEventListener('click', function() {
-    isPanelVisible = !isPanelVisible;
-    
-    if (isPanelVisible) {
-      transparencyPanel.style.transform = 'translateX(0%)';
-      transparencyPanel.style.opacity = '1';
-      transparencyPanel.style.pointerEvents = 'auto';
-    } else {
-      transparencyPanel.style.transform = 'translateX(100%)';
-      transparencyPanel.style.opacity = '0';
-      transparencyPanel.style.pointerEvents = 'none';
-    }
-  });
-  
-  // 滑块变化
-  transparencySlider.addEventListener('input', function() {
-    const value = parseInt(this.value);
-    const opacity = value / 100;
-    
-    // 应用透明度到主内容区域
-    const mainContent = document.querySelector('.main');
-    const sidebarRight = document.querySelector('.sidebar.right-sidebar');
-    
-    if (mainContent) {
-      mainContent.style.opacity = opacity;
-    }
-    if (sidebarRight) {
-      sidebarRight.style.opacity = opacity;
-    }
-    
-    // 更新显示值
-    transparencyValue.textContent = value + '%';
-  });
-  
-  // 点击其他地方关闭面板
-  document.addEventListener('click', function(event) {
-    if (!transparencyPanel.contains(event.target) && !transparencyToggle.contains(event.target)) {
-      transparencyPanel.style.transform = 'translateX(100%)';
-      transparencyPanel.style.opacity = '0';
-      transparencyPanel.style.pointerEvents = 'none';
-      isPanelVisible = false;
-    }
-  });
-}
-
-// 沉浸阅读功能
-function initImmersiveReading() {
-  const immersiveButton = document.getElementById('immersive-reading-button');
-  const body = document.body;
-  const sidebarLeft = document.querySelector('.sidebar.left-sidebar');
-  const sidebarRight = document.querySelector('.sidebar.right-sidebar');
-  const mainContent = document.querySelector('.main');
-  const container = document.querySelector('.container.main-container');
-  
-  if (!immersiveButton) return;
-  
-  immersiveButton.addEventListener('click', function() {
-    const isImmersive = body.classList.contains('immersive-reading');
-    
-    if (isImmersive) {
-      // 退出沉浸阅读
-      body.classList.remove('immersive-reading');
-      
-      if (sidebarLeft) sidebarLeft.style.display = '';
-      if (sidebarRight) sidebarRight.style.display = 'none';
-      if (mainContent) {
-        mainContent.style.width = '';
-        mainContent.style.maxWidth = '';
-        mainContent.style.margin = '';
-      }
-      if (container) {
-        container.classList.remove('extended');
-        container.classList.add('compact');
-      }
-      
-      // 切换图标
-      const bookIcon = immersiveButton.querySelector('.book-icon');
-      const exitIcon = immersiveButton.querySelector('.exit-icon');
-      if (bookIcon) bookIcon.style.display = 'block';
-      if (exitIcon) exitIcon.style.display = 'none';
-    } else {
-      // 进入沉浸阅读
-      body.classList.add('immersive-reading');
-      
-      if (sidebarLeft) sidebarLeft.style.display = 'none';
-      if (sidebarRight) sidebarRight.style.display = 'none';
-      if (mainContent) {
-        mainContent.style.width = '100%';
-        mainContent.style.maxWidth = '100%';
-        mainContent.style.margin = '0';
-      }
-      if (container) {
-        container.style.display = 'block';
-        container.style.maxWidth = '100%';
-        container.style.width = '100%';
-      }
-      
-      // 切换图标
-      const bookIcon = immersiveButton.querySelector('.book-icon');
-      const exitIcon = immersiveButton.querySelector('.exit-icon');
-      if (bookIcon) bookIcon.style.display = 'none';
-      if (exitIcon) exitIcon.style.display = 'block';
-    }
-  });
-}
-
 // 页面加载完成后初始化
 window.addEventListener('load', function() {
-  initTransparencyControl();
   initImmersiveReading();
 });
 </script>
