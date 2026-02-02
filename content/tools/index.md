@@ -25,16 +25,6 @@ comments: false
             <span>格式化</span>
         </div>
     </div>
-    <div class="tool-card" onclick="window.location.href='/blog/page/password-generator/'">
-        <div class="tool-icon">🔒</div>
-        <h3>密码生成器</h3>
-        <p>生成安全强度高的随机密码</p>
-        <div class="tool-features">
-            <span>自定义长度</span>
-            <span>字符类型选择</span>
-            <span>强度检测</span>
-        </div>
-    </div>
     <div class="tool-card" onclick="window.location.href='/blog/page/color-tool/'">
         <div class="tool-icon">🎨</div>
         <h3>颜色工具</h3>
@@ -60,8 +50,8 @@ comments: false
 <style>
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
@@ -70,8 +60,8 @@ comments: false
 .tool-card {
     background: linear-gradient(135deg, rgba(255, 200, 210, 0.1), rgba(170, 210, 230, 0.1));
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 30px;
+    border-radius: 16px;
+    padding: 20px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -105,23 +95,23 @@ comments: false
 }
 
 .tool-icon {
-    font-size: 48px;
-    margin-bottom: 20px;
+    font-size: 36px;
+    margin-bottom: 15px;
     display: block;
 }
 
 .tool-card h3 {
     color: #FFB7C5;
-    font-size: 22px;
-    margin-bottom: 15px;
+    font-size: 18px;
+    margin-bottom: 12px;
     font-weight: 600;
 }
 
 .tool-card p {
     color: #718096;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 15px;
 }
 
 .tool-features {
@@ -134,9 +124,9 @@ comments: false
 .tool-features span {
     background: rgba(255, 183, 197, 0.2);
     color: #4a5568;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
     font-weight: 500;
 }
 

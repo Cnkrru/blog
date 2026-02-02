@@ -115,9 +115,10 @@ comments: false
     .input-group label {
         display: block;
         margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #4a5568;
+        font-size: 16px;
+        font-weight: 800;
+        color: #000000 !important;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
     .input-group input,
@@ -125,14 +126,29 @@ comments: false
     .input-group textarea {
         width: 100%;
         padding: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 3px solid #333333;
         border-radius: 8px;
         font-size: 16px;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        background: #ffffff;
         transition: all 0.3s ease;
         box-sizing: border-box;
+        color: #000000 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .input-group input::placeholder,
+    .input-group textarea::placeholder {
+        color: #666666 !important;
+        font-weight: 500 !important;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
+        outline: none;
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
     }
 
     .input-group input:focus,
@@ -173,23 +189,24 @@ comments: false
     .result-group label {
         display: block;
         margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #4a5568;
+        font-size: 16px;
+        font-weight: 800;
+        color: #000000 !important;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
     .result-group input,
     .result-group textarea {
         width: 100%;
         padding: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 3px solid #FFB7C5;
         border-radius: 8px;
         font-size: 16px;
-        background: rgba(249, 249, 249, 0.8);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        font-weight: 500;
+        background: #ffffff;
+        font-weight: 700 !important;
         box-sizing: border-box;
+        color: #000000 !important;
+        box-shadow: 0 2px 8px rgba(255, 183, 197, 0.2);
     }
 
     /* 工具页面底部 */
@@ -219,17 +236,21 @@ comments: false
 
     /* 常用进制对照样式 */
     #common-bases {
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.8);
         padding: 15px;
         border-radius: 8px;
         font-family: monospace;
         font-size: 14px;
+        color: #000000;
+        font-weight: 700;
     }
 
     #common-bases div {
         padding: 5px;
         border-radius: 4px;
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.6);
+        color: #000000;
+        font-weight: 700;
     }
 
     /* 暗黑模式适配 */
