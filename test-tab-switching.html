@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标签页切换测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .tab-button { padding: 10px 20px; margin: 5px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+        .tab-button.active { background: #007cba; color: white; }
+        .tool-panel { display: none; padding: 20px; border: 1px solid #ccc; margin: 10px 0; }
+        .tool-panel.active { display: block; }
+    </style>
+</head>
+<body>
+    <h1>标签页切换功能测试</h1>
+    
+    <div id="test-results"></div>
+    
+    <!-- 测试用的标签页 -->
+    <div class="tools-tabs">
+        <button class="tab-button active" data-tab="text-tool">文本处理</button>
+        <button class="tab-button" data-tab="password-generator">密码生成</button>
+        <button class="tab-button" data-tab="color-tool">颜色工具</button>
+        <button class="tab-button" data-tab="base-converter">进制转换</button>
+    </div>
+    
+    <div class="tools-content">
+        <div id="text-tool" class="tool-panel active">
+            <h3>文本处理工具</h3>
+            <p>这是文本处理工具面板</p>
+        </div>
+        
+        <div id="password-generator" class="tool-panel">
+            <h3>密码生成器</h3>
+            <p>这是密码生成器面板</p>
+        </div>
+        
+        <div id="color-tool" class="tool-panel">
+            <h3>颜色工具</h3>
+            <p>这是颜色工具面板</p>
+        </div>
+        
+        <div id="base-converter" class="tool-panel">
+            <h3>进制转换器</h3>
+            <p>这是进制转换器面板</p>
+        </div>
+    </div>
+
+    <script>
+        function addTestResult(message, isSuccess = true) {
+            const resultsDiv = document.getElementById('test-results');
+            const div = document.createElement('div');
+            div.className = `test-result ${isSuccess ? 'success' : 'error'}`;
+            div.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            resultsDiv.appendChild(div);
+            console.log(message);
+        }
+        
+        function switchTab(tabId) {
+            addTestResult('尝试切换到标签页: ' + tabId);
+            
+            // 更新按钮状态
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+                addTestResult('成功激活按钮: ' + tabId);
+            } else {
+                addTestResult('未找到按钮: ' + tabId, false);
+                return false;
+            }
+            
+            // 更新面板显示
+            const panels = document.querySelectorAll('.tool-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            const activePanel = document.getElementById(tabId);
+            if (activePanel) {
+                activePanel.classList.add('active');
+                addTestResult('成功显示面板: ' + tabId);
+                return true;
+            } else {
+                addTestResult('未找到面板: ' + tabId, false);
+                return false;
+            }
+        }
+        
+        function runTests() {
+            addTestResult('开始运行测试');
+            
+            // 测试1：检查DOM元素
+            const tabButtons = document.querySelectorAll('.tab-button');
+            addTestResult(`找到 ${tabButtons.length} 个标签按钮`);
+            
+            const toolPanels = document.querySelectorAll('.tool-panel');
+            addTestResult(`找到 ${toolPanels.length} 个工具面板`);
+            
+            // 测试2：测试每个标签页切换
+            const tabs = ['text-tool', 'password-generator', 'color-tool', 'base-converter'];
+            tabs.forEach(tab => {
+                const success = switchTab(tab);
+                if (success) {
+                    addTestResult(`标签页 ${tab} 切换成功`);
+                } else {
+                    addTestResult(`标签页 ${tab} 切换失败`, false);
+                }
+            });
+            
+            // 测试3：绑定点击事件
+            tabButtons.forEach((button, index) => {
+                const tabId = button.getAttribute('data-tab');
+                button.addEventListener('click', () => {
+                    addTestResult(`点击事件触发: ${tabId}`);
+                    switchTab(tabId);
+                });
+                addTestResult(`为按钮 ${index + 1} (${tabId}) 绑定了点击事件`);
+            });
+            
+            addTestResult('所有测试完成！现在可以点击标签按钮测试切换功能');
+        }
+        
+        // 页面加载完成后运行测试
+        document.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

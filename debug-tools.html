@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具页面调试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-info { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .tab-button { padding: 10px 20px; margin: 5px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+        .tab-button.active { background: #007cba; color: white; }
+        .tool-panel { display: none; padding: 20px; border: 1px solid #ccc; margin: 10px 0; }
+        .tool-panel.active { display: block; }
+    </style>
+</head>
+<body>
+    <h1>工具页面调试</h1>
+    
+    <div class="debug-info">
+        <h3>调试信息</h3>
+        <div id="debug-log"></div>
+    </div>
+    
+    <!-- 简化的标签页测试 -->
+    <div class="tools-tabs">
+        <button class="tab-button active" data-tab="text-tool">文本处理</button>
+        <button class="tab-button" data-tab="password-generator">密码生成</button>
+        <button class="tab-button" data-tab="color-tool">颜色工具</button>
+        <button class="tab-button" data-tab="base-converter">进制转换</button>
+    </div>
+    
+    <div class="tools-content">
+        <div id="text-tool" class="tool-panel active">
+            <h3>文本处理工具</h3>
+            <p>这是文本处理工具面板</p>
+        </div>
+        
+        <div id="password-generator" class="tool-panel">
+            <h3>密码生成器</h3>
+            <p>这是密码生成器面板</p>
+        </div>
+        
+        <div id="color-tool" class="tool-panel">
+            <h3>颜色工具</h3>
+            <p>这是颜色工具面板</p>
+        </div>
+        
+        <div id="base-converter" class="tool-panel">
+            <h3>进制转换器</h3>
+            <p>这是进制转换器面板</p>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const debugLog = document.getElementById('debug-log');
+            const p = document.createElement('p');
+            p.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            debugLog.appendChild(p);
+            console.log(message);
+        }
+        
+        log('页面加载开始');
+        
+        function switchTab(tabId) {
+            log('切换到标签页: ' + tabId);
+            
+            // 更新按钮状态
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+                log('激活按钮: ' + tabId);
+            } else {
+                log('未找到按钮: ' + tabId);
+            }
+            
+            // 更新面板显示
+            document.querySelectorAll('.tool-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            const activePanel = document.getElementById(tabId);
+            if (activePanel) {
+                activePanel.classList.add('active');
+                log('显示面板: ' + tabId);
+            } else {
+                log('未找到面板: ' + tabId);
+            }
+        }
+        
+        function bindTabEvents() {
+            log('绑定标签页事件');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            log('找到标签按钮数量: ' + tabButtons.length);
+            
+            tabButtons.forEach((button, index) => {
+                const tabId = button.getAttribute('data-tab');
+                log(`绑定第${index + 1}个按钮: ${tabId}`);
+                button.addEventListener('click', (e) => {
+                    log('按钮被点击: ' + tabId);
+                    switchTab(tabId);
+                });
+            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('DOM加载完成，开始初始化');
+            bindTabEvents();
+            log('初始化完成');
+        });
+        
+        log('脚本加载完成');
+    </script>
+</body>
+</html>

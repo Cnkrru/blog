@@ -48,6 +48,116 @@ comments: false
     <a href="/blog/tools/" class="back-to-tools">← 返回工具列表</a>
 </div>
 
+<!-- 代码展示区域 -->
+<div class="code-display-section">
+    <div class="code-header">
+        <h3>实现代码</h3>
+        <p>查看此工具的实现代码</p>
+        <button id="toggle-code-btn" class="toggle-code-btn">显示代码</button>
+    </div>
+    
+    <div id="code-content" class="code-content" style="display: none;">
+        <div class="code-tabs">
+            <button class="code-tab active" data-lang="html">HTML</button>
+            <button class="code-tab" data-lang="css">CSS</button>
+            <button class="code-tab" data-lang="js">JavaScript</button>
+        </div>
+        
+        <div class="code-panel active" id="html-code">
+            <pre><code>&lt;div class="tool-implementation"&gt;
+    &lt;div class="input-group"&gt;
+        &lt;label for="text-input"&gt;输入文本：&lt;/label&gt;
+        &lt;textarea id="text-input" placeholder="请输入要处理的文本" rows="6"&gt;&lt;/textarea&gt;
+    &lt;/div&gt;
+    &lt;div class="input-group"&gt;
+        &lt;label for="text-operation"&gt;操作类型：&lt;/label&gt;
+        &lt;select id="text-operation"&gt;
+            &lt;option value="uppercase"&gt;转为大写&lt;/option&gt;
+            &lt;option value="lowercase"&gt;转为小写&lt;/option&gt;
+            &lt;option value="capitalize"&gt;首字母大写&lt;/option&gt;
+            &lt;option value="count"&gt;字符统计&lt;/option&gt;
+            &lt;option value="trim"&gt;去除首尾空格&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;button id="process-btn" class="tool-button"&gt;处理文本&lt;/button&gt;
+    &lt;div class="result-group"&gt;
+        &lt;label for="text-result"&gt;处理结果：&lt;/label&gt;
+        &lt;textarea id="text-result" readonly rows="6"&gt;&lt;/textarea&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+        
+        <div class="code-panel" id="css-code">
+            <pre><code>.tool-implementation {
+    background: linear-gradient(135deg, rgba(255, 200, 210, 0.1), rgba(170, 210, 230, 0.1));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.tool-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}</code></pre>
+        </div>
+        
+        <div class="code-panel" id="js-code">
+            <pre><code>function initTextTool() {
+    const textInput = document.getElementById('text-input');
+    const textOperation = document.getElementById('text-operation');
+    const processBtn = document.getElementById('process-btn');
+    const textResult = document.getElementById('text-result');
+    
+    processBtn.addEventListener('click', function() {
+        const text = textInput.value;
+        const operation = textOperation.value;
+        let result = '';
+        
+        switch(operation) {
+            case 'uppercase':
+                result = text.toUpperCase();
+                break;
+            case 'lowercase':
+                result = text.toLowerCase();
+                break;
+            case 'capitalize':
+                result = text.split(' ').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                ).join(' ');
+                break;
+            case 'trim':
+                result = text.trim();
+                break;
+        }
+        
+        textResult.value = result;
+    });
+}
+
+initTextTool();</code></pre>
+        </div>
+    </div>
+</div>
+
 <style>
     /* 工具页面头部 */
     .tool-page-header {
@@ -274,6 +384,139 @@ comments: false
             margin-bottom: 30px;
         }
     }
+
+    /* 代码展示区域样式 */
+    .code-display-section {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .code-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .code-header h3 {
+        color: #FFB7C5;
+        font-size: 20px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .code-header p {
+        color: #AAB2C0;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .toggle-code-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .toggle-code-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .code-content {
+        background: #2d3748;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    .code-tabs {
+        display: flex;
+        background: #1a202c;
+        border-bottom: 1px solid #4a5568;
+    }
+
+    .code-tab {
+        background: none;
+        border: none;
+        color: #a0aec0;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .code-tab.active {
+        background: #2d3748;
+        color: #ffffff;
+        border-bottom: 2px solid #667eea;
+    }
+
+    .code-tab:hover {
+        background: #2d3748;
+        color: #ffffff;
+    }
+
+    .code-panel {
+        display: none;
+        padding: 0;
+    }
+
+    .code-panel.active {
+        display: block;
+    }
+
+    .code-panel pre {
+        margin: 0;
+        padding: 20px;
+        background: #2d3748;
+        color: #e2e8f0;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-x: auto;
+    }
+
+    .code-panel code {
+        background: none;
+        color: inherit;
+        padding: 0;
+        font-size: inherit;
+    }
+
+    /* 暗黑模式下的代码展示 */
+    .dark .code-header h3 {
+        color: #FFB7C5;
+    }
+
+    .dark .code-header p {
+        color: #a0aec0;
+    }
+
+    @media (max-width: 768px) {
+        .code-display-section {
+            padding: 0 16px;
+        }
+
+        .code-tabs {
+            flex-wrap: wrap;
+        }
+
+        .code-tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 15px;
+            font-size: 13px;
+        }
+
+        .code-panel pre {
+            padding: 15px;
+            font-size: 12px;
+        }
+    }
 </style>
 
 <script>
@@ -379,4 +622,48 @@ comments: false
         console.log('Window load事件，确保文本工具初始化');
         setTimeout(initTextTool, 100);
     });
+
+    // 代码展示功能
+    function initCodeDisplay() {
+        const toggleBtn = document.getElementById('toggle-code-btn');
+        const codeContent = document.getElementById('code-content');
+        const codeTabs = document.querySelectorAll('.code-tab');
+        const codePanels = document.querySelectorAll('.code-panel');
+
+        if (toggleBtn && codeContent) {
+            toggleBtn.addEventListener('click', function() {
+                if (codeContent.style.display === 'none') {
+                    codeContent.style.display = 'block';
+                    toggleBtn.textContent = '隐藏代码';
+                } else {
+                    codeContent.style.display = 'none';
+                    toggleBtn.textContent = '显示代码';
+                }
+            });
+        }
+
+        // 代码标签页切换
+        codeTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                
+                // 更新标签页状态
+                codeTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 更新面板显示
+                codePanels.forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                document.getElementById(lang + '-code').classList.add('active');
+            });
+        });
+    }
+
+    // 初始化代码展示
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCodeDisplay);
+    } else {
+        initCodeDisplay();
+    }
 </script>

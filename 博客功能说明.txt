@@ -1,0 +1,182 @@
+# Hugo博客功能说明文档
+
+## 博客概述
+这是一个基于Hugo框架构建的个人博客网站，使用hugo-theme-stack主题，部署在GitHub Pages上。
+博客地址：https://Cnkrru.github.io/blog
+
+## 主要功能模块
+
+### 1. 基础博客功能
+**功能描述**：
+- 多语言支持（中文简体、英文、日文等）
+- 文章发布、分类、标签管理
+- 页面管理（关于、归档、搜索等）
+- Giscus评论系统
+- RSS/JSON订阅支持
+- 搜索功能
+
+**实现文件**：
+- 配置文件：hugo.yaml
+- 内容目录：content/post/、content/page/
+- 主题：themes/hugo-theme-stack/
+- 多语言文件：i18n/
+
+### 2. 在线工具集合
+博客内置4个实用工具，提供完整的前端交互功能：
+
+#### 2.1 进制转换器
+**功能**：支持2-36进制之间的数值转换，实时转换并显示常用进制对照表
+**实现文件**：
+- content/tools/base-converter/index.md
+- content/page/tools/base-converter/index.md
+- JavaScript代码内嵌在Markdown文件中
+
+#### 2.2 颜色工具
+**功能**：
+- 颜色代码转换（HEX、RGB、RGBA、HSL格式互转）
+- 实时颜色预览
+- 自动生成调色板
+- 点击复制颜色代码
+**实现文件**：
+- content/tools/color-tool/index.md
+- content/page/tools/color-tool/index.md
+
+#### 2.3 密码生成器
+**功能**：
+- 生成安全强度高的随机密码
+- 自定义密码长度（6-128位）
+- 可选字符类型（大小写字母、数字、特殊符号）
+- 密码强度实时评估
+- 一键复制功能
+**实现文件**：
+- content/tools/password-generator/index.md
+- content/page/tools/password-generator/index.md
+
+#### 2.4 文本处理工具
+**功能**：
+- 文本格式化（大小写转换、首字母大写）
+- 字符统计（字符数、单词数、行数）
+- 去除首尾空格
+**实现文件**：
+- content/tools/text-tool/index.md
+- content/page/tools/text-tool/index.md
+
+**工具集合入口**：
+- 主页面：content/tools/index.md
+- 样式文件：static/css/tools.css
+- 脚本文件：static/js/tools.js
+
+### 3. 全局音乐播放器
+**功能特点**：
+- 完整的音乐播放控制（播放/暂停、上一首/下一首）
+- 可拖拽的进度条和音量控制
+- 三种播放模式（顺序播放、随机播放、循环播放）
+- 播放列表管理和显示
+- 智能显示/隐藏（鼠标悬停底部区域自动显示）
+- 页面切换时保持播放状态（PJAX兼容）
+- 播放状态本地存储
+- 响应式设计，支持移动设备
+- 暗黑模式适配
+
+**实现文件**：
+- 主脚本：static/audio/js/music-player.js
+- 样式文件：static/audio/css/music-player.css
+- 配置文件：static/audio/js/music-config.json
+- 音频文件：static/audio/music/（包含5首歌曲）
+- 封面图片：static/audio/covers/
+
+**支持的音乐**：
+- MY ALL - 浜崎あゆみ
+- 半点心 - 草蜢
+- Stay With Me
+- 打上花火
+- 生生世世爱
+
+### 4. 主题和界面系统
+**功能特点**：
+- 响应式设计，适配各种屏幕尺寸
+- 明暗主题切换功能
+- 毛玻璃效果和渐变背景
+- 丰富的CSS动画效果
+- 自定义颜色方案
+
+**样式文件**：
+- static/css/animations.css - 动画效果
+- static/css/article-card.css - 文章卡片样式
+- static/css/back-to-top.css - 返回顶部按钮
+- static/css/background-image.css - 背景图片
+- static/css/code-blocks.css - 代码块样式
+- static/css/custom-theme.css - 自定义主题
+- static/css/responsive.css - 响应式布局
+- static/css/sidebar.css - 侧边栏样式
+- 等多个专门的CSS文件
+
+### 5. SEO和性能优化
+**优化功能**：
+- 自动生成sitemap.xml站点地图
+- 图片处理和压缩优化
+- CSS/JS资源压缩
+- 智能缓存控制策略
+- 安全HTTP头部配置
+- 懒加载支持
+
+**配置文件**：
+- hugo.yaml中的imaging、resources、server配置段
+- static/manifest.json - PWA配置
+- static/robots.txt - 搜索引擎爬虫配置
+
+### 6. 部署和版本管理
+**部署方式**：
+- GitHub Pages自动部署
+- 支持自定义域名
+- GitHub Actions自动化构建
+
+**管理工具**：
+- Git版本控制
+- Hugo静态站点生成器（hugo.exe）
+- 标准化的更新流程
+
+**相关文件**：
+- .github/ - GitHub Actions配置
+- 用户指导手册/博客更新指令.txt - Git操作指南
+- .gitignore - Git忽略文件配置
+
+### 7. 内容管理
+**内容类型**：
+- 博客文章（content/post/）
+- 静态页面（content/page/）
+- 工具页面（content/tools/）
+- 分类和标签管理
+
+**多媒体支持**：
+- 图片资源（assets/img/、static/background/）
+- 音频文件（static/audio/music/）
+- 图标资源（assets/icons/、static/css/中的图标）
+
+## 技术栈
+- **框架**：Hugo静态站点生成器
+- **主题**：hugo-theme-stack
+- **前端**：HTML5、CSS3、JavaScript（ES6+）
+- **样式**：SCSS、CSS Grid、Flexbox
+- **部署**：GitHub Pages
+- **版本控制**：Git
+- **评论系统**：Giscus
+- **音频处理**：Web Audio API
+
+## 特色功能
+1. **工具集成**：将实用工具直接集成到博客中，无需跳转外部网站
+2. **音乐体验**：全局音乐播放器提供沉浸式浏览体验
+3. **响应式设计**：完美适配桌面和移动设备
+4. **性能优化**：多项优化措施确保快速加载
+5. **用户友好**：直观的界面设计和流畅的交互体验
+
+## 维护说明
+- 使用Git进行版本控制
+- 通过GitHub Pages自动部署
+- 定期更新内容和功能
+- 遵循响应式设计原则
+- 保持代码整洁和文档完整
+
+---
+文档生成时间：2026年2月2日
+博客版本：基于Hugo + hugo-theme-stack主题的定制版本
